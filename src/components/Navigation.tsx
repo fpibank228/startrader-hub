@@ -20,25 +20,41 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-customDarkBlue bg-opacity-80 backdrop-blur-lg z-50 border-t border-white/10">
-      <div className="max-w-screen-lg mx-auto">
-        <ul className="flex justify-around">
-          {navItems.map((item) => (
-            <li key={item.path} className="flex-1">
-              <Link
-                to={item.path}
-                className={`nav-item flex flex-col items-center justify-center py-3 ${
-                  location.pathname === item.path ? 'active' : ''
-                }`}
-                onClick={handleNavClick}
-              >
-                <div className={`${isAnimating ? 'animate-star-glow' : ''}`}>
-                  {item.icon}
-                </div>
-                <span className="text-xs mt-1">{item.label}</span>
-              </Link>
-            </li>
-          ))}
+    <nav className="fixed bottom-0 left-0 right-0 bg-customDarkBlue bg-opacity-85 backdrop-blur-xl z-50 border-t border-white/10 shadow-lg">
+      <div className="max-w-screen-lg mx-auto px-2">
+        <ul className="flex justify-around items-center">
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <li key={item.path} className="flex-1">
+                <Link
+                  to={item.path}
+                  className={`flex flex-col items-center justify-center py-3 px-1 ${
+                    isActive 
+                      ? 'text-customPurple' 
+                      : 'text-gray-400 hover:text-gray-300'
+                  } transition-all duration-300`}
+                  onClick={handleNavClick}
+                >
+                  <div 
+                    className={`${
+                      isActive 
+                        ? 'bg-white/10 p-2 rounded-full shadow-inner' 
+                        : 'p-2'
+                    } ${isAnimating ? 'animate-star-glow' : ''}`}
+                  >
+                    {item.icon}
+                  </div>
+                  <span className={`text-xs mt-1 ${isActive ? 'font-medium' : 'font-normal'}`}>
+                    {item.label}
+                  </span>
+                  {isActive && (
+                    <div className="absolute bottom-0 w-1/4 h-0.5 bg-customPurple rounded-t-full animate-pulse-slow" />
+                  )}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </nav>

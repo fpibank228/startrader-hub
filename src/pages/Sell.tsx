@@ -1,17 +1,20 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Star, DollarSign, Wallet } from 'lucide-react';
+import { Star, DollarSign, Wallet, Loader2 } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 import StarBackground from '../components/StarBackground';
 import StarCard from '../components/StarCard';
 import StarAmountSelector from '../components/StarAmountSelector';
+import { Input } from '@/components/ui/input';
 
 const TON_PRICE = 3.5; // TON price in USD
 const STAR_PRICE = 0.007; // Selling price per star in USD
 
 const Sell = () => {
   const [selectedStars, setSelectedStars] = useState<number | null>(null);
+  const [tonAddress, setTonAddress] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   const handleStarSelect = (amount: number) => {
@@ -30,6 +33,12 @@ const Sell = () => {
     };
   };
 
+  const isValidTonAddress = (address: string) => {
+    // Простая проверка - адрес должен начинаться с "EQ" или "UQ" и быть не короче 48 символов
+    // В реальном приложении нужна более точная валидация
+    return (address.startsWith('EQ') || address.startsWith('UQ')) && address.length >= 48;
+  };
+
   const handleSell = () => {
     if (!selectedStars) {
       toast({
@@ -40,10 +49,24 @@ const Sell = () => {
       return;
     }
 
-    toast({
-      title: "Заявка создана",
-      description: `Вы продаете ${selectedStars} звезд за ${calculatePrice().ton} TON`,
-    });
+    if (!tonAddress || !isValidTonAddress(tonAddress)) {
+      toast({
+        title: "Ошибка",
+        description: "Пожалуйста, введите корректный адрес TON кошелька",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Симуляция отправки запроса
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      toast({
+        title: "Заявка создана",
+        description: `Вы продаете ${selectedStars} звезд за ${calculatePrice().ton} TON`,
+      });
+    }, 1500);
   };
 
   return (
@@ -116,6 +139,24 @@ const Sell = () => {
                     </span>
                   </div>
                 </div>
+
+                <div className="mt-4 pt-4 border-t border-white/10">
+                  <label className="block text-white/90 text-sm mb-2">
+                    Адрес TON кошелька для получения средств:
+                  </label>
+                  <Input 
+                    type="text"
+                    placeholder="Например: EQABCDefg..."
+                    value={tonAddress}
+                    onChange={(e) => setTonAddress(e.target.value)}
+                    className="bg-white/5 border-white/10 focus:border-customPurple"
+                  />
+                  {tonAddress && !isValidTonAddress(tonAddress) && (
+                    <p className="text-red-400 text-xs mt-1">
+                      Введите корректный TON адрес (начинается с EQ или UQ)
+                    </p>
+                  )}
+                </div>
               </StarCard>
             </motion.div>
           )}
@@ -127,15 +168,19 @@ const Sell = () => {
           >
             <button
               onClick={handleSell}
-              disabled={!selectedStars}
+              disabled={!selectedStars || !isValidTonAddress(tonAddress) || isSubmitting}
               className={`w-full py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-300 ${
-                selectedStars
-                  ? 'bg-customMidBlue text-white btn-glow hover:bg-opacity-90'
+                selectedStars && isValidTonAddress(tonAddress) && !isSubmitting
+                  ? 'bg-purple-600 text-white hover:bg-purple-700 btn-glow'
                   : 'bg-white/10 text-white/50 cursor-not-allowed'
               }`}
             >
-              <Wallet size={18} />
-              Продать звезды
+              {isSubmitting ? (
+                <Loader2 size={18} className="animate-spin" />
+              ) : (
+                <Wallet size={18} />
+              )}
+              {isSubmitting ? 'Обработка...' : 'Продать звезды'}
             </button>
           </motion.div>
         </div>
