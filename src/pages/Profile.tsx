@@ -6,6 +6,7 @@ import StarBackground from '../components/StarBackground';
 import StarCard from '../components/StarCard';
 import { useToast } from '../hooks/use-toast';
 import { Button } from '@/components/ui/button';
+import {TonConnectButton} from "@tonconnect/ui-react";
 
 interface Transaction {
   id: number;
@@ -104,16 +105,9 @@ const Profile = () => {
                   </div>
                   <h2 className="text-xl font-bold mb-1">Пользователь</h2>
                   <p className="text-white/70 text-sm mb-4">user@example.com</p>
-                  
-                  <Button
-                    onClick={handleConnectWallet}
-                    disabled={walletConnected}
-                    className={`mb-4 ${walletConnected ? 'bg-green-600' : 'bg-customPurple'}`}
-                  >
-                    <Wallet className="mr-2 h-4 w-4" />
-                    {walletConnected ? 'Кошелек подключен' : 'Подключить кошелек'}
-                  </Button>
-                  
+
+                  <TonConnectButton className={`mb-4`}/>
+
                   <div className="w-full h-0.5 bg-white/10 my-4"></div>
                   
                   <div className="w-full grid grid-cols-2 gap-4">
