@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, DollarSign, Store, User } from 'lucide-react';
+import { Home, DollarSign, User, Loader2 } from 'lucide-react';
 
 const Navigation = () => {
   const location = useLocation();
@@ -15,7 +15,7 @@ const Navigation = () => {
   const navItems = [
     { path: '/', label: 'Главная', icon: <Home className="w-5 h-5" /> },
     { path: '/buy', label: 'Купить', icon: <DollarSign className="w-5 h-5" /> },
-    { path: '/sell', label: 'Продать', icon: <Store className="w-5 h-5" /> },
+    { path: '/roulette', label: 'Рулетка', icon: <Loader2 className="w-5 h-5" /> },
     { path: '/profile', label: 'Профиль', icon: <User className="w-5 h-5" /> },
   ];
 
@@ -39,7 +39,7 @@ const Navigation = () => {
                   <div 
                     className={`${
                       isActive 
-                        ? 'bg-white/10 p-2 rounded-full shadow-inner' 
+                        ? 'bg-white/20 p-2 rounded-full shadow-inner glow-purple' 
                         : 'p-2'
                     } ${isAnimating ? 'animate-star-glow' : ''}`}
                   >
@@ -49,7 +49,7 @@ const Navigation = () => {
                     {item.label}
                   </span>
                   {isActive && (
-                    <div className="absolute bottom-0 w-1/4 h-0.5 bg-customPurple rounded-t-full animate-pulse-slow" />
+                    <div className="absolute bottom-0 w-1/4 h-1 bg-customPurple rounded-t-full animate-pulse-slow" />
                   )}
                 </Link>
               </li>

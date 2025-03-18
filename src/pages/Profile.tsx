@@ -1,9 +1,11 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Star, History, User, DollarSign } from 'lucide-react';
+import { Star, History, User, DollarSign, Share2, Wallet } from 'lucide-react';
 import StarBackground from '../components/StarBackground';
 import StarCard from '../components/StarCard';
+import { useToast } from '../hooks/use-toast';
+import { Button } from '@/components/ui/button';
 
 interface Transaction {
   id: number;
@@ -15,6 +17,8 @@ interface Transaction {
 
 const Profile = () => {
   const [tab, setTab] = useState<'profile' | 'history'>('profile');
+  const [walletConnected, setWalletConnected] = useState(false);
+  const { toast } = useToast();
   
   const mockTransactions: Transaction[] = [
     { id: 1, type: 'buy', amount: 100, date: '10.05.2023', price: '0.43 TON' },
@@ -31,6 +35,22 @@ const Profile = () => {
   const totalSold = mockTransactions
     .filter(t => t.type === 'sell')
     .reduce((sum, t) => sum + t.amount, 0);
+
+  const handleConnectWallet = () => {
+    setWalletConnected(true);
+    toast({
+      title: "Кошелек подключен",
+      description: "Ваш TON кошелек успешно подключен к аккаунту",
+    });
+  };
+
+  const handleCopyReferral = () => {
+    navigator.clipboard.writeText('https://star-market.com/ref/user123');
+    toast({
+      title: "Скопировано",
+      description: "Реферальная ссылка скопирована в буфер обмена",
+    });
+  };
 
   return (
     <div className="relative min-h-screen pt-4 pb-24">
@@ -85,6 +105,15 @@ const Profile = () => {
                   <h2 className="text-xl font-bold mb-1">Пользователь</h2>
                   <p className="text-white/70 text-sm mb-4">user@example.com</p>
                   
+                  <Button
+                    onClick={handleConnectWallet}
+                    disabled={walletConnected}
+                    className={`mb-4 ${walletConnected ? 'bg-green-600' : 'bg-customPurple'}`}
+                  >
+                    <Wallet className="mr-2 h-4 w-4" />
+                    {walletConnected ? 'Кошелек подключен' : 'Подключить кошелек'}
+                  </Button>
+                  
                   <div className="w-full h-0.5 bg-white/10 my-4"></div>
                   
                   <div className="w-full grid grid-cols-2 gap-4">
@@ -103,6 +132,39 @@ const Profile = () => {
                       </div>
                       <p className="text-2xl font-bold">{totalSold}</p>
                     </div>
+                  </div>
+                </div>
+              </StarCard>
+              
+              {/* Referral Program Card */}
+              <StarCard className="mb-6 border border-customPurple/30">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-customPurple/20 flex items-center justify-center">
+                    <Share2 className="text-customPurple" size={20} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold">Реферальная программа</h3>
+                    <p className="text-xs text-white/70">Приглашайте друзей и получайте бонусы</p>
+                  </div>
+                </div>
+                
+                <div className="p-3 rounded-lg bg-white/5 mb-4">
+                  <p className="text-sm font-medium mb-1">Ваш бонус:</p>
+                  <p className="text-xl font-bold text-green-400">50% от прибыли</p>
+                </div>
+                
+                <div className="space-y-2">
+                  <p className="text-sm text-white/70">Ваша реферальная ссылка:</p>
+                  <div className="flex">
+                    <div className="flex-1 bg-white/5 truncate rounded-l-lg p-2 text-xs border border-white/10">
+                      https://star-market.com/ref/user123
+                    </div>
+                    <button 
+                      onClick={handleCopyReferral}
+                      className="bg-customPurple text-white px-3 rounded-r-lg text-xs"
+                    >
+                      Копировать
+                    </button>
                   </div>
                 </div>
               </StarCard>

@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { Star } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 interface StarAmountSelectorProps {
   onSelect: (amount: number) => void;
@@ -8,11 +9,24 @@ interface StarAmountSelectorProps {
 
 const StarAmountSelector = ({ onSelect }: StarAmountSelectorProps) => {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
+  const [customAmount, setCustomAmount] = useState<string>('');
   const starAmounts = [50, 100, 150, 200, 250, 500, 1000];
 
   const handleSelect = (amount: number) => {
     setSelectedAmount(amount);
+    setCustomAmount('');
     onSelect(amount);
+  };
+
+  const handleCustomAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setCustomAmount(value);
+    setSelectedAmount(null);
+    
+    const numValue = parseInt(value, 10);
+    if (!isNaN(numValue) && numValue > 0) {
+      onSelect(numValue);
+    }
   };
 
   return (
@@ -37,6 +51,20 @@ const StarAmountSelector = ({ onSelect }: StarAmountSelectorProps) => {
             <span className="font-medium">{amount}</span>
           </button>
         ))}
+      </div>
+      
+      <div className="mt-4">
+        <label className="block text-white/90 text-sm mb-2">
+          Или введите своё количество:
+        </label>
+        <Input 
+          type="number"
+          min="1"
+          placeholder="Например: 75"
+          value={customAmount}
+          onChange={handleCustomAmountChange}
+          className="bg-white/5 border-white/10 focus:border-customPurple"
+        />
       </div>
     </div>
   );
