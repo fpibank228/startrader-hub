@@ -31,7 +31,7 @@ const Navigation = () => {
                   to={item.path}
                   className={`flex flex-col items-center justify-center py-3 px-1 ${
                     isActive 
-                      ? 'text-customPurple' 
+                      ? 'text-white' 
                       : 'text-gray-400 hover:text-gray-300'
                   } transition-all duration-300`}
                   onClick={handleNavClick}
@@ -39,17 +39,17 @@ const Navigation = () => {
                   <div 
                     className={`${
                       isActive 
-                        ? 'bg-white/20 p-2 rounded-full shadow-inner glow-purple' 
+                        ? 'bg-white/20 p-2 rounded-full shadow-inner glow-purple border border-white/30' 
                         : 'p-2'
                     } ${isAnimating ? 'animate-star-glow' : ''}`}
                   >
                     {item.icon}
                   </div>
-                  <span className={`text-xs mt-1 ${isActive ? 'font-medium' : 'font-normal'}`}>
+                  <span className={`text-xs mt-1 ${isActive ? 'font-semibold text-white' : 'font-normal'}`}>
                     {item.label}
                   </span>
                   {isActive && (
-                    <div className="absolute bottom-0 w-1/4 h-1 bg-customPurple rounded-t-full animate-pulse-slow" />
+                    <div className="absolute bottom-0 w-1/4 h-1 bg-white rounded-t-full animate-pulse-slow" />
                   )}
                 </Link>
               </li>
