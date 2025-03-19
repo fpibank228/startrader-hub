@@ -8,8 +8,8 @@ import WebApp from "@twa-dev/sdk";
 globalThis.Buffer = Buffer;
 window.Buffer = Buffer;
 
-const tele = WebApp;
-tele.ready();
-tele.setHeaderColor("#000");
-tele.setBackgroundColor("#000");
+// const tele = WebApp;
+// tele.ready();
+// tele.setHeaderColor("#000");
+// tele.setBackgroundColor("#000");
 createRoot(document.getElementById("root")!).render(<App />);
