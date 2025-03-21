@@ -1,6 +1,8 @@
+
 import { useState } from 'react';
-import { Star } from 'lucide-react';
+import { Star, Check, User } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 interface StarAmountSelectorProps {
   onSelect: (amount: number) => void;
@@ -9,7 +11,8 @@ interface StarAmountSelectorProps {
 const StarAmountSelector = ({ onSelect }: StarAmountSelectorProps) => {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(50); // Начальное значение 50
   const [customAmount, setCustomAmount] = useState<string>('');
-  const starAmounts = [50, 100, 150, 200, 250, 500, 1000];
+  const [username, setUsername] = useState<string>('');
+  const starAmounts = [50, 100, 500, 1000];
 
   const handleSelect = (amount: number) => {
     setSelectedAmount(amount);
@@ -30,10 +33,23 @@ const StarAmountSelector = ({ onSelect }: StarAmountSelectorProps) => {
     }
   };
 
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+  };
+
+  const handleCheckUsername = () => {
+    // Здесь можно добавить логику проверки имени пользователя
+    console.log('Проверка имени пользователя:', username);
+  };
+
+  const handleSetMyUsername = () => {
+    setUsername('hostnes');
+  };
+
   return (
       <div className="space-y-3">
         <h3 className="text-lg font-medium text-white/90">Выберите количество звезд:</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {starAmounts.map((amount) => (
               <button
                   key={amount}
@@ -70,6 +86,37 @@ const StarAmountSelector = ({ onSelect }: StarAmountSelectorProps) => {
                 MozAppearance: 'textfield', // Скрыть стрелочки в Firefox
               }}
           />
+        </div>
+
+        <div className="mt-4">
+          <label className="block text-white/90 text-sm mb-2">
+            Введите имя пользователя:
+          </label>
+          <div className="flex gap-2">
+            <Input
+                type="text"
+                placeholder="Имя пользователя"
+                value={username}
+                onChange={handleUsernameChange}
+                className="bg-white/5 border-white/10 focus:border-customPurple flex-grow"
+            />
+            <Button 
+                onClick={handleCheckUsername}
+                variant="outline" 
+                className="bg-white/5 border-white/10 hover:bg-white/10 text-white"
+            >
+                <Check size={16} className="mr-1" />
+                Проверить
+            </Button>
+            <Button 
+                onClick={handleSetMyUsername}
+                variant="outline" 
+                className="bg-white/5 border-white/10 hover:bg-white/10 text-white"
+            >
+                <User size={16} className="mr-1" />
+                Себе
+            </Button>
+          </div>
         </div>
       </div>
   );
