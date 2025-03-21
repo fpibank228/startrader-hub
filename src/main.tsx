@@ -12,6 +12,7 @@ window.Buffer = Buffer;
 const tele = WebApp;
 tele.ready();
 viewport.mount.isAvailable()
-tele.setHeaderColor("#0C0032");
+tele.setHeaderColor("#000");
 tele.setBackgroundColor("#0C0032");
+tele.requestFullscreen()
 createRoot(document.getElementById("root")!).render(<App />);

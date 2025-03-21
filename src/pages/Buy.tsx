@@ -49,6 +49,8 @@ const Buy = () => {
             toast({
                 title: 'Успешно',
                 description: `Имя пользователя ${checkedUsername} проверено!`,
+                variant: 'green',
+
             });
         } else if (checkedUsername && !isValid) {
             toast({

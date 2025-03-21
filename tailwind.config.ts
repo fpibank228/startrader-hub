@@ -65,6 +65,7 @@ export default {
 				},
 				// Custom colors based on the provided palette
 				customDarkBlue: '#0C0032',
+				customDark: '#000',
 				customMidBlue: '#190061',
 				customBrightBlue: '#240090',
 				customPurple: '#3500D3',
