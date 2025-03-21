@@ -6,12 +6,14 @@ import { Button } from '@/components/ui/button';
 
 interface StarAmountSelectorProps {
   onSelect: (amount: number) => void;
+  onUsernameCheck: (username: string, isValid: boolean) => void;
 }
 
-const StarAmountSelector = ({ onSelect }: StarAmountSelectorProps) => {
+const StarAmountSelector = ({ onSelect, onUsernameCheck }: StarAmountSelectorProps) => {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(50); // Начальное значение 50
   const [customAmount, setCustomAmount] = useState<string>('');
   const [username, setUsername] = useState<string>('');
+  const [isChecking, setIsChecking] = useState(false);
   const starAmounts = [50, 100, 500, 1000];
 
   const handleSelect = (amount: number) => {
@@ -35,15 +37,32 @@ const StarAmountSelector = ({ onSelect }: StarAmountSelectorProps) => {
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
+    // Reset check when username changes
+    onUsernameCheck('', false);
   };
 
   const handleCheckUsername = () => {
-    // Здесь можно добавить логику проверки имени пользователя
-    console.log('Проверка имени пользователя:', username);
+    if (!username) {
+      return;
+    }
+    
+    setIsChecking(true);
+    
+    // Имитация проверки имени пользователя
+    // В реальном приложении здесь будет API запрос
+    setTimeout(() => {
+      console.log('Проверка имени пользователя:', username);
+      const isValid = username.length >= 3; // Пример простой валидации
+      onUsernameCheck(username, isValid);
+      setIsChecking(false);
+    }, 1000);
   };
 
   const handleSetMyUsername = () => {
-    setUsername('hostnes');
+    const myUsername = 'hostnes';
+    setUsername(myUsername);
+    // Automatically validate my username
+    onUsernameCheck(myUsername, true);
   };
 
   return (
@@ -103,10 +122,11 @@ const StarAmountSelector = ({ onSelect }: StarAmountSelectorProps) => {
             <Button 
                 onClick={handleCheckUsername}
                 variant="outline" 
-                className="bg-white/5 border-white/10 hover:bg-white/10 text-white"
+                className={`bg-white/5 border-white/10 hover:bg-white/10 text-white ${isChecking ? 'opacity-50' : ''}`}
+                disabled={isChecking || !username}
             >
                 <Check size={16} className="mr-1" />
-                Проверить
+                {isChecking ? 'Проверка...' : 'Проверить'}
             </Button>
             <Button 
                 onClick={handleSetMyUsername}

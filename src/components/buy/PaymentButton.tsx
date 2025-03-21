@@ -19,7 +19,7 @@ const PaymentButton = ({ handlePayment, isDisabled }: PaymentButtonProps) => {
         disabled={isDisabled}
         className={`w-full py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-300 ${
           !isDisabled
-            ? 'bg-customPurple text-white btn-glow hover:bg-opacity-90'
+            ? 'bg-customPurple text-white btn-glow hover:bg-opacity-90 animate-pulse-purple'
             : 'bg-white/10 text-white/50 cursor-not-allowed'
         }`}
       >

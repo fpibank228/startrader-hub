@@ -21,6 +21,8 @@ const Buy = () => {
   const [selectedStars, setSelectedStars] = useState<number>(50);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isUsernameChecked, setIsUsernameChecked] = useState(false);
+  const [username, setUsername] = useState<string>('');
   const { toast } = useToast();
   const [tonConnectUI] = useTonConnectUI();
   const wallet = useTonWallet();
@@ -38,6 +40,24 @@ const Buy = () => {
 
   const handleStarSelect = (amount: number) => {
     setSelectedStars(amount);
+  };
+
+  const handleUsernameCheck = (checkedUsername: string, isValid: boolean) => {
+    setUsername(checkedUsername);
+    setIsUsernameChecked(isValid);
+    
+    if (isValid) {
+      toast({
+        title: 'Успешно',
+        description: `Имя пользователя ${checkedUsername} проверено!`,
+      });
+    } else if (checkedUsername && !isValid) {
+      toast({
+        title: 'Ошибка',
+        description: 'Имя пользователя не прошло проверку.',
+        variant: 'destructive',
+      });
+    }
   };
 
   const calculatePrice = () => {
@@ -63,6 +83,11 @@ const Buy = () => {
   const handlePayment = () => {
     if (!selectedStars || selectedStars < 50) {
       showErrorToast('Минимальное количество звезд — 50.');
+      return;
+    }
+
+    if (!isUsernameChecked || !username) {
+      showErrorToast('Необходимо проверить имя пользователя перед оплатой.');
       return;
     }
 
@@ -95,7 +120,7 @@ const Buy = () => {
     handleSubmit();
   };
 
-  const isPaymentDisabled = !tonConnectUI.connected || !selectedStars || !tonPrice || selectedStars < 50;
+  const isPaymentDisabled = !tonConnectUI.connected || !selectedStars || !tonPrice || selectedStars < 50 || !isUsernameChecked || !username;
 
   return (
     <div
@@ -134,7 +159,10 @@ const Buy = () => {
                 <span className="text-white font-bold">${STAR_PRICE}</span>
               </div>
               <div className="h-0.5 bg-white/10 mb-4"></div>
-              <StarAmountSelector onSelect={handleStarSelect} />
+              <StarAmountSelector 
+                onSelect={handleStarSelect} 
+                onUsernameCheck={handleUsernameCheck} 
+              />
             </StarCard>
           </motion.div>
 
