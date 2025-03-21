@@ -7,15 +7,19 @@ import {
   ToastTitle,
   ToastViewport,
 } from "@/components/ui/toast"
+import WebApp from "@twa-dev/sdk";
 
 export function Toaster() {
   const { toasts } = useToast()
+  const isFullscreen = WebApp.isFullscreen;
 
   return (
     <ToastProvider>
       {toasts.map(function ({ id, title, description, action, ...props }) {
         return (
-          <Toast key={id} {...props}>
+          <Toast key={id} {...props} style={{
+            marginTop: isFullscreen ? "80px" : "0px",
+          }}>
             <div className="grid gap-1">
               {title && <ToastTitle>{title}</ToastTitle>}
               {description && (

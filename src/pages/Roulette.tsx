@@ -5,10 +5,12 @@ import { Loader2 } from 'lucide-react';
 import StarBackground from '../components/StarBackground';
 import StarCard from '../components/StarCard';
 import { useToast } from '../hooks/use-toast';
+import WebApp from "@twa-dev/sdk";
 
 const Roulette = () => {
   const [isSpinning, setIsSpinning] = useState(false);
   const { toast } = useToast();
+  const isFullscreen = WebApp.isFullscreen;
 
   useEffect(() => {
     // Show toast when page loads
@@ -31,7 +33,9 @@ const Roulette = () => {
   };
 
   return (
-    <div className="relative min-h-screen pt-4 pb-24">
+    <div className="relative min-h-screen pt-4 pb-24" style={{
+      marginTop: isFullscreen ? "80px" : "0px",
+    }}>
       <StarBackground />
       
       <div className="relative z-10 container mx-auto px-4">

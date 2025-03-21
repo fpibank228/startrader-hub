@@ -68,6 +68,7 @@ export default {
 				customMidBlue: '#190061',
 				customBrightBlue: '#240090',
 				customPurple: '#3500D3',
+				customBlue: '#704ef8',
 				customDarkGray: '#282828',
 			},
 			borderRadius: {

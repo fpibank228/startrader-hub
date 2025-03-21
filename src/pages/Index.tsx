@@ -6,16 +6,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import StarBackground from '../components/StarBackground';
 import Logo from '../components/Logo';
 import StarCard from '../components/StarCard';
+import WebApp from "@twa-dev/sdk";
 
 const Index = () => {
   const [scrollY, setScrollY] = useState(0);
   const navigate = useNavigate();
+  const isFullscreen = WebApp.isFullscreen; // Получаем состояние полноэкранного режима
 
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -25,7 +26,9 @@ const Index = () => {
   };
 
   return (
-      <div className="relative min-h-screen pt-4 pb-24">
+      <div className="relative min-h-screen pt-4 pb-24" style={{
+        marginTop: isFullscreen ? "80px" : "0px",
+      }}>
         <StarBackground />
 
         <div className="relative z-10 container mx-auto px-4">
