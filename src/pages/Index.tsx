@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {motion} from 'framer-motion';
 import {Star, ArrowRight} from 'lucide-react';
 import {Link, useNavigate} from 'react-router-dom';
@@ -6,6 +6,7 @@ import StarBackground from '../components/StarBackground';
 import Logo from '../components/Logo';
 import StarCard from '../components/StarCard';
 import WebApp from "@twa-dev/sdk";
+import { Home, DollarSign, User, Loader2 } from 'lucide-react';
 
 const Index = () => {
     const [scrollY, setScrollY] = useState(0);
@@ -22,6 +23,12 @@ const Index = () => {
 
     const handleBuyStarsClick = () => {
         navigate('/buy');
+    };
+    const handleRouletteStarsClick = () => {
+        navigate('/roulette');
+    };
+    const handleProfileStarsClick = () => {
+        navigate('/profile');
     };
 
     return (
@@ -66,6 +73,50 @@ const Index = () => {
                             </div>
                         </StarCard>
                     </motion.div>
+                    <motion.div
+                        initial={{opacity: 0, x: -20}}
+                        animate={{opacity: 1, x: 0}}
+                        transition={{duration: 0.5, delay: 0.2}}
+                        onClick={handleRouletteStarsClick}
+                        className="cursor-pointer hover:scale-105 transition-all duration-300"
+                    >
+                        <StarCard glowEffect className="flex items-center p-6">
+                            <div className="mr-4">
+                                <div
+                                    className="w-12 h-12 rounded-full bg-customPurple flex items-center justify-center">
+                                    <Loader2 className="w-6 h-6" />
+                                </div>
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-bold mb-1">Крутите рулетку</h3>
+                                <p className="text-white/70 text-sm">
+                                    Получите возможность увеличить ваши средства
+                                </p>
+                            </div>
+                        </StarCard>
+                    </motion.div>
+                    <motion.div
+                        initial={{opacity: 0, x: -20}}
+                        animate={{opacity: 1, x: 0}}
+                        transition={{duration: 0.5, delay: 0.2}}
+                        onClick={handleProfileStarsClick}
+                        className="cursor-pointer hover:scale-105 transition-all duration-300"
+                    >
+                        <StarCard glowEffect className="flex items-center p-6">
+                            <div className="mr-4">
+                                <div
+                                    className="w-12 h-12 rounded-full bg-customPurple flex items-center justify-center">
+                                    <User className="w-6 h-6 text-white" fill="white"/>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-bold mb-1">Следите за профилем</h3>
+                                <p className="text-white/70 text-sm">
+                                    Просматривайте историю покупок и реферальную активность
+                                </p>
+                            </div>
+                        </StarCard>
+                    </motion.div>
 
                     <motion.div
                         initial={{opacity: 0, y: 20}}
@@ -89,10 +140,21 @@ const Index = () => {
                     transition={{duration: 1, delay: 0.8}}
                     className="mt-20 text-center items-center flex items-center justify-center"
                 >
-                    <div className="coin-container w-44">
-                        <video className="absolute object-contain self-center w-44 "
-                               autoPlay loop playsInline src="https://fpibank.com/assets/img/output.webm"></video>
-                    </div>
+                    {/*<div*/}
+                    {/*    className="parent-container bg-transparent"> /!* Убедитесь, что родительский контейнер не имеет фона *!/*/}
+                    {/*    <div className="coin-container w-44 bg-transparent">*/}
+                    {/*        <video*/}
+                    {/*            className="absolute object-contain self-center w-44 h-16 bg-transparent"*/}
+                    {/*            autoPlay*/}
+                    {/*            loop*/}
+                    {/*            playsInline*/}
+                    {/*            src="/public/assets/sticker.webm"*/}
+                    {/*        ></video>*/}
+                    {/*        <video*/}
+                    {/*            className="absolute object-contain self-center w-full aspect-[2.43] max-md:max-w-full z-10"*/}
+                    {/*            autoPlay loop playsInline src="/public/assets/sticker.webm"></video>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                 </motion.div>
             </div>
         </div>
