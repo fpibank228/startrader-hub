@@ -49,7 +49,6 @@ export const processSuccessfulTransaction = async (
                 hash: hash,
                 stars_for_username: stars_for_username,
             },
-
         );
 
         setIsLoading(false);

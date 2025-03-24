@@ -13,7 +13,6 @@ const Roulette = () => {
   const isFullscreen = WebApp.isFullscreen;
 
   useEffect(() => {
-    // Show toast when page loads
     toast({
       title: "Функция в разработке",
       description: "Рулетка появится в ближайшем обновлении",

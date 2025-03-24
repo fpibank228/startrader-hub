@@ -153,7 +153,6 @@ const Index = () => {
                         </div>
                     </div>
                 </motion.div>
-                <p>{WebApp.initData}</p>
             </div>
         </div>
     );
