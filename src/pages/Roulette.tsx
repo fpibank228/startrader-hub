@@ -1,34 +1,88 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Loader2 } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import StarBackground from '../components/StarBackground';
-import StarCard from '../components/StarCard';
+import RouletteWheel from '../components/roulette/RouletteWheel';
+import RouletteSelector from '../components/roulette/RouletteSelector';
+import RouletteResult from '../components/roulette/RouletteResult';
 import { useToast } from '../hooks/use-toast';
 import WebApp from "@twa-dev/sdk";
 
+// Sample data for the roulette
+const rouletteData = [
+  {
+    'chance': 'yes',
+    'link': 'https://nft.fragment.com/gift/homemadecake-10230.lottie.json'
+  },
+  {
+    'chance': 'no',
+    'link': 'https://nft.fragment.com/gift/homemadecake-10230.lottie.json'
+  },
+  {
+    'chance': 'no',
+    'link': 'https://nft.fragment.com/gift/homemadecake-10230.lottie.json'
+  },
+];
+
+const rouletteOptions = [
+  {
+    id: 'basic',
+    title: 'Обычная рулетка',
+    description: 'Испытайте свою удачу с шансом выигрыша',
+  },
+  {
+    id: 'premium',
+    title: 'Премиум рулетка',
+    description: 'Увеличенные шансы на выигрыш',
+  },
+  {
+    id: 'vip',
+    title: 'VIP рулетка',
+    description: 'Эксклюзивные призы для VIP игроков',
+  }
+];
+
 const Roulette = () => {
-  const [isSpinning, setIsSpinning] = useState(false);
+  const [selectedRouletteType, setSelectedRouletteType] = useState<string | null>(null);
+  const [gameState, setGameState] = useState<'selecting' | 'playing' | 'result'>('selecting');
+  const [result, setResult] = useState<any>(null);
   const { toast } = useToast();
   const isFullscreen = WebApp.isFullscreen;
 
-  useEffect(() => {
-    toast({
-      title: "Функция в разработке",
-      description: "Рулетка появится в ближайшем обновлении",
-    });
-  }, [toast]);
+  const handleSelectRouletteType = (type: string) => {
+    setSelectedRouletteType(type);
+    setGameState('playing');
+  };
 
-  const handleSpinClick = () => {
-    setIsSpinning(true);
+  const handleSpinResult = (result: any) => {
+    setResult(result);
+    setGameState('result');
     
-    setTimeout(() => {
-      setIsSpinning(false);
+    if (result.chance === 'yes') {
       toast({
-        title: "Скоро открытие!",
-        description: "Рулетка будет доступна в следующем обновлении",
+        title: "Поздравляем!",
+        description: "Вы выиграли приз!",
       });
-    }, 2000);
+    } else {
+      toast({
+        title: "Не повезло",
+        description: "Попробуйте еще раз!",
+      });
+    }
+  };
+
+  const handlePlayAgain = () => {
+    setGameState('playing');
+    setResult(null);
+  };
+
+  const handleBack = () => {
+    if (gameState === 'playing' || gameState === 'result') {
+      setGameState('selecting');
+      setSelectedRouletteType(null);
+      setResult(null);
+    }
   };
 
   return (
@@ -38,75 +92,76 @@ const Roulette = () => {
       <StarBackground />
       
       <div className="relative z-10 container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-8"
-        >
-          <h1 className="text-2xl font-bold mb-2">Звёздная Рулетка</h1>
-          <p className="text-white/70 text-sm max-w-md mx-auto">
-            Испытайте удачу и выиграйте звезды! Особый режим для смелых игроков.
-          </p>
-        </motion.div>
+        <div className="flex items-center mb-6">
+          {(gameState === 'playing' || gameState === 'result') && (
+            <button 
+              onClick={handleBack}
+              className="mr-2 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              <ArrowLeft size={20} />
+            </button>
+          )}
+          
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-2xl font-bold"
+          >
+            {gameState === 'selecting' 
+              ? 'Звёздная Рулетка' 
+              : selectedRouletteType === 'basic' 
+                ? 'Обычная рулетка'
+                : selectedRouletteType === 'premium'
+                  ? 'Премиум рулетка'
+                  : 'VIP рулетка'}
+          </motion.h1>
+        </div>
 
-        <div className="max-w-md mx-auto">
+        {gameState === 'selecting' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.5 }}
           >
-            <StarCard className="mb-6 p-8 text-center">
-              <div className="relative mb-8">
-                <div className="w-32 h-32 rounded-full bg-gradient-to-r from-customPurple to-customBrightBlue mx-auto relative overflow-hidden">
-                  <motion.div 
-                    className="absolute inset-0 flex items-center justify-center"
-                    animate={{ rotate: isSpinning ? 360 : 0 }}
-                    transition={{ 
-                      duration: 2,
-                      ease: "linear",
-                      repeat: isSpinning ? Infinity : 0
-                    }}
-                  >
-                    <Loader2 size={64} className="text-white" />
-                  </motion.div>
-                  
-                  {/* Декоративные элементы */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-white/5"></div>
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white/10"></div>
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/20"></div>
-                </div>
-                
-                {/* Блики */}
-                <div className="absolute -top-4 -right-4 w-12 h-12 bg-customPurple/20 rounded-full blur-lg"></div>
-                <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-customBrightBlue/20 rounded-full blur-lg"></div>
-              </div>
-              
-              <h2 className="text-xl font-bold mb-4">В разработке</h2>
-              <p className="text-white/70 mb-6">
-                Мы работаем над созданием уникальной системы рулетки звёзд. Скоро здесь появится возможность выиграть до x10 от вашей ставки!
-              </p>
-              
-              <button
-                onClick={handleSpinClick}
-                disabled={isSpinning}
-                className="w-full py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-customPurple to-purple-700 text-white hover:opacity-90"
-              >
-                {isSpinning ? (
-                  <>
-                    <Loader2 size={18} className="animate-spin" />
-                    Загрузка...
-                  </>
-                ) : (
-                  <>
-                    <Loader2 size={18} />
-                    Скоро открытие!
-                  </>
-                )}
-              </button>
-            </StarCard>
+            <p className="text-white/70 text-sm mb-6">
+              Испытайте удачу и выиграйте звезды! Выберите тип рулетки, чтобы начать игру.
+            </p>
+            
+            <RouletteSelector 
+              options={rouletteOptions} 
+              onSelect={handleSelectRouletteType} 
+            />
           </motion.div>
-        </div>
+        )}
+
+        {gameState === 'playing' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="max-w-md mx-auto"
+          >
+            <RouletteWheel 
+              items={rouletteData}
+              onSpin={handleSpinResult} 
+            />
+          </motion.div>
+        )}
+
+        {gameState === 'result' && result && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="max-w-md mx-auto"
+          >
+            <RouletteResult 
+              result={result}
+              onPlayAgain={handlePlayAgain}
+            />
+          </motion.div>
+        )}
       </div>
     </div>
   );
