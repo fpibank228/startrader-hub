@@ -13,6 +13,7 @@ import PaymentButton from '../components/buy/PaymentButton';
 import TransactionStatusDialog from '../components/buy/TransactionStatusDialog';
 import {createTransactionRequest, processSuccessfulTransaction} from '../utils/transactionUtils';
 import WebApp from '@twa-dev/sdk';
+import {SafeAreaInset} from "@twa-dev/types";
 
 const STAR_PRICE = 0.020;
 
@@ -29,6 +30,7 @@ const Buy = () => {
     const isFullscreen = WebApp.isFullscreen;
 
     useEffect(() => {
+        WebApp.isVerticalSwipesEnabled = false
         if (!tonConnectUI.connected) {
             toast({
                 title: 'Подключите кошелек!',

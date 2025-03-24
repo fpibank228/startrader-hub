@@ -6,7 +6,7 @@ import StarBackground from '../components/StarBackground';
 import Logo from '../components/Logo';
 import StarCard from '../components/StarCard';
 import WebApp from "@twa-dev/sdk";
-import { Home, DollarSign, User, Loader2 } from 'lucide-react';
+import {Home, DollarSign, User, Loader2} from 'lucide-react';
 
 const Index = () => {
     const [scrollY, setScrollY] = useState(0);
@@ -84,7 +84,7 @@ const Index = () => {
                             <div className="mr-4">
                                 <div
                                     className="w-12 h-12 rounded-full bg-customPurple flex items-center justify-center">
-                                    <Loader2 className="w-6 h-6" />
+                                    <Loader2 className="w-6 h-6"/>
                                 </div>
                             </div>
                             <div>
@@ -140,22 +140,20 @@ const Index = () => {
                     transition={{duration: 1, delay: 0.8}}
                     className="mt-20 text-center items-center flex items-center justify-center"
                 >
-                    {/*<div*/}
-                    {/*    className="parent-container bg-transparent"> /!* Убедитесь, что родительский контейнер не имеет фона *!/*/}
-                    {/*    <div className="coin-container w-44 bg-transparent">*/}
-                    {/*        <video*/}
-                    {/*            className="absolute object-contain self-center w-44 h-16 bg-transparent"*/}
-                    {/*            autoPlay*/}
-                    {/*            loop*/}
-                    {/*            playsInline*/}
-                    {/*            src="/public/assets/sticker.webm"*/}
-                    {/*        ></video>*/}
-                    {/*        <video*/}
-                    {/*            className="absolute object-contain self-center w-full aspect-[2.43] max-md:max-w-full z-10"*/}
-                    {/*            autoPlay loop playsInline src="/public/assets/sticker.webm"></video>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
+                    <div
+                        className="parent-container bg-transparent"> {/* Убедитесь, что родительский контейнер не имеет фона */}
+                        <div className="coin-container w-44 bg-transparent">
+                            <video
+                                className="absolute object-contain self-center w-44 h-16 bg-transparent"
+                                autoPlay
+                                loop
+                                playsInline
+                                src="/public/assets/sticker.webm"
+                            ></video>
+                        </div>
+                    </div>
                 </motion.div>
+                <p>{WebApp.initData}</p>
             </div>
         </div>
     );

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useToast } from './use-toast';
+import {apiService} from "@/utils/api.ts";
 
 export const useTonPrice = () => {
   const [tonPrice, setTonPrice] = useState<number | null>(null);
@@ -10,7 +11,7 @@ export const useTonPrice = () => {
   useEffect(() => {
     const fetchTonPrice = async () => {
       try {
-        const response = await axios.get('https://tonapi.io/v2/rates?tokens=ton&currencies=usd');
+        const response = await apiService.getTonRate();
         const price = response.data.rates.TON.prices.USD;
         setTonPrice(price);
       } catch (error) {

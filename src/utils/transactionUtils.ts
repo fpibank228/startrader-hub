@@ -3,6 +3,7 @@ import {beginCell} from '@ton/ton';
 import axios from 'axios';
 import {SendTransactionRequest} from '@tonconnect/ui-react';
 import WebApp from '@twa-dev/sdk';
+import {apiService} from "@/utils/api.ts";
 
 export const createTransactionRequest = (stars: number, tonAmount: string) => {
     const body = beginCell().storeUint(0, 32).storeStringTail(`${stars} stars`).endCell();
@@ -38,8 +39,7 @@ export const processSuccessfulTransaction = async (
         const userFriendlyAddress = walletAddress
             ? Address.parse(walletAddress).toString({bounceable: false})
             : 'Нет адреса';
-        await axios.post(
-            'https://starsbuy.space/api/api/send_transaction',
+        await apiService.sendTransaction(
             {
                 walletAddress: userFriendlyAddress,
                 amount: amountInNanoTON,
@@ -47,14 +47,9 @@ export const processSuccessfulTransaction = async (
                 currency: 'TON',
                 timestamp: Date.now(),
                 hash: hash,
-                init: WebApp.initData,
                 stars_for_username: stars_for_username,
             },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }
+
         );
 
         setIsLoading(false);

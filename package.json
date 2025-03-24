@@ -49,7 +49,7 @@
     "@ton/core": "^0.60.0",
     "@ton/ton": "^15.2.1",
     "@tonconnect/ui-react": "2.0.10-beta.1",
-    "@twa-dev/sdk": "^8.0.1",
+    "@twa-dev/sdk": "^8.0.2",
     "@vitejs/plugin-react": "^4.3.4",
     "axios": "^1.7.8",
     "buffer": "^6.0.3",
