@@ -8,7 +8,6 @@ import WebApp from "@twa-dev/sdk";
 globalThis.Buffer = Buffer;
 window.Buffer = Buffer;
 try {
-
     const tele = WebApp;
     tele.ready();
     tele.setHeaderColor("#000");
