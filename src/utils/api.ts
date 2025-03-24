@@ -28,7 +28,7 @@ export const apiService = {
     async getTonRate() {
         try {
             const response = await tonApi.get('/rates?tokens=ton&currencies=usd');
-            return response.data;
+            return response;
         } catch (error) {
             console.error('TON API Error:', error);
             throw error;
@@ -38,8 +38,7 @@ export const apiService = {
     // Получение списка транзакций
     async getMyTransactions() {
         try {
-            const response = await mainApi.post('/get_my_transaction');
-            return response.data;
+            return await mainApi.post('/get_my_transaction');
         } catch (error) {
             console.error('Transactions API Error:', error);
             throw error;
@@ -49,8 +48,7 @@ export const apiService = {
     // Проверка имени пользователя
     async checkUsername(username: string, stars: number) {
         try {
-            const response = await mainApi.post('/stars/search', { username, stars });
-            return response.data;
+            return await mainApi.post('/stars/search', {username, stars});
         } catch (error) {
             console.error('Username check API Error:', error);
             throw error;

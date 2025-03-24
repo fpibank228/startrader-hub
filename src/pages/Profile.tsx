@@ -39,13 +39,14 @@ const Profile = () => {
         setIsLoading(true);
         try {
             const response = await apiService.getMyTransactions()
+            console.log(response)
             const json = await response.data;
             // if (!response.ok) {
             //     throw new Error('Ошибка при загрузке транзакций');
             // }
 
             const data = await response.data;
-            setTransactions(data.transactions); // Обновляем состояние транзакций
+            setTransactions(data["transactions"]); // Обновляем состояние транзакций
         } catch (error) {
             console.error(error);
             toast({
