@@ -10,10 +10,6 @@ import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import Navigation from "./components/Navigation";
 import {TonConnectUIProvider} from "@tonconnect/ui-react";
-import {useEffect} from "react";
-import {isTMA} from "@tma.js/sdk";
-import {init} from "i18next";
-import {viewport} from "@telegram-apps/sdk";
 import WebApp from "@twa-dev/sdk";
 
 const queryClient = new QueryClient();
@@ -21,40 +17,21 @@ const queryClient = new QueryClient();
 const App = () => {
     const isFullscreen = WebApp.isFullscreen;
 
-    useEffect(() => {
-        async function initTg() {
-            if (await isTMA()) {
-                if (viewport.requestFullscreen.isAvailable()) {
-                    await viewport.requestFullscreen();
-                }
-                init();
-                if (viewport.mount.isAvailable()) {
-                    await viewport.mount();
-                    viewport.expand();
-                }
-            }
-        }
-
-        initTg();
-    }, []);
-
     return (
         <TonConnectUIProvider manifestUrl="https://starsbuy.space/assets/tonconnect-manifest.json">
             <QueryClientProvider client={queryClient}>
                 <TooltipProvider>
-                    {/* Настройка Toaster */}
                     <Toaster
                     />
-                    {/* Настройка Sonner */}
                     <Sonner
                         toastOptions={{
                             style: {
-                                marginTop: isFullscreen ? "80px" : "0px", // Добавляем отступ сверху
+                                marginTop: isFullscreen ? "80px" : "0px",
                             },
                         }}
                     />
                     <BrowserRouter>
-                        <div className="pb-16"> {/* Add padding bottom for the navigation */}
+                        <div className="pb-16">
                             <Routes>
                                 <Route path="/" element={<Index/>}/>
                                 <Route path="/buy" element={<Buy/>}/>

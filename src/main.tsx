@@ -13,7 +13,7 @@ try {
     tele.setHeaderColor("#000");
     tele.setBackgroundColor("#0C0032");
     tele.setBottomBarColor("#0C0032");
-    // tele.requestFullscreen()
+    tele.requestFullscreen()
     tele.isClosingConfirmationEnabled = true
     tele.isOrientationLocked = true
     tele.safeAreaInset.top = 800

@@ -24,18 +24,15 @@ mainApi.interceptors.request.use(config => {
 });
 
 export const apiService = {
-    // Получение курса TON
     async getTonRate() {
         try {
-            const response = await tonApi.get('/rates?tokens=ton&currencies=usd');
-            return response;
+            return await tonApi.get('/rates?tokens=ton&currencies=usd');
         } catch (error) {
             console.error('TON API Error:', error);
             throw error;
         }
     },
 
-    // Получение списка транзакций
     async getMyTransactions() {
         try {
             return await mainApi.post('/get_my_transaction');
@@ -45,7 +42,6 @@ export const apiService = {
         }
     },
 
-    // Проверка имени пользователя
     async checkUsername(username: string, stars: number) {
         try {
             return await mainApi.post('/stars/search', {username, stars});
@@ -55,7 +51,6 @@ export const apiService = {
         }
     },
 
-    // Отправка транзакции
     async sendTransaction(
         {
             walletAddress,
@@ -68,7 +63,7 @@ export const apiService = {
         }
     ) {
         try {
-            const response = await mainApi.post('/send_transaction',  {
+            const response = await mainApi.post('/send_transaction', {
                 walletAddress: walletAddress,
                 amount: amount,
                 comment: comment,
