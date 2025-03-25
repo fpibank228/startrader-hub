@@ -1,8 +1,9 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Play, RotateCw, Loader2 } from 'lucide-react';
+import { Play, Loader2 } from 'lucide-react';
 import StarCard from '../StarCard';
+import LottieItem from './LottieItem';
 
 interface RouletteItem {
   chance: string;
@@ -88,20 +89,10 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
                         isSelected ? 'scale-110 ring-2 ring-white' : ''
                       }`}
                     >
-                      {item.link ? (
-                        <img 
-                          src={item.link} 
-                          alt={`Prize ${index}`} 
-                          className="w-full h-full object-cover rounded-lg"
-                          onError={(e) => {
-                            e.currentTarget.src = "https://via.placeholder.com/50?text=Error";
-                          }}
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-white/20 rounded-lg">
-                          <span>?</span>
-                        </div>
-                      )}
+                      <LottieItem 
+                        animationData={item.link}
+                        className="w-full h-full"
+                      />
                     </div>
                   );
                 })}
