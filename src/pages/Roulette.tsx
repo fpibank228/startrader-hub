@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Star, Award, Image } from 'lucide-react';
+import { ArrowLeft, Star } from 'lucide-react';
 import StarBackground from '../components/StarBackground';
 import RouletteWheel from '../components/roulette/RouletteWheel';
 import RouletteSelector from '../components/roulette/RouletteSelector';
@@ -35,7 +35,6 @@ const rouletteData = [
     'chance': 'no',
     'link': 'https://nft.fragment.com/gift/partysparkler-42951.lottie.json'
   },
-
 ];
 
 const rouletteOptions = [
@@ -50,15 +49,17 @@ const rouletteOptions = [
     id: 'nft',
     title: 'NFT рулетка',
     description: 'Выиграйте уникальные NFT предметы',
-    icon: <Image className="w-12 h-12 text-white/90" />,
-    imageBg: 'https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'
+    icon: <Star className="w-12 h-12 text-white/90 opacity-50" />,
+    imageBg: 'https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
+    disabled: true
   },
   {
     id: 'upgrade',
     title: 'Апгрейд рулетка',
     description: 'Улучшите свои существующие предметы',
-    icon: <Award className="w-12 h-12 text-white/90" />,
-    imageBg: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'
+    icon: <Star className="w-12 h-12 text-white/90 opacity-50" />,
+    imageBg: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
+    disabled: true
   }
 ];
 

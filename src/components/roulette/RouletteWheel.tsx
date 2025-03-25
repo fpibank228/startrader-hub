@@ -29,33 +29,44 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
     if (isSpinning) return;
     
     setIsSpinning(true);
+    setSelectedIndex(null);
     
-    // Calculate the final position so that the winning item is in the center
-    // We multiply by a larger number to ensure multiple spins before stopping
+    // Рассчитываем ширину одного элемента и всей полосы
     const itemWidth = 120; // width of each item + gap
     const stripWidth = items.length * itemWidth;
     
-    // Calculate position to ensure winning item is centered
-    // We'll move the strip far to the left, then back to center the winning item
+    // Начальная позиция - отодвигаем ленту сильно влево для начала вращения
     const initialSlide = -(stripWidth * 3); // Move strip 3x its length to the left
+    
+    // Конечная позиция - такая, чтобы выигрышный элемент оказался по центру
     const finalPosition = initialSlide + (stripWidth - (safeWinningIndex * itemWidth)) - (window.innerWidth / 2) + (itemWidth / 2);
     
-    // Set the initial extreme left position
+    // Устанавливаем начальную позицию
     setSlidePosition(initialSlide);
     
-    // After a small delay, animate to the final position
+    // После небольшой задержки начинаем быстрое вращение
     setTimeout(() => {
-      setSlidePosition(finalPosition);
+      // Промежуточная позиция для быстрого вращения
+      const fastSpinPosition = initialSlide + (stripWidth * 2);
       
-      // After animation completes
+      // Быстрое вращение
+      setSlidePosition(fastSpinPosition);
+      
+      // После завершения быстрого вращения начинаем замедление
       setTimeout(() => {
-        setSelectedIndex(safeWinningIndex);
-        setIsSpinning(false);
+        // Медленное замедляющееся вращение до финальной позиции
+        setSlidePosition(finalPosition);
         
-        if (onSpin) {
-          onSpin(items[safeWinningIndex]);
-        }
-      }, 5000); // Match this with the animation duration
+        // После завершения анимации
+        setTimeout(() => {
+          setSelectedIndex(safeWinningIndex);
+          setIsSpinning(false);
+          
+          if (onSpin) {
+            onSpin(items[safeWinningIndex]);
+          }
+        }, 3000); // Время замедленного вращения
+      }, 2000); // Время быстрого вращения
     }, 100);
   };
 
@@ -78,8 +89,8 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
               x: slidePosition 
             }}
             transition={{ 
-              duration: isSpinning ? 5 : 0,
-              ease: "easeOut",
+              duration: isSpinning ? (selectedIndex === null ? 2 : 3) : 0,
+              ease: selectedIndex === null ? "easeInOut" : "easeOut",
             }}
           >
             {/* Repeat items multiple times to create illusion of infinite strip */}
