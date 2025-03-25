@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Play, Loader2 } from 'lucide-react';
 import StarCard from '../StarCard';
 import LottieItem from './LottieItem';
+import { useIsMobile } from '../../hooks/use-mobile';
 
 interface RouletteItem {
   chance: string;
@@ -20,6 +21,8 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
   const [slidePosition, setSlidePosition] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const stripRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
   
   // Find the winning item index (chance === "yes")
   const winningIndex = items.findIndex(item => item.chance === "yes");
@@ -31,18 +34,24 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
     setIsSpinning(true);
     setSelectedIndex(null);
     
-    // Расчет ширины одного элемента и всей полосы
+    // Размеры элементов
     const itemWidth = 120; // ширина элемента + отступ
     const stripWidth = items.length * itemWidth;
     
-    // Расчет стартовой и конечной позиции для плавной анимации
-    const startPosition = 0; // Начальная позиция (всё на месте)
+    // Получаем фактическую ширину контейнера
+    const containerWidth = containerRef.current?.offsetWidth || window.innerWidth;
+    const centerPosition = containerWidth / 2;
     
-    // Сдвигаем ленту так, чтобы выигрышный элемент оказался по центру
-    const midwayPosition = -(stripWidth * 3); // Промежуточная позиция с большим смещением влево
+    // Начальная позиция (без анимации)
+    const startPosition = 0;
     
-    // Финальная позиция, где выигрышный элемент будет по центру
-    const finalPosition = midwayPosition + (stripWidth - (safeWinningIndex * itemWidth)) - (window.innerWidth / 2) + (itemWidth / 2);
+    // Промежуточная позиция для анимации - сдвигаем ленту далеко влево
+    const midwayPosition = -(stripWidth * 3);
+    
+    // Финальная позиция, где выигрышный элемент будет точно по центру контейнера
+    // Учитываем положение центра контейнера и позицию выигрышного элемента
+    const targetItemLeftPosition = midwayPosition + (stripWidth - (safeWinningIndex * itemWidth));
+    const finalPosition = targetItemLeftPosition - centerPosition + (itemWidth / 2);
     
     // Устанавливаем начальную позицию (без анимации)
     setSlidePosition(startPosition);
@@ -69,7 +78,10 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
       <StarCard className="relative w-full max-w-md mb-6 p-6">
         <h3 className="text-center text-lg font-medium mb-4">Вращайте рулетку и выигрывайте приз!</h3>
         
-        <div className="relative h-40 mx-auto bg-gradient-to-r from-purple-900/50 via-blue-900/50 to-purple-900/50 rounded-xl overflow-hidden">
+        <div 
+          ref={containerRef}
+          className="relative h-40 mx-auto bg-gradient-to-r from-purple-900/50 via-blue-900/50 to-purple-900/50 rounded-xl overflow-hidden"
+        >
           {/* Center indicator */}
           <div className="absolute left-1/2 top-0 bottom-0 -ml-[2px] w-1 bg-white shadow-[0_0_10px_2px_rgba(255,255,255,0.6)] z-20"></div>
           
