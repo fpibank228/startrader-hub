@@ -12,18 +12,43 @@ interface RouletteItem {
 }
 
 interface RouletteWheelProps {
-  items: RouletteItem[];
   onSpin?: (result: RouletteItem) => void;
 }
 
-const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
+const RouletteWheel = ({ onSpin }: RouletteWheelProps) => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [slidePosition, setSlidePosition] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const stripRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
-  
+  const items = [
+    {
+      'chance': 'yes',
+      'link': 'https://nft.fragment.com/gift/homemadecake-10230.lottie.json'
+    },
+    {
+      'chance': 'no',
+      'link': 'https://nft.fragment.com/gift/diamondring-18822.lottie.json'
+    },
+    {
+      'chance': 'no',
+      'link': 'https://nft.fragment.com/gift/eternalrose-1385.lottie.json'
+    },
+    {
+      'chance': 'no',
+      'link': 'https://nft.fragment.com/gift/cookieheart-87873.lottie.json'
+    },
+    {
+      'chance': 'no',
+      'link': 'https://nft.fragment.com/gift/partysparkler-42951.lottie.json'
+    },
+    {
+      'chance': 'no',
+      'link': 'https://nft.fragment.com/gift/partysparkler-42952.lottie.json'
+    },
+  ];
+
   // Find the winning item index (chance === "yes")
   const winningIndex = items.findIndex(item => item.chance === "yes");
   const safeWinningIndex = 0;

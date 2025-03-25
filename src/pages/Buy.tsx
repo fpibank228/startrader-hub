@@ -17,6 +17,7 @@ import {createTransactionRequest, processSuccessfulTransaction} from '../utils/t
 import WebApp from '@twa-dev/sdk';
 import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group"
 import {Label} from "@/components/ui/label"
+import {cn} from "@/lib/utils.ts";
 
 const STAR_PRICE = 0.020;
 
@@ -209,20 +210,27 @@ const Buy = () => {
                     >
                         <StarCard>
                             <h3 className="text-lg font-medium mb-4">Способ оплаты</h3>
-                            <RadioGroup 
-                                defaultValue="crypto" 
+                            <RadioGroup
+                                defaultValue="crypto"
                                 value={paymentMethod}
                                 onValueChange={(value) => setPaymentMethod(value as 'crypto' | 'rubles')}
                                 className="grid grid-cols-1 gap-4"
                             >
-                                <div className="flex items-center space-x-2 p-3 rounded-lg border border-white/10 hover:bg-white/5">
+                                <div className={cn(
+                                    "flex items-center space-x-2 p-3 rounded-lg border border-white/10 hover:bg-white/5 transition-colors",
+                                    paymentMethod === 'crypto' ? 'bg-white/10' : ''
+                                )}>
                                     <RadioGroupItem value="crypto" id="crypto" />
                                     <Label htmlFor="crypto" className="flex-1 cursor-pointer">
                                         <div className="font-medium">Криптовалюта (TON)</div>
                                         <div className="text-sm text-white/70">Оплата через TON кошелек</div>
                                     </Label>
                                 </div>
-                                <div className="flex items-center space-x-2 p-3 rounded-lg border border-white/10 hover:bg-white/5">
+
+                                <div className={cn(
+                                    "flex items-center space-x-2 p-3 rounded-lg border border-white/10 hover:bg-white/5 transition-colors",
+                                    paymentMethod === 'rubles' ? 'bg-white/10' : ''
+                                )}>
                                     <RadioGroupItem value="rubles" id="rubles" />
                                     <Label htmlFor="rubles" className="flex-1 cursor-pointer">
                                         <div className="font-medium">Российский рубль (₽)</div>

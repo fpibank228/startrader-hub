@@ -10,55 +10,29 @@ import { useToast } from '../hooks/use-toast';
 import WebApp from "@twa-dev/sdk";
 
 // Sample data for the roulette
-const rouletteData = [
-  {
-    'chance': 'yes',
-    'link': 'https://nft.fragment.com/gift/homemadecake-10230.lottie.json'
-  },
-  {
-    'chance': 'no',
-    'link': 'https://nft.fragment.com/gift/diamondring-18822.lottie.json'
-  },
-  {
-    'chance': 'no',
-    'link': 'https://nft.fragment.com/gift/eternalrose-1385.lottie.json'
-  },
-  {
-    'chance': 'no',
-    'link': 'https://nft.fragment.com/gift/cookieheart-87873.lottie.json'
-  },
-  {
-    'chance': 'no',
-    'link': 'https://nft.fragment.com/gift/partysparkler-42951.lottie.json'
-  },
-  {
-    'chance': 'no',
-    'link': 'https://nft.fragment.com/gift/partysparkler-42952.lottie.json'
-  },
-];
-
 const rouletteOptions = [
   {
     id: 'basic',
     title: 'Обычная рулетка',
     description: 'Испытайте свою удачу с шансом выигрыша',
     icon: <Star className="w-12 h-12 text-white/90" />,
-    imageBg: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'
+    imageBg: 'https://cdn.pixabay.com/photo/2017/02/13/01/26/the-question-mark-2061539_1280.png',
+    disabled: true
   },
   {
     id: 'nft',
     title: 'NFT рулетка',
     description: 'Выиграйте уникальные NFT предметы',
     icon: <Star className="w-12 h-12 text-white/90 opacity-50" />,
-    imageBg: 'https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
+    imageBg: 'https://cdn.pixabay.com/photo/2017/02/13/01/26/the-question-mark-2061539_1280.png',
     disabled: true
   },
   {
     id: 'upgrade',
-    title: 'Апгрейд рулетка',
+    title: 'Апгрейд',
     description: 'Улучшите свои существующие предметы',
     icon: <Star className="w-12 h-12 text-white/90 opacity-50" />,
-    imageBg: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
+    imageBg: 'https://cdn.pixabay.com/photo/2017/02/13/01/26/the-question-mark-2061539_1280.png',
     disabled: true
   }
 ];
@@ -163,8 +137,7 @@ const Roulette = () => {
             className="max-w-md mx-auto"
           >
             <RouletteWheel 
-              items={rouletteData}
-              onSpin={handleSpinResult} 
+              onSpin={handleSpinResult}
             />
           </motion.div>
         )}

@@ -42,17 +42,15 @@ const PaymentDetailsCard = ({selectedStars, calculatePrice}: PaymentDetailsCardP
 
                     <div className="flex justify-between items-center">
                         <span className="text-white/70">К оплате в TON:</span>
-                        <span className="font-medium text-customBlue flex items-center gap-1">
+                        <span className="font-medium text-white flex items-center gap-1">
               {calculatePrice().ton} TON
-              <Wallet size={14}/>
             </span>
                     </div>
                     
                     <div className="flex justify-between items-center">
                         <span className="text-white/70">К оплате в рублях:</span>
-                        <span className="font-medium text-green-500 flex items-center gap-1">
+                        <span className="font-medium text-white flex items-center gap-1">
               {calculatePrice().rub} ₽
-              <RussianRuble size={14}/>
             </span>
                     </div>
                 </div>

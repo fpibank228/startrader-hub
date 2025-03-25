@@ -70,6 +70,9 @@ const RublePayment = () => {
         setIsChecking(true);
         try {
             // const response = await apiService.checkPayLink("3a18e085-7328-481b-526a-401a6d7e9db5");
+            console.log("123");
+            console.log(state.transaction_id);
+            state.transaction_id = "3a18e100-d7b6-bc8b-7802-1aedba0f8064"
             const response = await apiService.checkPayLink(state.transaction_id);
             console.log(response);
             setIsSuccess(true);
@@ -89,25 +92,6 @@ const RublePayment = () => {
             setIsLoading(false);
         }
         setIsChecking(false);
-
-        // const isSuccessful = Math.random() > 0.5;
-        //
-        // if (isSuccessful) {
-        //     setIsSuccess(true);
-        //     toast({
-        //         title: "Успешно!",
-        //         description: "Оплата прошла успешно! Звезды начислены.",
-        //         variant: "green",
-        //     });
-        // } else {
-        //     toast({
-        //         title: "Оплата не найдена",
-        //         description: "Мы еще не получили подтверждение оплаты. Если вы уже оплатили, подождите немного и проверьте снова.",
-        //         variant: "destructive",
-        //     });
-        // }
-        //
-        // setIsChecking(false);
     };
 
     return (
