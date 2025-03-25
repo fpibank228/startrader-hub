@@ -27,7 +27,14 @@ const RouletteResult = ({ result, onPlayAgain }: RouletteResultProps) => {
         </h2>
         
         <div className="my-6 mx-auto w-32 h-32 flex items-center justify-center">
-          <LottieItem url={result.link} width="100%" height="100%" />
+          <img 
+            src={result.link} 
+            alt="Prize" 
+            className="w-full h-full object-cover rounded-lg"
+            onError={(e) => {
+              e.currentTarget.src = "https://via.placeholder.com/100?text=Prize";
+            }}
+          />
         </div>
         
         <p className="text-white/80 mb-6">

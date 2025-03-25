@@ -16,62 +16,77 @@ interface RouletteWheelProps {
 
 const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
   const [isSpinning, setIsSpinning] = useState(false);
-  const [rotationDegree, setRotationDegree] = useState(0);
+  const [slidePosition, setSlidePosition] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const wheelRef = useRef<HTMLDivElement>(null);
+  const stripRef = useRef<HTMLDivElement>(null);
+  
+  // Find the winning item index (chance === "yes")
+  const winningIndex = items.findIndex(item => item.chance === "yes");
+  const safeWinningIndex = winningIndex >= 0 ? winningIndex : 0;
 
   const spinWheel = () => {
     if (isSpinning) return;
     
     setIsSpinning(true);
     
-    // Calculate a random result
-    const randomIndex = Math.floor(Math.random() * items.length);
-    const spinDegree = 1800 + (randomIndex * (360 / items.length)); // Multiple spins + position
+    // Calculate the final position so that the winning item is in the center
+    // We multiply by a larger number to ensure multiple spins before stopping
+    const itemWidth = 120; // width of each item + gap
+    const stripWidth = items.length * itemWidth;
     
-    // Set the rotation
-    setRotationDegree(spinDegree);
+    // Calculate position to ensure winning item is centered
+    // We'll move the strip far to the left, then back to center the winning item
+    const initialSlide = -(stripWidth * 3); // Move strip 3x its length to the left
+    const finalPosition = initialSlide + (stripWidth - (safeWinningIndex * itemWidth)) - (window.innerWidth / 2) + (itemWidth / 2);
     
-    // After spinning is complete
+    // Set the initial extreme left position
+    setSlidePosition(initialSlide);
+    
+    // After a small delay, animate to the final position
     setTimeout(() => {
-      setSelectedIndex(randomIndex);
-      setIsSpinning(false);
+      setSlidePosition(finalPosition);
       
-      if (onSpin) {
-        onSpin(items[randomIndex]);
-      }
-    }, 3000); // Match this with the animation duration
+      // After animation completes
+      setTimeout(() => {
+        setSelectedIndex(safeWinningIndex);
+        setIsSpinning(false);
+        
+        if (onSpin) {
+          onSpin(items[safeWinningIndex]);
+        }
+      }, 5000); // Match this with the animation duration
+    }, 100);
   };
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-full max-w-md mb-6">
-        <div 
-          ref={wheelRef}
-          className="w-full aspect-square rounded-full bg-gradient-to-r from-customPurple to-customBrightBlue mx-auto relative overflow-hidden"
-        >
+      <div className="relative w-full max-w-md mb-6 overflow-hidden">
+        <div className="relative h-32 bg-gradient-to-r from-purple-900/50 to-blue-900/50 rounded-xl">
+          {/* Indicator line in the center */}
+          <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-white/80 z-10"></div>
+          
           <motion.div 
-            className="w-full h-full absolute"
-            animate={{ rotate: rotationDegree }}
+            ref={stripRef}
+            className="absolute top-0 bottom-0 flex items-center gap-4 px-4"
+            animate={{ 
+              x: slidePosition 
+            }}
             transition={{ 
-              duration: 3,
-              ease: [0.2, 0.65, 0.3, 0.9], // Custom easing function
+              duration: isSpinning ? 5 : 0,
+              ease: "easeOut",
             }}
           >
-            {items.map((item, index) => {
-              const angle = (360 / items.length) * index;
-              return (
-                <div 
-                  key={index}
-                  className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center"
-                  style={{
-                    transform: `rotate(${angle}deg)`,
-                  }}
-                >
-                  <div className="absolute w-full h-1/2 origin-bottom transform-gpu" style={{ transformOrigin: 'center bottom' }}>
+            {/* Repeat items multiple times to create illusion of infinite strip */}
+            {[...Array(5)].map((_, repeatIndex) => (
+              <div key={repeatIndex} className="flex items-center gap-4">
+                {items.map((item, index) => {
+                  const isSelected = selectedIndex === index && repeatIndex === 2;
+                  return (
                     <div 
-                      className={`absolute top-4 left-1/2 -translate-x-1/2 w-16 h-16 rounded-lg flex items-center justify-center
-                        ${selectedIndex === index ? 'scale-110 ring-2 ring-white ring-opacity-70' : ''}`}
+                      key={`${repeatIndex}-${index}`}
+                      className={`w-24 h-24 flex-shrink-0 rounded-lg flex items-center justify-center ${
+                        isSelected ? 'scale-110 ring-2 ring-white' : ''
+                      }`}
                     >
                       {item.link ? (
                         <img 
@@ -88,21 +103,11 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
                         </div>
                       )}
                     </div>
-                  </div>
-                </div>
-              );
-            })}
+                  );
+                })}
+              </div>
+            ))}
           </motion.div>
-          
-          {/* Center point */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 z-10 flex items-center justify-center">
-            <div className="w-5 h-5 rounded-full bg-white/40"></div>
-          </div>
-          
-          {/* Indicator */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-10 z-10">
-            <div className="w-0 h-0 border-left-8 border-right-8 border-top-12 border-transparent border-top-white"></div>
-          </div>
         </div>
       </div>
       

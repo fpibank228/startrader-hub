@@ -18,10 +18,10 @@ const StarCard = ({ children, className = '', glowEffect = false, onClick }: Sta
         ${className}`}
       onClick={onClick}
     >
-      {/* Декоративный элемент в углу карточки */}
+      {/* Decorative element in the corner of the card */}
       <div className="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-br from-purple-500/20 to-transparent rounded-full blur-md"></div>
       
-      {/* Блик на карточке */}
+      {/* Highlight on the card */}
       <div className="absolute -top-1 left-1/4 w-[150%] h-[1px] bg-white/20 rotate-[30deg] transform-gpu"></div>
       
       {children}
