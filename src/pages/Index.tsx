@@ -133,26 +133,6 @@ const Index = () => {
                         </Link>
                     </motion.div>
                 </div>
-
-                <motion.div
-                    initial={{opacity: 0}}
-                    animate={{opacity: 1}}
-                    transition={{duration: 1, delay: 0.8}}
-                    className="mt-20 text-center items-center flex items-center justify-center"
-                >
-                    <div
-                        className="parent-container bg-transparent"> {/* Убедитесь, что родительский контейнер не имеет фона */}
-                        <div className="coin-container w-44 bg-transparent">
-                            <video
-                                className="absolute object-contain self-center w-44 h-16 bg-transparent"
-                                autoPlay
-                                loop
-                                playsInline
-                                src="/public/assets/sticker.webm"
-                            ></video>
-                        </div>
-                    </div>
-                </motion.div>
             </div>
         </div>
     );

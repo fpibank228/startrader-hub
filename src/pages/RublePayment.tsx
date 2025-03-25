@@ -44,11 +44,13 @@ const RublePayment = () => {
         setIsLoading(true);
         // В реальном приложении здесь будет запрос к API
         // Сейчас просто имитация с задержкой
+        const response = await apiService.generatePayLink(10.0, "hostnes");
+        setPaymentUrl(response.data.data.url);
         setTimeout(() => {
           // Здесь должен быть реальный запрос к вашему API
           // const response = await apiService.createRublePayment(state.username, state.stars, state.price);
           // setPaymentUrl(response.data.paymentUrl);
-          
+
           // Временная имитация URL (замените на реальный запрос к API)
           setPaymentUrl(`https://example.com/pay?amount=${state.price}&stars=${state.stars}&user=${state.username}`);
           setIsLoading(false);

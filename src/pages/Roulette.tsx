@@ -29,11 +29,11 @@ const rouletteData = [
   },
   {
     'chance': 'no',
-    'link': 'https://nft.fragment.com/gift/cookieheart-87832.lottie.json'
+    'link': 'https://nft.fragment.com/gift/partysparkler-42951.lottie.json'
   },
   {
     'chance': 'no',
-    'link': 'https://nft.fragment.com/gift/partysparkler-42951.lottie.json'
+    'link': 'https://nft.fragment.com/gift/partysparkler-42952.lottie.json'
   },
 ];
 

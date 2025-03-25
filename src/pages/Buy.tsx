@@ -72,7 +72,7 @@ const Buy = () => {
 
         const usdPrice = selectedStars * STAR_PRICE;
         const tonPriceCalculated = usdPrice / tonPrice;
-        const rubPrice = usdPrice * 90; // Примерный курс USD к RUB
+        const rubPrice = usdPrice * 95; // Примерный курс USD к RUB
 
         return {
             usd: usdPrice.toFixed(2),

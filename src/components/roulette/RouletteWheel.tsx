@@ -26,7 +26,7 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
   
   // Find the winning item index (chance === "yes")
   const winningIndex = items.findIndex(item => item.chance === "yes");
-  const safeWinningIndex = winningIndex >= 0 ? winningIndex : 0;
+  const safeWinningIndex = 0;
 
   const spinWheel = () => {
     if (isSpinning) return;
@@ -50,7 +50,7 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
     
     // Финальная позиция, где выигрышный элемент будет точно по центру контейнера
     // Учитываем положение центра контейнера и позицию выигрышного элемента
-    const targetItemLeftPosition = midwayPosition + (stripWidth - (safeWinningIndex * itemWidth));
+    const targetItemLeftPosition = midwayPosition + (stripWidth - (4 * itemWidth));
     const finalPosition = targetItemLeftPosition - centerPosition + (itemWidth / 2);
     
     // Устанавливаем начальную позицию (без анимации)

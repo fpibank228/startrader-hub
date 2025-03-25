@@ -51,6 +51,15 @@ export const apiService = {
         }
     },
 
+    async generatePayLink(amount: number, to_user: string) {
+        try {
+            return await mainApi.post('/pay/link', {amount, to_user});
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
+
     async sendTransaction(
         {
             walletAddress,
