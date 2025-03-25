@@ -17,12 +17,25 @@ const rouletteData = [
   },
   {
     'chance': 'no',
-    'link': 'https://nft.fragment.com/gift/homemadecake-10230.lottie.json'
+    'link': 'https://nft.fragment.com/gift/diamondring-18822.lottie.json'
   },
   {
     'chance': 'no',
-    'link': 'https://nft.fragment.com/gift/homemadecake-10230.lottie.json'
+    'link': 'https://nft.fragment.com/gift/eternalrose-1385.lottie.json'
   },
+  {
+    'chance': 'no',
+    'link': 'https://nft.fragment.com/gift/cookieheart-87873.lottie.json'
+  },
+  {
+    'chance': 'no',
+    'link': 'https://nft.fragment.com/gift/cookieheart-87832.lottie.json'
+  },
+  {
+    'chance': 'no',
+    'link': 'https://nft.fragment.com/gift/partysparkler-42951.lottie.json'
+  },
+
 ];
 
 const rouletteOptions = [

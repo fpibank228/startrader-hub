@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import Lottie from 'lottie-react';
+import Lottie from "lottie-react";
 import { Loader2 } from 'lucide-react';
 
 interface LottieItemProps {
