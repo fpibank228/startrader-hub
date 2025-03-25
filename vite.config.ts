@@ -1,11 +1,12 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
-export default defineConfig(({ mode }) => ({
+// Define the configuration in a more compatible way
+export default defineConfig({
   server: {
     host: "::",
     port: 8080,
@@ -13,8 +14,7 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    mode === 'development' &&
-    componentTagger(),
+    process.env.NODE_ENV !== 'production' && componentTagger(),
     nodePolyfills({
       include: ['buffer', 'process'],
       globals: {
@@ -24,27 +24,16 @@ export default defineConfig(({ mode }) => ({
       },
     }),
   ].filter(Boolean),
-
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
   define: {
-    global: 'globalThis', // Добавьте эту строку
-    'process.env': {}, // Добавьте эту строку
+    global: 'globalThis',
+    'process.env': {},
   },
   optimizeDeps: {
     include: ['buffer'],
-    esbuildOptions: {
-      define: {
-        global: 'globalThis',
-      },
-      plugins: [
-        NodeGlobalsPolyfillPlugin({
-          buffer: true,
-        }),
-      ],
-    },
   },
-}));
+});
