@@ -1,9 +1,11 @@
+
 import {useState, useEffect} from 'react';
 import {motion} from 'framer-motion';
 import {Cell} from '@ton/core';
 import {toNano} from '@ton/core';
 import {useTonConnectUI, useTonWallet} from '@tonconnect/ui-react';
 import {useToast} from '../hooks/use-toast';
+import {useNavigate} from 'react-router-dom';
 import StarBackground from '../components/StarBackground';
 import StarCard from '../components/StarCard';
 import StarAmountSelector from '../components/StarAmountSelector';
@@ -13,7 +15,8 @@ import PaymentButton from '../components/buy/PaymentButton';
 import TransactionStatusDialog from '../components/buy/TransactionStatusDialog';
 import {createTransactionRequest, processSuccessfulTransaction} from '../utils/transactionUtils';
 import WebApp from '@twa-dev/sdk';
-import {SafeAreaInset} from "@twa-dev/types";
+import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group"
+import {Label} from "@/components/ui/label"
 
 const STAR_PRICE = 0.020;
 
@@ -23,21 +26,23 @@ const Buy = () => {
     const [isSuccess, setIsSuccess] = useState(false);
     const [isUsernameChecked, setIsUsernameChecked] = useState(false);
     const [username, setUsername] = useState<string>('');
+    const [paymentMethod, setPaymentMethod] = useState<'crypto' | 'rubles'>('crypto');
     const {toast} = useToast();
     const [tonConnectUI] = useTonConnectUI();
     const wallet = useTonWallet();
     const tonPrice = useTonPrice();
     const isFullscreen = WebApp.isFullscreen;
+    const navigate = useNavigate();
 
     useEffect(() => {
         WebApp.isVerticalSwipesEnabled = false
-        if (!tonConnectUI.connected) {
+        if (!tonConnectUI.connected && paymentMethod === 'crypto') {
             toast({
                 title: 'Подключите кошелек!',
                 description: 'Для покупки звезд вам нужно подключить кошелек',
             });
         }
-    }, [toast, tonConnectUI.connected]);
+    }, [toast, tonConnectUI.connected, paymentMethod]);
 
     const handleStarSelect = (amount: number) => {
         setSelectedStars(amount);
@@ -52,7 +57,6 @@ const Buy = () => {
                 title: 'Успешно',
                 description: `Имя пользователя ${checkedUsername} проверено!`,
                 variant: 'green',
-
             });
         } else if (checkedUsername && !isValid) {
             toast({
@@ -64,14 +68,16 @@ const Buy = () => {
     };
 
     const calculatePrice = () => {
-        if (!selectedStars || !tonPrice) return {usd: '0', ton: '0'};
+        if (!selectedStars || !tonPrice) return {usd: '0', ton: '0', rub: '0'};
 
         const usdPrice = selectedStars * STAR_PRICE;
         const tonPriceCalculated = usdPrice / tonPrice;
+        const rubPrice = usdPrice * 90; // Примерный курс USD к RUB
 
         return {
             usd: usdPrice.toFixed(2),
             ton: tonPriceCalculated.toFixed(4),
+            rub: rubPrice.toFixed(0)
         };
     };
 
@@ -91,6 +97,18 @@ const Buy = () => {
 
         if (!isUsernameChecked || !username) {
             showErrorToast('Необходимо проверить имя пользователя перед оплатой.');
+            return;
+        }
+
+        if (paymentMethod === 'rubles') {
+            // Переход на страницу оплаты рублями
+            navigate('/buy/rubles', { 
+                state: { 
+                    username, 
+                    stars: selectedStars, 
+                    price: calculatePrice().rub 
+                } 
+            });
             return;
         }
 
@@ -125,7 +143,12 @@ const Buy = () => {
         handleSubmit();
     };
 
-    const isPaymentDisabled = !tonConnectUI.connected || !selectedStars || !tonPrice || selectedStars < 50 || !isUsernameChecked || !username;
+    const isPaymentDisabled = (paymentMethod === 'crypto' && !tonConnectUI.connected) || 
+                             !selectedStars || 
+                             (paymentMethod === 'crypto' && !tonPrice) || 
+                             selectedStars < 50 || 
+                             !isUsernameChecked || 
+                             !username;
 
     return (
         <div
@@ -146,8 +169,7 @@ const Buy = () => {
                 >
                     <h1 className="text-2xl font-bold mb-2">Купить звезды</h1>
                     <p className="text-white/70 text-sm max-w-md mx-auto">
-                        Выберите количество звезд, которое хотите приобрести. Минимальное количество — 50. Оплата в
-                        криптовалюте TON.
+                        Выберите количество звезд, которое хотите приобрести. Минимальное количество — 50.
                     </p>
                 </motion.div>
 
@@ -179,9 +201,43 @@ const Buy = () => {
                         />
                     )}
 
+                    <motion.div
+                        initial={{opacity: 0, y: 20}}
+                        animate={{opacity: 1, y: 0}}
+                        transition={{duration: 0.5, delay: 0.3}}
+                        className="mb-6"
+                    >
+                        <StarCard>
+                            <h3 className="text-lg font-medium mb-4">Способ оплаты</h3>
+                            <RadioGroup 
+                                defaultValue="crypto" 
+                                value={paymentMethod}
+                                onValueChange={(value) => setPaymentMethod(value as 'crypto' | 'rubles')}
+                                className="grid grid-cols-1 gap-4"
+                            >
+                                <div className="flex items-center space-x-2 p-3 rounded-lg border border-white/10 hover:bg-white/5">
+                                    <RadioGroupItem value="crypto" id="crypto" />
+                                    <Label htmlFor="crypto" className="flex-1 cursor-pointer">
+                                        <div className="font-medium">Криптовалюта (TON)</div>
+                                        <div className="text-sm text-white/70">Оплата через TON кошелек</div>
+                                    </Label>
+                                </div>
+                                <div className="flex items-center space-x-2 p-3 rounded-lg border border-white/10 hover:bg-white/5">
+                                    <RadioGroupItem value="rubles" id="rubles" />
+                                    <Label htmlFor="rubles" className="flex-1 cursor-pointer">
+                                        <div className="font-medium">Российский рубль (₽)</div>
+                                        <div className="text-sm text-white/70">Оплата через банковскую карту</div>
+                                    </Label>
+                                </div>
+                            </RadioGroup>
+                        </StarCard>
+                    </motion.div>
+
                     <PaymentButton
                         handlePayment={handlePayment}
                         isDisabled={isPaymentDisabled}
+                        buttonText={paymentMethod === 'crypto' ? 'Оплатить в TON' : 'Продолжить'}
+                        paymentMethod={paymentMethod}
                     />
                 </div>
             </div>

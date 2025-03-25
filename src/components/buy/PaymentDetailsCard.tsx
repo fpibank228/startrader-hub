@@ -1,11 +1,12 @@
-import {DollarSign, Wallet} from 'lucide-react';
+
+import {DollarSign, Wallet, RussianRuble} from 'lucide-react';
 import StarCard from '../StarCard';
 import {motion} from 'framer-motion';
 import React from "react";
 
 interface PaymentDetailsCardProps {
     selectedStars: number;
-    calculatePrice: () => { usd: string; ton: string };
+    calculatePrice: () => { usd: string; ton: string; rub: string };
 }
 
 const PaymentDetailsCard = ({selectedStars, calculatePrice}: PaymentDetailsCardProps) => {
@@ -44,6 +45,14 @@ const PaymentDetailsCard = ({selectedStars, calculatePrice}: PaymentDetailsCardP
                         <span className="font-medium text-customBlue flex items-center gap-1">
               {calculatePrice().ton} TON
               <Wallet size={14}/>
+            </span>
+                    </div>
+                    
+                    <div className="flex justify-between items-center">
+                        <span className="text-white/70">К оплате в рублях:</span>
+                        <span className="font-medium text-green-500 flex items-center gap-1">
+              {calculatePrice().rub} ₽
+              <RussianRuble size={14}/>
             </span>
                     </div>
                 </div>
