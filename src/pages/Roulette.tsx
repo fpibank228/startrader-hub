@@ -35,7 +35,6 @@ const rouletteData = [
     'chance': 'no',
     'link': 'https://nft.fragment.com/gift/partysparkler-42951.lottie.json'
   },
-
 ];
 
 const rouletteOptions = [
