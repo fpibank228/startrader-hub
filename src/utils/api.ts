@@ -60,6 +60,15 @@ export const apiService = {
         }
     },
 
+    async checkPayLink(transaction_id: string) {
+        try {
+            return await mainApi.post('/pay/check', {"transaction_id": transaction_id});
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
+
     async sendTransaction(
         {
             walletAddress,
