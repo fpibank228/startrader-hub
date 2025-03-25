@@ -115,7 +115,6 @@ const Buy = () => {
 
         const handleSubmit = async () => {
             const transaction = createTransactionRequest(selectedStars, calculatePrice().ton);
-            console.log(username)
 
             tonConnectUI
                 .sendTransaction(transaction)

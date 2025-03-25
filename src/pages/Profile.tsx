@@ -33,15 +33,11 @@ const Profile = () => {
         }
     }, [tab]);
 
-    console.log(WebApp.initDataUnsafe.user);
     // Функция для загрузки транзакций
     const fetchTransactions = async () => {
         setIsLoading(true);
         try {
             const response = await apiService.getMyTransactions()
-            console.log(response)
-            const json = await response.data;
-
             const data = await response.data;
             setTransactions(data["transactions"]); // Обновляем состояние транзакций
         } catch (error) {

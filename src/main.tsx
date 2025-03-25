@@ -19,7 +19,6 @@ try {
     tele.safeAreaInset.top = 800
     tele.isVerticalSwipesEnabled = false
     tele.expand()
-    console.log(tele.safeAreaInset.top)
 } catch (e) {
     console.error(e);
 }
