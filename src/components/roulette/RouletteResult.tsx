@@ -26,11 +26,15 @@ const RouletteResult = ({ result, onPlayAgain }: RouletteResultProps) => {
           {isWin ? '🎉 Поздравляем! Вы выиграли!' : 'К сожалению, не повезло'}
         </h2>
         
-        <div className="my-6 mx-auto w-32 h-32 flex items-center justify-center">
-          <LottieItem 
-            animationData={result.link} 
-            className="w-full h-full"
-          />
+        <div className="my-6 mx-auto w-40 h-40">
+          <div className={`w-full h-full rounded-lg overflow-hidden border-2 ${
+            isWin ? 'border-yellow-400 shadow-[0_0_20px_rgba(255,215,0,0.6)]' : 'border-white/30'
+          }`}>
+            <LottieItem 
+              animationData={result.link} 
+              className="w-full h-full"
+            />
+          </div>
         </div>
         
         <p className="text-white/80 mb-6">

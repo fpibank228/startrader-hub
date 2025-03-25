@@ -61,14 +61,19 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-full max-w-md mb-6 overflow-hidden">
-        <div className="relative h-32 bg-gradient-to-r from-purple-900/50 to-blue-900/50 rounded-xl">
-          {/* Indicator line in the center */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-white/80 z-10"></div>
+      <StarCard className="relative w-full max-w-md mb-6 p-6">
+        <h3 className="text-center text-lg font-medium mb-4">Вращайте рулетку и выигрывайте приз!</h3>
+        
+        <div className="relative h-40 mx-auto bg-gradient-to-r from-purple-900/50 via-blue-900/50 to-purple-900/50 rounded-xl overflow-hidden">
+          {/* Center indicator */}
+          <div className="absolute left-1/2 top-0 bottom-0 -ml-[2px] w-1 bg-white shadow-[0_0_10px_2px_rgba(255,255,255,0.6)] z-20"></div>
+          
+          {/* Highlight glow around the center */}
+          <div className="absolute left-1/2 top-0 bottom-0 -ml-6 w-12 bg-white/5 blur-md z-10"></div>
           
           <motion.div 
             ref={stripRef}
-            className="absolute top-0 bottom-0 flex items-center gap-4 px-4"
+            className="absolute top-0 bottom-0 flex items-center gap-4 px-6 py-2"
             animate={{ 
               x: slidePosition 
             }}
@@ -79,20 +84,24 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
           >
             {/* Repeat items multiple times to create illusion of infinite strip */}
             {[...Array(5)].map((_, repeatIndex) => (
-              <div key={repeatIndex} className="flex items-center gap-4">
+              <div key={repeatIndex} className="flex items-center gap-6">
                 {items.map((item, index) => {
                   const isSelected = selectedIndex === index && repeatIndex === 2;
                   return (
                     <div 
                       key={`${repeatIndex}-${index}`}
-                      className={`w-24 h-24 flex-shrink-0 rounded-lg flex items-center justify-center ${
-                        isSelected ? 'scale-110 ring-2 ring-white' : ''
+                      className={`w-24 h-24 flex-shrink-0 ${
+                        isSelected ? 'scale-110 z-10' : ''
                       }`}
                     >
-                      <LottieItem 
-                        animationData={item.link}
-                        className="w-full h-full"
-                      />
+                      <div className={`w-full h-full rounded-lg overflow-hidden border-2 ${
+                        isSelected ? 'border-white shadow-[0_0_15px_rgba(255,255,255,0.7)]' : 'border-white/30'
+                      }`}>
+                        <LottieItem 
+                          animationData={item.link}
+                          className="w-full h-full"
+                        />
+                      </div>
                     </div>
                   );
                 })}
@@ -100,25 +109,27 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
             ))}
           </motion.div>
         </div>
-      </div>
-      
-      <button
-        onClick={spinWheel}
-        disabled={isSpinning}
-        className="w-full max-w-xs py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-3 transition-all duration-300 bg-gradient-to-r from-customPurple to-purple-700 text-white hover:opacity-90 disabled:opacity-50"
-      >
-        {isSpinning ? (
-          <>
-            <Loader2 size={20} className="animate-spin" />
-            Крутится...
-          </>
-        ) : (
-          <>
-            <Play size={20} />
-            Крутить
-          </>
-        )}
-      </button>
+        
+        <div className="mt-6">
+          <button
+            onClick={spinWheel}
+            disabled={isSpinning}
+            className="w-full py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-3 transition-all duration-300 bg-gradient-to-r from-customPurple to-purple-700 text-white hover:opacity-90 disabled:opacity-50"
+          >
+            {isSpinning ? (
+              <>
+                <Loader2 size={20} className="animate-spin" />
+                Крутится...
+              </>
+            ) : (
+              <>
+                <Play size={20} />
+                Крутить
+              </>
+            )}
+          </button>
+        </div>
+      </StarCard>
     </div>
   );
 };

@@ -4,13 +4,12 @@ import Lottie from 'lottie-react';
 import { Loader2 } from 'lucide-react';
 
 interface LottieItemProps {
-  url: string;
-  width?: number | string;
-  height?: number | string;
+  animationData: string;
+  className?: string;
 }
 
-const LottieItem = ({ url, width = 50, height = 50 }: LottieItemProps) => {
-  const [animationData, setAnimationData] = useState<any>(null);
+const LottieItem = ({ animationData, className = '' }: LottieItemProps) => {
+  const [animation, setAnimation] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -19,11 +18,11 @@ const LottieItem = ({ url, width = 50, height = 50 }: LottieItemProps) => {
       setIsLoading(true);
       setError(false);
       try {
-        const response = await fetch(url);
+        const response = await fetch(animationData);
         if (!response.ok) throw new Error('Failed to fetch animation');
         
         const data = await response.json();
-        setAnimationData(data);
+        setAnimation(data);
       } catch (err) {
         console.error('Error loading Lottie animation:', err);
         setError(true);
@@ -32,24 +31,24 @@ const LottieItem = ({ url, width = 50, height = 50 }: LottieItemProps) => {
       }
     };
 
-    if (url) {
+    if (animationData) {
       fetchAnimation();
     }
-  }, [url]);
+  }, [animationData]);
 
   if (isLoading) {
-    return <div className="flex items-center justify-center" style={{ width, height }}><Loader2 className="w-6 h-6 animate-spin" /></div>;
+    return <div className={`flex items-center justify-center ${className}`}><Loader2 className="w-6 h-6 animate-spin" /></div>;
   }
 
   if (error) {
-    return <div className="flex items-center justify-center bg-gray-200 rounded" style={{ width, height }}>Error</div>;
+    return <div className={`flex items-center justify-center bg-white/10 rounded-lg ${className}`}>❓</div>;
   }
 
   return (
-    <div style={{ width, height }}>
-      {animationData && (
+    <div className={className}>
+      {animation && (
         <Lottie
-          animationData={animationData}
+          animationData={animation}
           loop={true}
           autoplay={true}
           style={{ width: '100%', height: '100%' }}
