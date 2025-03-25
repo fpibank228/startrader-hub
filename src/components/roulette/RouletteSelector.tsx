@@ -2,13 +2,15 @@
 import { useState } from 'react';
 import StarCard from '../StarCard';
 import { motion } from 'framer-motion';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Star, Award, Image } from 'lucide-react';
 
 interface RouletteSelectorProps {
   options: {
     id: string;
     title: string;
     description: string;
+    icon?: React.ReactNode;
+    imageBg?: string;
   }[];
   onSelect: (id: string) => void;
 }
@@ -26,15 +28,29 @@ const RouletteSelector = ({ options, onSelect }: RouletteSelectorProps) => {
           whileTap={{ scale: 0.98 }}
         >
           <StarCard 
-            className="p-4 cursor-pointer hover:shadow-lg transition-shadow"
+            className="p-0 cursor-pointer hover:shadow-lg transition-shadow overflow-hidden"
             onClick={() => onSelect(option.id)}
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold">{option.title}</h3>
-                <p className="text-sm text-white/70">{option.description}</p>
+            {option.imageBg && (
+              <div 
+                className="w-full h-32 bg-cover bg-center relative"
+                style={{ backgroundImage: `url(${option.imageBg})` }}
+              >
+                <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  {option.icon || <Star className="w-12 h-12 text-white opacity-70" />}
+                </div>
               </div>
-              <ChevronRight className="w-5 h-5 text-white/60" />
+            )}
+            
+            <div className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold">{option.title}</h3>
+                  <p className="text-sm text-white/70">{option.description}</p>
+                </div>
+                <ChevronRight className="w-5 h-5 text-white/60" />
+              </div>
             </div>
           </StarCard>
         </motion.div>

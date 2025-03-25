@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Star, Award, Image } from 'lucide-react';
 import StarBackground from '../components/StarBackground';
 import RouletteWheel from '../components/roulette/RouletteWheel';
 import RouletteSelector from '../components/roulette/RouletteSelector';
@@ -30,16 +30,22 @@ const rouletteOptions = [
     id: 'basic',
     title: 'Обычная рулетка',
     description: 'Испытайте свою удачу с шансом выигрыша',
+    icon: <Star className="w-12 h-12 text-white/90" />,
+    imageBg: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'
   },
   {
-    id: 'premium',
-    title: 'Премиум рулетка',
-    description: 'Увеличенные шансы на выигрыш',
+    id: 'nft',
+    title: 'NFT рулетка',
+    description: 'Выиграйте уникальные NFT предметы',
+    icon: <Image className="w-12 h-12 text-white/90" />,
+    imageBg: 'https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'
   },
   {
-    id: 'vip',
-    title: 'VIP рулетка',
-    description: 'Эксклюзивные призы для VIP игроков',
+    id: 'upgrade',
+    title: 'Апгрейд рулетка',
+    description: 'Улучшите свои существующие предметы',
+    icon: <Award className="w-12 h-12 text-white/90" />,
+    imageBg: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'
   }
 ];
 
@@ -112,9 +118,9 @@ const Roulette = () => {
               ? 'Звёздная Рулетка' 
               : selectedRouletteType === 'basic' 
                 ? 'Обычная рулетка'
-                : selectedRouletteType === 'premium'
-                  ? 'Премиум рулетка'
-                  : 'VIP рулетка'}
+                : selectedRouletteType === 'nft'
+                  ? 'NFT рулетка'
+                  : 'Апгрейд рулетка'}
           </motion.h1>
         </div>
 
@@ -125,7 +131,7 @@ const Roulette = () => {
             transition={{ duration: 0.5 }}
           >
             <p className="text-white/70 text-sm mb-6">
-              Испытайте удачу и выиграйте звезды! Выберите тип рулетки, чтобы начать игру.
+              Испытайте удачу и выиграйте призы! Выберите тип рулетки, чтобы начать игру.
             </p>
             
             <RouletteSelector 
