@@ -9,7 +9,6 @@ import RouletteResult from '../components/roulette/RouletteResult';
 import { useToast } from '../hooks/use-toast';
 import WebApp from "@twa-dev/sdk";
 
-
 // Sample data for the roulette
 const rouletteData = [
   {
@@ -36,6 +35,7 @@ const rouletteData = [
     'chance': 'no',
     'link': 'https://nft.fragment.com/gift/partysparkler-42951.lottie.json'
   },
+
 ];
 
 const rouletteOptions = [
