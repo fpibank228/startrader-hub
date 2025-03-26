@@ -26,11 +26,11 @@ const Profile = () => {
     const {toast} = useToast();
     const isFullscreen = WebApp.isFullscreen;
 
-    const [shareLink, setShareLink] = useState('https://t.me/testzvezbot/app');
+    const [shareLink, setShareLink] = useState('https://t.me/amnyamstarsbot/app');
 
     useEffect(() => {
         const userIdParam = WebApp.initDataUnsafe.user?.id;
-            setShareLink(`https://t.me/testzvezbot/app?startapp=${userIdParam}`);
+            setShareLink(`https://t.me/amnyamstarsbot/app?startapp=${userIdParam}`);
         fetchUserData()
     }, []);
 
