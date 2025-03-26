@@ -21,6 +21,7 @@ const Profile = () => {
     const [tab, setTab] = useState<'profile' | 'history'>('profile');
     const [walletConnected, setWalletConnected] = useState(false);
     const [transactions, setTransactions] = useState<Transaction[]>([]); // Состояние для хранения транзакций
+    const [userInfo, setUserInfo] = useState({"ref_user": 0});
     const [isLoading, setIsLoading] = useState(false); // Состояние для загрузки
     const {toast} = useToast();
     const isFullscreen = WebApp.isFullscreen;
@@ -36,18 +37,16 @@ const Profile = () => {
 
     // Загрузка транзакций при открытии вкладки "История"
     useEffect(() => {
-        if (tab === 'history') {
-            fetchTransactions();
-        }
-    }, [tab]);
+        fetchUserData();
+    });
 
-    // Функция для загрузки транзакций
-    const fetchTransactions = async () => {
+    const fetchUserData = async () => {
         setIsLoading(true);
         try {
-            const response = await apiService.getMyTransactions()
+            const response = await apiService.getUserInfo()
             const data = await response.data;
-            setTransactions(data["transactions"]); // Обновляем состояние транзакций
+            setTransactions(data["transactions"]);
+            setUserInfo(data["user_info"]);
         } catch (error) {
             console.error(error);
             toast({
@@ -59,7 +58,7 @@ const Profile = () => {
             setIsLoading(false);
         }
     };
-    const invitedCount = 0;
+
     const earnedAmount = 0.00;
     const totalBought = transactions
         .filter(t => t.type === 'buy')
@@ -153,7 +152,7 @@ const Profile = () => {
                                         className="w-24 h-24 rounded-full bg-customMidBlue mb-4 flex items-center justify-center">
                                         {WebApp.initDataUnsafe.user?.photo_url ? (
                                             <img
-                                                src={WebApp.initDataUnsafe.user.photo_url }
+                                                src={WebApp.initDataUnsafe.user.photo_url}
                                                 alt="User Avatar"
                                                 className="w-full h-full object-cover rounded-full"
                                             />
@@ -161,7 +160,7 @@ const Profile = () => {
                                             <User size={40} className="text-white"/>
                                         )}
                                     </div>
-                                    <h2 className="text-xl font-bold mb-1">{WebApp.initDataUnsafe.user  ? WebApp.initDataUnsafe.user.first_name : "error"}</h2>
+                                    <h2 className="text-xl font-bold mb-1">{WebApp.initDataUnsafe.user ? WebApp.initDataUnsafe.user.first_name : "error"}</h2>
                                     <p className="text-white/70 text-sm mb-4">@{WebApp.initDataUnsafe.user ? WebApp.initDataUnsafe.user.username : "error"}</p>
                                     <TonConnectButton className={`mb-4`}/>
 
@@ -184,7 +183,7 @@ const Profile = () => {
                                                     <div
                                                         className="flex items-center justify-center gap-1 text-blue-50">
                                                         <span
-                                                            className="font-bold">{invitedCount} приглашено</span>
+                                                            className="font-bold">{userInfo['ref_user'] || '0'} приглашено</span>
                                                     </div>
                                                 </div>
 

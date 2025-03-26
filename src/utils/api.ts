@@ -42,9 +42,9 @@ export const apiService = {
         }
     },
 
-    async getMyTransactions() {
+    async getUserInfo() {
         try {
-            return await mainApi.post('/get_my_transaction');
+            return await mainApi.post('/user_info');
         } catch (error) {
             console.error('Transactions API Error:', error);
             throw error;
