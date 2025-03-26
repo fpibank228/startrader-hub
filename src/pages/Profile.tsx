@@ -30,15 +30,9 @@ const Profile = () => {
 
     useEffect(() => {
         const userIdParam = WebApp.initDataUnsafe.user?.id;
-        if (userIdParam) {
             setShareLink(`https://t.me/testzvezbot/app?startapp=${userIdParam}`);
-        }
+        fetchUserData()
     }, []);
-
-    // Загрузка транзакций при открытии вкладки "История"
-    useEffect(() => {
-        fetchUserData();
-    });
 
     const fetchUserData = async () => {
         setIsLoading(true);
@@ -78,16 +72,9 @@ const Profile = () => {
 
     const handleShareLink = () => {
         const utils = initUtils();
-        utils.shareURL(shareLink, '\nJoin PoksCoin and start earning right now, plus get an extra 80 tokens as a gift! 🚀\n' +
-            '\n' +
-            '🌟 Get your own virtual pet:\n' +
-            'Take care of it and earn tokens as a reward.\n' +
-            '🎮 Play exciting mini-games:\n' +
-            'Complete tasks and interact with other users.\n' +
-            '💎 Exclusive rewards:\n' +
-            'Earn unique items and accessories for your pet.\n' +
-            '\n' +
-            '💣 Become a part of the new exciting world of PoksCoin today!\n')
+        utils.shareURL(shareLink,
+            '😁Привет! Добро пожаловать в нашего бота для покупки звёзд и казино!\n'
+            )
     }
 
     // const handleCopyReferral = () => {
@@ -187,11 +174,31 @@ const Profile = () => {
                                                     </div>
                                                 </div>
 
-                                                <div className="bg-white/5 rounded-lg p-4">
+                                                <div
+                                                    className="bg-white/5 rounded-lg p-4 relative group border border-dashed border-white/20">
                                                     <div
-                                                        className="flex items-center justify-center gap-1 text-blue-50">
+                                                        className="flex flex-col items-center justify-center gap-1 text-blue-50/50">
                                                         <span
-                                                            className="font-bold text-center">{earnedAmount} TON заработано</span>
+                                                            className="font-bold text-center">{earnedAmount} TON</span>
+                                                        <span className="text-sm text-white/30">заработано</span>
+
+                                                        {/* Иконка информации */}
+                                                        <div
+                                                            className="absolute top-2 right-2 text-white/40 hover:text-white/60 transition-colors">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                 height="16" viewBox="0 0 24 24" fill="none"
+                                                                 stroke="currentColor">
+                                                                <circle cx="12" cy="12" r="10" strokeWidth="1.5"/>
+                                                                <path d="M12 16v-4m0-4h.01" strokeWidth="2"
+                                                                      strokeLinecap="round"/>
+                                                            </svg>
+
+                                                            {/* Всплывающая подсказка */}
+                                                            <div
+                                                                className="absolute hidden group-hover:block top-full right-0 mt-1 w-48 bg-black/90 text-white text-xs p-2 rounded-md shadow-lg z-10">
+                                                                Эта функция находится в разработке!
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
