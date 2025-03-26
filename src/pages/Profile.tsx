@@ -4,11 +4,10 @@ import {History, User, DollarSign, Share2, Wallet, Loader} from 'lucide-react';
 import StarBackground from '../components/StarBackground';
 import StarCard from '../components/StarCard';
 import {useToast} from '../hooks/use-toast';
-import {Button} from '@/components/ui/button';
 import {TonConnectButton} from "@tonconnect/ui-react";
 import WebApp from "@twa-dev/sdk";
-import axios from "axios";
 import {apiService} from "@/utils/api.ts";
+import {initUtils} from '@tma.js/sdk';
 
 interface Transaction {
     id: number;
@@ -25,6 +24,15 @@ const Profile = () => {
     const [isLoading, setIsLoading] = useState(false); // Состояние для загрузки
     const {toast} = useToast();
     const isFullscreen = WebApp.isFullscreen;
+
+    const [shareLink, setShareLink] = useState('https://t.me/testzvezbot/app');
+
+    useEffect(() => {
+        const userIdParam = WebApp.initDataUnsafe.user?.id;
+        if (userIdParam) {
+            setShareLink(`https://t.me/testzvezbot/app?startapp=${userIdParam}`);
+        }
+    }, []);
 
     // Загрузка транзакций при открытии вкладки "История"
     useEffect(() => {
@@ -69,13 +77,27 @@ const Profile = () => {
         });
     };
 
-    const handleCopyReferral = () => {
-        navigator.clipboard.writeText('https://star-market.com/ref/user123');
-        toast({
-            title: "Скопировано",
-            description: "Реферальная ссылка скопирована в буфер обмена",
-        });
-    };
+    const handleShareLink = () => {
+        const utils = initUtils();
+        utils.shareURL(shareLink, '\nJoin PoksCoin and start earning right now, plus get an extra 80 tokens as a gift! 🚀\n' +
+            '\n' +
+            '🌟 Get your own virtual pet:\n' +
+            'Take care of it and earn tokens as a reward.\n' +
+            '🎮 Play exciting mini-games:\n' +
+            'Complete tasks and interact with other users.\n' +
+            '💎 Exclusive rewards:\n' +
+            'Earn unique items and accessories for your pet.\n' +
+            '\n' +
+            '💣 Become a part of the new exciting world of PoksCoin today!\n')
+    }
+
+    // const handleCopyReferral = () => {
+    //     navigator.clipboard.writeText('https://star-market.com/ref/user123');
+    //     toast({
+    //         title: "Скопировано",
+    //         description: "Реферальная ссылка скопирована в буфер обмена",
+    //     });
+    // };
 
     return (
         <div className="relative min-h-screen pt-4 pb-24" style={{
@@ -197,13 +219,13 @@ const Profile = () => {
                                     <div className="flex">
                                         <div
                                             className="flex-1 bg-white/5 truncate rounded-l-lg p-2 text-xs border border-white/10">
-                                            https://star-market.com/ref/user123
+                                            {shareLink}
                                         </div>
                                         <button
-                                            onClick={handleCopyReferral}
+                                            onClick={handleShareLink}
                                             className="bg-customPurple text-white px-3 rounded-r-lg text-xs"
                                         >
-                                            Копировать
+                                            Отправить
                                         </button>
                                     </div>
                                 </div>

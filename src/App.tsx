@@ -1,4 +1,3 @@
-
 import {Toaster} from "@/components/ui/toaster";
 import {Toaster as Sonner} from "@/components/ui/sonner";
 import {TooltipProvider} from "@/components/ui/tooltip";
@@ -13,12 +12,17 @@ import NotFound from "./pages/NotFound";
 import Navigation from "./components/Navigation";
 import {TonConnectUIProvider} from "@tonconnect/ui-react";
 import WebApp from "@twa-dev/sdk";
+import {useEffect} from "react";
+import {apiService} from "@/utils/api.ts";
 
 const queryClient = new QueryClient();
 
 const App = () => {
     const isFullscreen = WebApp.isFullscreen;
-
+    useEffect(() => {
+        apiService.checkUser(WebApp.initDataUnsafe.start_param || "",)
+        console.log(WebApp.initDataUnsafe.start_param)
+    }, [])
     return (
         <TonConnectUIProvider manifestUrl="https://starsbuy.space/assets/tonconnect-manifest.json">
             <QueryClientProvider client={queryClient}>

@@ -33,6 +33,15 @@ export const apiService = {
         }
     },
 
+    async checkUser(ref_id: string) {
+        try {
+            return await mainApi.post('/check_user', {"ref_id": ref_id});
+        } catch (error) {
+            console.error('Transactions API Error:', error);
+            throw error;
+        }
+    },
+
     async getMyTransactions() {
         try {
             return await mainApi.post('/get_my_transaction');

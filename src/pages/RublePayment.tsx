@@ -81,7 +81,7 @@ const RublePayment = () => {
             console.error("Error fetching payment URL:", error);
             toast({
                 title: "Оплата не найдена",
-                description: "Мы еще не получили подтверждение оплаты. Если вы уже оплатили, подождите немного и проверьте снова.",
+                description: error.error,
                 variant: "destructive",
             });
             setIsLoading(false);
