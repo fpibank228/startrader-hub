@@ -5,11 +5,13 @@ import RouletteDisplay from './RouletteDisplay';
 import SpinButton from './SpinButton';
 import PrizeGrid from './PrizeGrid';
 import { useIsMobile } from '../../hooks/use-mobile';
+import RouletteResultModal from './RouletteResultModal';
 
 interface RouletteItem {
   chance: string;
   link: string;
   title: string;
+  price: number; // Added price field to match the data structure
 }
 
 interface RouletteWheelProps {
@@ -21,6 +23,8 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [slidePosition, setSlidePosition] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [showResultModal, setShowResultModal] = useState(false);
+  const [result, setResult] = useState<RouletteItem | null>(null);
   const isMobile = useIsMobile();
 
   // Find the winning item index (chance === "yes")
@@ -62,11 +66,24 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
         setSelectedIndex(safeWinningIndex);
         setIsSpinning(false);
         
+        // Show the result modal
+        setResult(items[safeWinningIndex]);
+        setShowResultModal(true);
+        
         if (onSpin) {
           onSpin(items[safeWinningIndex]);
         }
       }, 5000); // Время до полной остановки (5 секунд)
     }, 10);
+  };
+
+  const handleCloseModal = () => {
+    setShowResultModal(false);
+  };
+
+  const handlePlayAgain = () => {
+    setShowResultModal(false);
+    setResult(null);
   };
 
   return (
@@ -88,6 +105,14 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
 
       {/* Показываем все возможные выигрыши под рулеткой */}
       <PrizeGrid items={items} />
+
+      {/* Модальное окно с результатом */}
+      <RouletteResultModal 
+        isOpen={showResultModal}
+        onClose={handleCloseModal}
+        result={result}
+        onPlayAgain={handlePlayAgain}
+      />
     </div>
   );
 };

@@ -5,31 +5,14 @@ import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import StarBackground from '../components/StarBackground';
 import RouletteWheel from '../components/roulette/RouletteWheel';
-import RouletteResultModal from '../components/roulette/RouletteResultModal';
 import { useToast } from '../hooks/use-toast';
 import WebApp from "@twa-dev/sdk";
 import { basicRouletteItems } from '../data/rouletteData';
 
 const BasicRoulette = () => {
-  const [showResultModal, setShowResultModal] = useState(false);
-  const [result, setResult] = useState<any>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
   const isFullscreen = WebApp.isFullscreen;
-
-  const handleSpinResult = (result: any) => {
-    setResult(result);
-    setShowResultModal(true);
-  };
-
-  const handlePlayAgain = () => {
-    setShowResultModal(false);
-    setResult(null);
-  };
-
-  const handleCloseModal = () => {
-    setShowResultModal(false);
-  };
 
   const handleBack = () => {
     navigate('/roulette');
@@ -67,18 +50,9 @@ const BasicRoulette = () => {
           className="max-w-md mx-auto"
         >
           <RouletteWheel 
-            onSpin={handleSpinResult}
             items={basicRouletteItems}
           />
         </motion.div>
-
-        {/* Модальное окно с результатом вместо отдельной страницы */}
-        <RouletteResultModal 
-          isOpen={showResultModal}
-          onClose={handleCloseModal}
-          result={result}
-          onPlayAgain={handlePlayAgain}
-        />
       </div>
     </div>
   );
