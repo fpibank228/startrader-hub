@@ -43,7 +43,7 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
     setSelectedIndex(null);
     
     // Fixed item width plus gap for more precise calculations
-    const itemWidth = 96 + 16; // Each item is 96px wide (24*4) plus 16px gap
+    const itemWidth = 88 + 16; // Each item is 96px wide (24*4) plus 16px gap
     
     // Calculate the winning position more precisely
     const totalItems = items.length;
@@ -81,7 +81,7 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
           }
         }
       }, 4200); // Slightly longer than the animation duration to ensure it completes
-    }, 50); // Small delay before animation starts for better visual effect
+    }, 10); // Small delay before animation starts for better visual effect
   };
 
   const handleCloseModal = () => {
