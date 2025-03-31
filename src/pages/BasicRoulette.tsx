@@ -20,18 +20,6 @@ const BasicRoulette = () => {
   const handleSpinResult = (result: any) => {
     setResult(result);
     setGameState('result');
-    
-    if (result.chance === 'yes') {
-      toast({
-        title: "Поздравляем!",
-        description: "Вы выиграли приз!",
-      });
-    } else {
-      toast({
-        title: "Не повезло",
-        description: "Попробуйте еще раз!",
-      });
-    }
   };
 
   const handlePlayAgain = () => {

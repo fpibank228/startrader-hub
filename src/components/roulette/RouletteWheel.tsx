@@ -9,7 +9,7 @@ import { useIsMobile } from '../../hooks/use-mobile';
 interface RouletteItem {
   chance: string;
   link: string;
-  image?: string;
+  title: string;
 }
 
 interface RouletteWheelProps {
@@ -170,7 +170,7 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
                 />
               </div>
               <div className="text-sm mt-2 text-center">
-                {item.chance === "yes" ? "Главный приз" : `Приз ${index}`}
+                {item.title}
               </div>
             </StarCard>
           ))}
