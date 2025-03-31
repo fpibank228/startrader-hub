@@ -18,6 +18,7 @@ interface RouletteResultModalProps {
     model?: string;
     symbol?: string;
     backdrop?: string;
+    number?: number;
   } | null;
   onPlayAgain: () => void;
 }
@@ -51,7 +52,7 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-gradient-to-b from-customPurple/90 to-customMidBlue/90 border border-white/20 p-6 text-center max-w-sm mx-auto rounded-2xl">
+      <DialogContent className="bg-gradient-to-b from-customPurple/90 to-customMidBlue/90 border-none p-8 text-center max-w-sm mx-auto rounded-3xl shadow-[0_0_30px_rgba(53,0,211,0.4)]">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -67,8 +68,8 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
           </h2>
           
           <div className="my-6 mx-auto w-40 h-40">
-            <div className={`w-full h-full rounded-lg overflow-hidden border-2 ${
-              isWin ? 'border-yellow-400 shadow-[0_0_20px_rgba(255,215,0,0.6)]' : 'border-white/30'
+            <div className={`w-full h-full rounded-xl overflow-hidden border-2 ${
+              isWin ? 'border-yellow-400 shadow-[0_0_20px_rgba(255,215,0,0.6)]' : 'border-white/50'
             }`}>
               <LottieItem 
                 animationData={result.link} 
@@ -79,17 +80,35 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
           
           <h3 className="text-lg font-semibold mb-1">{result.title}</h3>
           
-          <div className="flex justify-center items-center gap-2 mb-4">
+          <div className="flex justify-center items-center gap-2 mb-2">
             <span className="text-yellow-400 font-bold">{result.price} TON</span>
             <span className="text-sm text-white/60">≈ ${usdPrice}</span>
           </div>
           
+          {result.number && (
+            <div className="text-white/70 text-sm mb-3">
+              #{result.number}
+            </div>
+          )}
+          
           {/* Display attributes if available */}
           {(result.model || result.symbol || result.backdrop) && (
-            <div className="grid grid-cols-1 gap-2 mb-4 text-sm text-white/80">
-              {result.model && <div>Модель: {result.model}</div>}
-              {result.symbol && <div>Символ: {result.symbol}</div>}
-              {result.backdrop && <div>Фон: {result.backdrop}</div>}
+            <div className="grid grid-cols-1 gap-2 mb-4 text-sm">
+              {result.model && (
+                <div className="bg-white/10 p-2 rounded-lg border border-white/10">
+                  Модель: <span className="text-white/80">{result.model}</span>
+                </div>
+              )}
+              {result.symbol && (
+                <div className="bg-white/10 p-2 rounded-lg border border-white/10">
+                  Символ: <span className="text-white/80">{result.symbol}</span>
+                </div>
+              )}
+              {result.backdrop && (
+                <div className="bg-white/10 p-2 rounded-lg border border-white/10">
+                  Фон: <span className="text-white/80">{result.backdrop}</span>
+                </div>
+              )}
             </div>
           )}
           

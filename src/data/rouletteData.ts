@@ -7,7 +7,13 @@ interface RouletteItem {
     model?: string;    // New field for model
     symbol?: string;   // New field for symbol
     backdrop?: string; // New field for backdrop
+    number?: number;   // New field for item number
 }
+
+// Generate random number between min and max
+const getRandomNumber = (min: number, max: number) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 
 // Data for the basic roulette
 export const basicRouletteItems: RouletteItem[] = [
@@ -18,7 +24,8 @@ export const basicRouletteItems: RouletteItem[] = [
         'price': 0.25,
         'model': 'Basic 15%',
         'symbol': 'Gold 5%',
-        'backdrop': 'Blue 10%'
+        'backdrop': 'Blue 10%',
+        'number': getRandomNumber(1, 200000)
     },
     {
         'chance': 'no',
@@ -27,7 +34,8 @@ export const basicRouletteItems: RouletteItem[] = [
         'price': 1.5,
         'model': 'Premium 5%',
         'symbol': 'Silver 10%', 
-        'backdrop': 'Purple 5%'
+        'backdrop': 'Purple 5%',
+        'number': getRandomNumber(1, 200000)
     },
     {
         'chance': 'no',
@@ -36,7 +44,8 @@ export const basicRouletteItems: RouletteItem[] = [
         'price': 0.7,
         'model': 'Standard 10%',
         'symbol': 'Bronze 15%',
-        'backdrop': 'Red 8%'
+        'backdrop': 'Red 8%',
+        'number': getRandomNumber(1, 200000)
     },
     {
         'chance': 'no',
@@ -45,7 +54,8 @@ export const basicRouletteItems: RouletteItem[] = [
         'price': 0.3,
         'model': 'Basic 20%',
         'symbol': 'Copper 20%',
-        'backdrop': 'Green 12%'
+        'backdrop': 'Green 12%',
+        'number': getRandomNumber(1, 200000)
     },
     {
         'chance': 'no',
@@ -54,7 +64,8 @@ export const basicRouletteItems: RouletteItem[] = [
         'price': 0.2,
         'model': 'Basic 25%',
         'symbol': 'Bronze 25%',
-        'backdrop': 'Yellow 15%'
+        'backdrop': 'Yellow 15%',
+        'number': getRandomNumber(1, 200000)
     },
     {
         'chance': 'no',
@@ -63,7 +74,8 @@ export const basicRouletteItems: RouletteItem[] = [
         'price': 0.2,
         'model': 'Basic 25%',
         'symbol': 'Copper 20%',
-        'backdrop': 'Orange 10%'
+        'backdrop': 'Orange 10%',
+        'number': getRandomNumber(1, 200000)
     },
     {
         'chance': 'yes',
@@ -72,7 +84,8 @@ export const basicRouletteItems: RouletteItem[] = [
         'price': 1.0,
         'model': 'Premium 5%',
         'symbol': 'Gold 3%',
-        'backdrop': 'Purple 5%'
+        'backdrop': 'Purple 5%',
+        'number': getRandomNumber(1, 200000)
     },
     {
         'chance': 'no',
@@ -81,7 +94,8 @@ export const basicRouletteItems: RouletteItem[] = [
         'price': 0.5,
         'model': 'Standard 10%',
         'symbol': 'Silver 7%',
-        'backdrop': 'Blue 8%'
+        'backdrop': 'Blue 8%',
+        'number': getRandomNumber(1, 200000)
     },
     {
         'chance': 'no',
@@ -90,7 +104,8 @@ export const basicRouletteItems: RouletteItem[] = [
         'price': 0.5,
         'model': 'Standard 10%',
         'symbol': 'Silver 7%',
-        'backdrop': 'Red 8%'
+        'backdrop': 'Red 8%',
+        'number': getRandomNumber(1, 200000)
     },
 ];
 

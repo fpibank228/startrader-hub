@@ -16,6 +16,7 @@ interface RouletteItem {
   model?: string;
   symbol?: string;
   backdrop?: string;
+  number?: number;
 }
 
 interface RouletteWheelProps {
@@ -68,11 +69,13 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
         setIsSpinning(false);
         
         // Show the result modal
-        setResult(items[winningIndex]);
-        setShowResultModal(true);
-        
-        if (onSpin) {
-          onSpin(items[winningIndex]);
+        if (items && items.length > winningIndex) {
+          setResult(items[winningIndex]);
+          setShowResultModal(true);
+          
+          if (onSpin && items[winningIndex]) {
+            onSpin(items[winningIndex]);
+          }
         }
       }, 5000); // Animation duration (5 seconds)
     }, 10);
@@ -97,13 +100,16 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
     setSelectedItem(null);
   };
 
+  // Make sure items is never undefined to prevent rendering issues
+  const safeItems = items || [];
+
   return (
     <div className="flex flex-col items-center">
       <StarCard className="relative w-full max-w-md mb-6 p-6">
         <h3 className="text-center text-lg font-medium mb-4">Вращайте рулетку и выигрывайте приз!</h3>
         
         <RouletteDisplay 
-          items={items}
+          items={safeItems}
           slidePosition={slidePosition}
           isSpinning={isSpinning}
           selectedIndex={selectedIndex}
@@ -115,7 +121,7 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
       </StarCard>
 
       {/* Показываем все возможные выигрыши под рулеткой */}
-      <PrizeGrid items={items} onItemClick={handleItemClick} />
+      <PrizeGrid items={safeItems} onItemClick={handleItemClick} />
 
       {/* Модальное окно с результатом */}
       <RouletteResultModal 

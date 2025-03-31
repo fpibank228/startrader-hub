@@ -6,6 +6,7 @@ interface RouletteItem {
   chance: string;
   link: string;
   title: string;
+  number?: number;
 }
 
 interface RouletteDisplayProps {
@@ -19,6 +20,9 @@ interface RouletteDisplayProps {
 const RouletteDisplay = memo(({ items, slidePosition, isSpinning, selectedIndex }: RouletteDisplayProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   
+  // Make sure items is never undefined
+  const safeItems = items || [];
+  
   return (
     <div 
       ref={containerRef}
@@ -31,7 +35,7 @@ const RouletteDisplay = memo(({ items, slidePosition, isSpinning, selectedIndex 
       <div className="absolute left-1/2 top-0 bottom-0 -ml-6 w-12 bg-white/5 blur-md z-10"></div>
       
       <RouletteStrip 
-        items={items}
+        items={safeItems}
         slidePosition={slidePosition}
         isSpinning={isSpinning}
         selectedIndex={selectedIndex}

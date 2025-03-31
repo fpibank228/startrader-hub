@@ -7,6 +7,7 @@ interface RouletteItem {
   chance: string;
   link: string;
   title: string;
+  number?: number;
 }
 
 interface RouletteStripProps {
@@ -50,7 +51,7 @@ const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }:
                 animationData={item.link} 
                 className="w-full h-full"
                 loop={isSelected}
-                autoplay={isSelected}
+                autoplay={isSelected || isSpinning}
               />
             </div>
           </div>

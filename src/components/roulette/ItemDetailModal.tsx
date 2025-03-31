@@ -11,6 +11,7 @@ interface RouletteItem {
   model?: string;
   symbol?: string;
   backdrop?: string;
+  number?: number;
 }
 
 interface ItemDetailModalProps {
@@ -22,7 +23,7 @@ interface ItemDetailModalProps {
 const ItemDetailModal = ({ isOpen, onClose, item }: ItemDetailModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-gradient-to-b from-customPurple/90 to-customMidBlue/90 border border-white/20 p-6 text-center max-w-sm mx-auto rounded-2xl">
+      <DialogContent className="bg-gradient-to-b from-customPurple/90 to-customMidBlue/90 border-none p-8 text-center max-w-sm mx-auto rounded-3xl shadow-[0_0_30px_rgba(53,0,211,0.4)]">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -36,7 +37,7 @@ const ItemDetailModal = ({ isOpen, onClose, item }: ItemDetailModalProps) => {
           <h2 className="text-xl font-bold mb-4">{item.title}</h2>
           
           <div className="my-6 mx-auto w-40 h-40">
-            <div className="w-full h-full rounded-lg overflow-hidden border-2 border-white/30 shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+            <div className="w-full h-full rounded-xl overflow-hidden border-2 border-white/50 shadow-[0_0_15px_rgba(255,255,255,0.3)]">
               <LottieItem 
                 animationData={item.link} 
                 className="w-full h-full"
@@ -46,27 +47,30 @@ const ItemDetailModal = ({ isOpen, onClose, item }: ItemDetailModalProps) => {
             </div>
           </div>
           
-          <div className="flex justify-center items-center gap-2 mb-4">
+          <div className="flex justify-between items-center gap-2 mb-4">
             <span className="text-yellow-400 font-bold">{item.price} TON</span>
+            {item.number && (
+              <span className="text-white/70 text-sm">#{item.number}</span>
+            )}
           </div>
           
           <div className="grid grid-cols-1 gap-3 mt-4 text-left">
             {item.model && (
-              <div className="bg-white/10 p-3 rounded-xl">
+              <div className="bg-white/10 p-3 rounded-xl border border-white/10">
                 <span className="text-sm font-medium">Модель:</span>
                 <div className="text-sm text-white/80 mt-1">{item.model}</div>
               </div>
             )}
             
             {item.symbol && (
-              <div className="bg-white/10 p-3 rounded-xl">
+              <div className="bg-white/10 p-3 rounded-xl border border-white/10">
                 <span className="text-sm font-medium">Символ:</span>
                 <div className="text-sm text-white/80 mt-1">{item.symbol}</div>
               </div>
             )}
             
             {item.backdrop && (
-              <div className="bg-white/10 p-3 rounded-xl">
+              <div className="bg-white/10 p-3 rounded-xl border border-white/10">
                 <span className="text-sm font-medium">Фон:</span>
                 <div className="text-sm text-white/80 mt-1">{item.backdrop}</div>
               </div>
