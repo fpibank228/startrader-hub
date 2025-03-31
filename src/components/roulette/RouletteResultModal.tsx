@@ -15,6 +15,9 @@ interface RouletteResultModalProps {
     link: string;
     title: string;
     price: number;
+    model?: string;
+    symbol?: string;
+    backdrop?: string;
   } | null;
   onPlayAgain: () => void;
 }
@@ -80,6 +83,15 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
             <span className="text-yellow-400 font-bold">{result.price} TON</span>
             <span className="text-sm text-white/60">≈ ${usdPrice}</span>
           </div>
+          
+          {/* Display attributes if available */}
+          {(result.model || result.symbol || result.backdrop) && (
+            <div className="grid grid-cols-1 gap-2 mb-4 text-sm text-white/80">
+              {result.model && <div>Модель: {result.model}</div>}
+              {result.symbol && <div>Символ: {result.symbol}</div>}
+              {result.backdrop && <div>Фон: {result.backdrop}</div>}
+            </div>
+          )}
           
           {isWin && showButtons ? (
             <div className="grid grid-cols-2 gap-3 mt-4">

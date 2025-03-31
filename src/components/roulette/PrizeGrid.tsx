@@ -8,14 +8,18 @@ interface RouletteItem {
   link: string;
   title: string;
   price: number;
+  model?: string;
+  symbol?: string;
+  backdrop?: string;
 }
 
 interface PrizeGridProps {
   items: RouletteItem[];
+  onItemClick?: (item: RouletteItem) => void;
 }
 
 // Мемоизируем компонент чтобы предотвратить лишние ререндеры
-const PrizeGrid = memo(({ items }: PrizeGridProps) => {
+const PrizeGrid = memo(({ items, onItemClick }: PrizeGridProps) => {
   return (
     <div className="w-full max-w-md mt-4">
       <h3 className="text-center text-lg font-medium mb-4">Возможные выигрыши</h3>
@@ -23,7 +27,8 @@ const PrizeGrid = memo(({ items }: PrizeGridProps) => {
         {items.map((item, index) => (
           <StarCard 
             key={index} 
-            className="p-2 flex flex-col items-center"
+            className="p-2 flex flex-col items-center cursor-pointer hover:bg-white/10 transition-colors"
+            onClick={() => onItemClick && onItemClick(item)}
           >
             <div className="w-20 h-20 rounded-lg overflow-hidden border border-white/30">
               <LottieItem 

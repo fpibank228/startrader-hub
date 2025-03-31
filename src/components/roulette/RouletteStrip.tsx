@@ -16,12 +16,9 @@ interface RouletteStripProps {
   selectedIndex: number | null;
 }
 
-// Мемоизируем компонент и уменьшим количество повторений элементов
+// Simplify the strip to ensure consistent behavior
 const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }: RouletteStripProps) => {
   const stripRef = useRef<HTMLDivElement>(null);
-  
-  // Уменьшаем количество повторений с 7 до 5
-  const repeatCount = 5;
   
   return (
     <motion.div 
@@ -36,34 +33,29 @@ const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }:
         type: "tween"
       }}
     >
-      {/* Уменьшаем количество повторений для оптимизации */}
-      {[...Array(repeatCount)].map((_, repeatIndex) => (
-        <div key={repeatIndex} className="flex items-center gap-6">
-          {items.map((item, index) => {
-            const isSelected = selectedIndex === index && repeatIndex === 3;
-            // Оптимизация: не показываем анимацию для неактивных элементов
-            return (
-              <div 
-                key={`${repeatIndex}-${index}`}
-                className={`w-24 h-24 flex-shrink-0 ${
-                  isSelected ? 'scale-110 z-10' : ''
-                }`}
-              >
-                <div className={`w-full h-full rounded-lg overflow-hidden border-2 ${
-                  isSelected ? 'border-white shadow-[0_0_15px_rgba(255,255,255,0.7)]' : 'border-white/30'
-                } bg-white/10 flex items-center justify-center`}>
-                  <LottieItem 
-                    animationData={item.link} 
-                    className="w-full h-full"
-                    loop={isSelected}
-                    autoplay={isSelected}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      ))}
+      {/* Use a simple array of items without repetition for more consistent behavior */}
+      {items.map((item, index) => {
+        const isSelected = selectedIndex === index;
+        return (
+          <div 
+            key={index}
+            className={`w-24 h-24 flex-shrink-0 ${
+              isSelected ? 'scale-110 z-10' : ''
+            }`}
+          >
+            <div className={`w-full h-full rounded-lg overflow-hidden border-2 ${
+              isSelected ? 'border-white shadow-[0_0_15px_rgba(255,255,255,0.7)]' : 'border-white/30'
+            } bg-white/10 flex items-center justify-center`}>
+              <LottieItem 
+                animationData={item.link} 
+                className="w-full h-full"
+                loop={isSelected}
+                autoplay={isSelected}
+              />
+            </div>
+          </div>
+        );
+      })}
     </motion.div>
   );
 });

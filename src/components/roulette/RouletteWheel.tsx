@@ -6,12 +6,16 @@ import SpinButton from './SpinButton';
 import PrizeGrid from './PrizeGrid';
 import { useIsMobile } from '../../hooks/use-mobile';
 import RouletteResultModal from './RouletteResultModal';
+import ItemDetailModal from './ItemDetailModal';
 
 interface RouletteItem {
   chance: string;
   link: string;
   title: string;
-  price: number; // Added price field to match the data structure
+  price: number;
+  model?: string;
+  symbol?: string;
+  backdrop?: string;
 }
 
 interface RouletteWheelProps {
@@ -25,11 +29,12 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showResultModal, setShowResultModal] = useState(false);
   const [result, setResult] = useState<RouletteItem | null>(null);
+  const [showItemDetail, setShowItemDetail] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<RouletteItem | null>(null);
   const isMobile = useIsMobile();
 
-  // Find the winning item index (chance === "yes")
-  const winningIndex = items.findIndex(item => item.chance === "yes");
-  const safeWinningIndex = winningIndex >= 0 ? winningIndex : 0;
+  // Always use index 6 (7th item) as the winning item for consistency
+  const winningIndex = 6;
 
   const spinWheel = () => {
     if (isSpinning) return;
@@ -37,43 +42,38 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
     setIsSpinning(true);
     setSelectedIndex(null);
     
-    // Размеры элементов
-    const itemWidth = 120; // ширина элемента + отступ
-    const stripWidth = items.length * itemWidth;
+    // Fixed item width for consistency
+    const itemWidth = 120;
     
-    // Начальная позиция (без анимации)
-    const startPosition = 0;
+    // Always target the 7th item (index 6) to appear in the center
+    // Regardless of screen size, we'll position this item in the center
     
-    // Промежуточная позиция для анимации - сдвигаем ленту далеко влево
-    const midwayPosition = -(stripWidth * 3);
+    // Start with an initial position of 0
+    setSlidePosition(0);
     
-    // Финальная позиция, где выигрышный элемент будет точно по центру контейнера
-    const containerWidth = window.innerWidth;
-    const centerPosition = containerWidth / 2;
-    const targetItemLeftPosition = midwayPosition + (stripWidth - (4 * itemWidth));
-    const finalPosition = targetItemLeftPosition - centerPosition + (itemWidth / 2);
-    
-    // Устанавливаем начальную позицию (без анимации)
-    setSlidePosition(startPosition);
-    
-    // Запускаем анимацию через небольшую задержку
+    // Short delay before starting the animation
     setTimeout(() => {
-      // Единая анимация с использованием одного вызова
+      // Calculate a position that will place the target item in the center
+      // We use a fixed calculation that works on all screen sizes
+      // Negative value moves the strip to the left
+      const finalPosition = -((winningIndex + 0.5) * itemWidth);
+      
+      // Start the animation to the final position
       setSlidePosition(finalPosition);
       
-      // После завершения анимации
+      // Set a timeout for when the animation completes
       setTimeout(() => {
-        setSelectedIndex(safeWinningIndex);
+        setSelectedIndex(winningIndex);
         setIsSpinning(false);
         
         // Show the result modal
-        setResult(items[safeWinningIndex]);
+        setResult(items[winningIndex]);
         setShowResultModal(true);
         
         if (onSpin) {
-          onSpin(items[safeWinningIndex]);
+          onSpin(items[winningIndex]);
         }
-      }, 5000); // Время до полной остановки (5 секунд)
+      }, 5000); // Animation duration (5 seconds)
     }, 10);
   };
 
@@ -84,6 +84,16 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
   const handlePlayAgain = () => {
     setShowResultModal(false);
     setResult(null);
+  };
+
+  const handleItemClick = (item: RouletteItem) => {
+    setSelectedItem(item);
+    setShowItemDetail(true);
+  };
+
+  const handleCloseItemDetail = () => {
+    setShowItemDetail(false);
+    setSelectedItem(null);
   };
 
   return (
@@ -104,7 +114,7 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
       </StarCard>
 
       {/* Показываем все возможные выигрыши под рулеткой */}
-      <PrizeGrid items={items} />
+      <PrizeGrid items={items} onItemClick={handleItemClick} />
 
       {/* Модальное окно с результатом */}
       <RouletteResultModal 
@@ -113,6 +123,15 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
         result={result}
         onPlayAgain={handlePlayAgain}
       />
+
+      {/* Модальное окно с деталями предмета */}
+      {selectedItem && (
+        <ItemDetailModal
+          isOpen={showItemDetail}
+          onClose={handleCloseItemDetail}
+          item={selectedItem}
+        />
+      )}
     </div>
   );
 };
