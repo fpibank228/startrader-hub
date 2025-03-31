@@ -2,8 +2,7 @@
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import LottieItem from './LottieItem';
 import { motion } from 'framer-motion';
-import { X, Loader2 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { X } from 'lucide-react';
 
 interface RouletteItem {
   chance: string;
@@ -23,21 +22,6 @@ interface ItemDetailModalProps {
 }
 
 const ItemDetailModal = ({ isOpen, onClose, item }: ItemDetailModalProps) => {
-  const [contentLoaded, setContentLoaded] = useState(false);
-  
-  // Reset loading state when modal opens or item changes
-  useEffect(() => {
-    if (isOpen) {
-      setContentLoaded(false);
-      // Имитируем время загрузки, чтобы показать состояние загрузки
-      const timer = setTimeout(() => {
-        setContentLoaded(true);
-      }, 300);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen, item]);
-  
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-gradient-to-b from-customPurple/90 to-customMidBlue/90 border-none p-8 text-center max-w-sm mx-auto rounded-3xl shadow-[0_0_30px_rgba(53,0,211,0.4)]">
@@ -65,11 +49,6 @@ const ItemDetailModal = ({ isOpen, onClose, item }: ItemDetailModalProps) => {
           
           <div className="my-6 mx-auto w-40 h-40 relative">
             <div className="w-full h-full rounded-xl overflow-hidden border-2 border-white/50 shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-              {!contentLoaded && (
-                <div className="absolute inset-0 flex items-center justify-center bg-white/10 z-10">
-                  <Loader2 className="w-10 h-10 animate-spin text-white/70" />
-                </div>
-              )}
               <LottieItem 
                 animationData={item.link} 
                 className="w-full h-full"

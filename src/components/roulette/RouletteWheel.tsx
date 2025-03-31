@@ -32,7 +32,6 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
   const [result, setResult] = useState<RouletteItem | null>(null);
   const [showItemDetail, setShowItemDetail] = useState(false);
   const [selectedItem, setSelectedItem] = useState<RouletteItem | null>(null);
-  const [itemLoading, setItemLoading] = useState(false);
   const isMobile = useIsMobile();
 
   // Always use index 6 (7th item) as the winning item for consistency
@@ -104,17 +103,12 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
   };
 
   const handleItemClick = (item: RouletteItem) => {
-    // Show loading state immediately
-    setItemLoading(true);
     setSelectedItem(item);
     setShowItemDetail(true);
-    
-    // The modal itself will handle showing loading state
   };
 
   const handleCloseItemDetail = () => {
     setShowItemDetail(false);
-    setItemLoading(false);
     setTimeout(() => {
       setSelectedItem(null);
     }, 200); // Short delay to ensure smooth transition

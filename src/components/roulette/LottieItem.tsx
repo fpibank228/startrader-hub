@@ -1,8 +1,6 @@
 
 import { useEffect, useState, memo } from 'react';
 import Lottie from "lottie-react";
-import { Loader2 } from 'lucide-react';
-import { Skeleton } from "@/components/ui/skeleton";
 
 interface LottieItemProps {
   animationData: string;
@@ -14,18 +12,11 @@ interface LottieItemProps {
 // Мемоизируем компонент чтобы предотвратить лишние ререндеры
 const LottieItem = memo(({ animationData, className = '', loop = true, autoplay = true }: LottieItemProps) => {
   const [animation, setAnimation] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
     const fetchAnimation = async () => {
-      // Показываем лоадер каждый раз при смене анимации
-      setIsLoading(true);
-      setIsVisible(false);
-      setError(false);
-      
       try {
         const response = await fetch(animationData);
         if (!response.ok) throw new Error('Failed to fetch animation');
@@ -33,28 +24,11 @@ const LottieItem = memo(({ animationData, className = '', loop = true, autoplay 
         const data = await response.json();
         if (isMounted) {
           setAnimation(data);
-          
-          // Добавляем небольшую задержку перед скрытием лоадера
-          // чтобы анимация успела подготовиться к рендеру
-          setTimeout(() => {
-            if (isMounted) {
-              setIsLoading(false);
-              
-              // После скрытия лоадера с небольшой задержкой показываем анимацию
-              // для плавного перехода
-              setTimeout(() => {
-                if (isMounted) {
-                  setIsVisible(true);
-                }
-              }, 100);
-            }
-          }, 300);
         }
       } catch (err) {
         console.error('Error loading Lottie animation:', err);
         if (isMounted) {
           setError(true);
-          setIsLoading(false);
         }
       }
     };
@@ -68,24 +42,12 @@ const LottieItem = memo(({ animationData, className = '', loop = true, autoplay 
     };
   }, [animationData]);
 
-  if (isLoading) {
-    return (
-      <div className={`flex items-center justify-center ${className}`}>
-        <Skeleton className="w-full h-full rounded-lg bg-white/10">
-          <div className="flex items-center justify-center w-full h-full">
-            <Loader2 className="w-8 h-8 animate-spin text-white/70" />
-          </div>
-        </Skeleton>
-      </div>
-    );
-  }
-
   if (error) {
     return <div className={`flex items-center justify-center bg-white/10 rounded-lg ${className}`}>❓</div>;
   }
 
   return (
-    <div className={`transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'} ${className}`}>
+    <div className={className}>
       {animation && (
         <Lottie
           animationData={animation}
