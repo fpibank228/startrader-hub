@@ -1,11 +1,11 @@
 
 import { motion } from 'framer-motion';
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import LottieItem from './LottieItem';
-import { RotateCw, Gift, Wallet, X } from 'lucide-react';
+import { RotateCw, Gift, Wallet, X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTonPrice } from '@/hooks/useTonPrice';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface RouletteResultModalProps {
   isOpen: boolean;
@@ -26,12 +26,26 @@ interface RouletteResultModalProps {
 const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteResultModalProps) => {
   const [showButtons, setShowButtons] = useState(true);
   const [action, setAction] = useState<'collect' | 'sell' | null>(null);
+  const [contentLoaded, setContentLoaded] = useState(false);
   const tonPrice = useTonPrice();
   
   if (!result) return null;
   
   const isWin = result.chance === 'yes';
   const usdPrice = tonPrice ? (result.price * tonPrice).toFixed(2) : 'загрузка...';
+
+  // Reset loading state when modal opens or result changes
+  useEffect(() => {
+    if (isOpen) {
+      setContentLoaded(false);
+      // Имитируем время загрузки, чтобы показать состояние загрузки
+      const timer = setTimeout(() => {
+        setContentLoaded(true);
+      }, 300);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, result]);
 
   const handlePlayAgain = () => {
     setShowButtons(true);
@@ -53,6 +67,8 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-gradient-to-b from-customPurple/90 to-customMidBlue/90 border-none p-8 text-center max-w-sm mx-auto rounded-3xl shadow-[0_0_30px_rgba(53,0,211,0.4)]">
+        <DialogTitle className="sr-only">Результат рулетки</DialogTitle>
+        
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -75,10 +91,15 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
             {isWin ? '🎉 Поздравляем! Вы выиграли!' : 'К сожалению, не повезло'}
           </h2>
           
-          <div className="my-6 mx-auto w-40 h-40">
+          <div className="my-6 mx-auto w-40 h-40 relative">
             <div className={`w-full h-full rounded-xl overflow-hidden border-2 ${
               isWin ? 'border-yellow-400 shadow-[0_0_20px_rgba(255,215,0,0.6)]' : 'border-white/50'
             }`}>
+              {!contentLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-white/10 z-10">
+                  <Loader2 className="w-10 h-10 animate-spin text-white/70" />
+                </div>
+              )}
               <LottieItem 
                 animationData={result.link} 
                 className="w-full h-full"

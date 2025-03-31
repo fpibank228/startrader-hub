@@ -36,7 +36,7 @@ const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }:
         x: slidePosition 
       }}
       transition={{ 
-        duration: isSpinning ? 4 : 0.2, // 4 seconds for spin, 0.2 for reset
+        duration: isSpinning ? 3.5 : 0.2, // 3.5 seconds for spin (slightly faster), 0.2 for reset
         ease: "easeOut", // Simple easeOut for consistent deceleration
         type: "tween", // Using tween for more predictable animation
       }}

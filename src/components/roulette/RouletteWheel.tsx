@@ -32,6 +32,7 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
   const [result, setResult] = useState<RouletteItem | null>(null);
   const [showItemDetail, setShowItemDetail] = useState(false);
   const [selectedItem, setSelectedItem] = useState<RouletteItem | null>(null);
+  const [itemLoading, setItemLoading] = useState(false);
   const isMobile = useIsMobile();
 
   // Always use index 6 (7th item) as the winning item for consistency
@@ -48,23 +49,21 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
     
     // Calculate the winning position more precisely
     const totalItems = items.length;
-    const fullRotations = 2; // 2 full rotations for consistency
     
     // Start with an initial position of 0
     setSlidePosition(0);
     
-    // Short delay before starting the animation
+    // Calculate the final position to ensure the 7th item (index 6) is centered
+    // We're using the third repetition of items (since we have 5 repetitions in RouletteStrip)
+    const targetSetIndex = 2; // Use the middle (third) set for stability
+    const targetItemPosition = targetSetIndex * totalItems + winningIndex;
+    
+    // Calculate the exact pixel position
+    // We add 0.5 to center the item precisely in the indicator
+    const finalPosition = -((targetItemPosition + 0.5) * itemWidth);
+    
+    // Start the animation to the final position immediately
     setTimeout(() => {
-      // Calculate the final position to ensure the 7th item (index 6) is centered
-      // We're using the third repetition of items (since we have 5 repetitions in RouletteStrip)
-      const targetSetIndex = 2; // Use the middle (third) set for stability
-      const targetItemPosition = targetSetIndex * totalItems + winningIndex;
-      
-      // Calculate the exact pixel position
-      // We add 0.5 to center the item precisely in the indicator
-      const finalPosition = -((targetItemPosition + 0.5) * itemWidth);
-      
-      // Start the animation to the final position
       setSlidePosition(finalPosition);
       
       // Set a timeout for when the animation completes
@@ -81,8 +80,8 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
             onSpin(items[winningIndex]);
           }
         }
-      }, 4000); // Slightly shorter than animation duration for better UX
-    }, 10); // Small delay before animation starts for better visual effect
+      }, 3500); // Match the animation duration in RouletteStrip
+    }, 10);
   };
 
   const handleCloseModal = () => {
@@ -105,14 +104,20 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
   };
 
   const handleItemClick = (item: RouletteItem) => {
-    // Immediately show loading state in modal
+    // Show loading state immediately
+    setItemLoading(true);
     setSelectedItem(item);
     setShowItemDetail(true);
+    
+    // The modal itself will handle showing loading state
   };
 
   const handleCloseItemDetail = () => {
     setShowItemDetail(false);
-    setSelectedItem(null);
+    setItemLoading(false);
+    setTimeout(() => {
+      setSelectedItem(null);
+    }, 200); // Short delay to ensure smooth transition
   };
 
   // Make sure items is never undefined to prevent rendering issues
