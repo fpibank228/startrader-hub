@@ -36,11 +36,11 @@ const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }:
         x: slidePosition 
       }}
       transition={{ 
-        duration: isSpinning ? 5 : 0,
-        ease: ["easeInOut", "easeOut"],
+        duration: isSpinning ? 6 : 0, // Increased duration to 6 seconds for smoother deceleration
+        ease: [0.16, 1, 0.3, 1], // Custom cubic-bezier curve for smooth deceleration
         type: "spring",
-        damping: 30,
-        stiffness: 150
+        damping: 60, // Increased damping for smoother stop
+        stiffness: 100 // Reduced stiffness for less abrupt stop
       }}
     >
       {repeatedItems.map((item, index) => {
