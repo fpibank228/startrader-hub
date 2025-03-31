@@ -22,6 +22,7 @@ const RouletteWheel = ({ onSpin }: RouletteWheelProps) => {
   const stripRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+  
   const items = [
     {
       'chance': 'yes',
@@ -139,11 +140,9 @@ const RouletteWheel = ({ onSpin }: RouletteWheelProps) => {
                     >
                       <div className={`w-full h-full rounded-lg overflow-hidden border-2 ${
                         isSelected ? 'border-white shadow-[0_0_15px_rgba(255,255,255,0.7)]' : 'border-white/30'
-                      }`}>
-                        <LottieItem 
-                          animationData={item.link}
-                          className="w-full h-full"
-                        />
+                      } bg-white/10 flex items-center justify-center`}>
+                        {/* Placeholder instead of animation */}
+                        <div className="text-4xl">?</div>
                       </div>
                     </div>
                   );
@@ -173,6 +172,30 @@ const RouletteWheel = ({ onSpin }: RouletteWheelProps) => {
           </button>
         </div>
       </StarCard>
+
+      {/* Показываем все возможные выигрыши под рулеткой */}
+      <div className="w-full max-w-md mt-4">
+        <h3 className="text-center text-lg font-medium mb-4">Возможные выигрыши</h3>
+        <div className="grid grid-cols-3 gap-4">
+          {items.map((item, index) => (
+            <StarCard 
+              key={index} 
+              className="p-2 flex flex-col items-center"
+            >
+              <div className="w-20 h-20 rounded-lg overflow-hidden border border-white/30">
+                <LottieItem 
+                  animationData={item.link} 
+                  className="w-full h-full"
+                  loop={false}
+                />
+              </div>
+              <div className="text-sm mt-2 text-center">
+                {item.chance === "yes" ? "Главный приз" : `Приз ${index}`}
+              </div>
+            </StarCard>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

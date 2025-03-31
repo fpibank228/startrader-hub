@@ -6,9 +6,10 @@ import { Loader2 } from 'lucide-react';
 interface LottieItemProps {
   animationData: string;
   className?: string;
+  loop?: boolean;
 }
 
-const LottieItem = ({ animationData, className = '' }: LottieItemProps) => {
+const LottieItem = ({ animationData, className = '', loop = true }: LottieItemProps) => {
   const [animation, setAnimation] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -49,7 +50,7 @@ const LottieItem = ({ animationData, className = '' }: LottieItemProps) => {
       {animation && (
         <Lottie
           animationData={animation}
-          loop={true}
+          loop={loop}
           autoplay={true}
           style={{ width: '100%', height: '100%' }}
         />
