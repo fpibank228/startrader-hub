@@ -48,7 +48,7 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
     
     // Calculate number of full rotations to make
     const totalItems = items.length;
-    const fullRotations = 3; // Reduced to 3 full rotations
+    const fullRotations = 2; // Reduced to 2 full rotations
     const fullRotationDistance = totalItems * itemWidth * fullRotations;
     
     // Start with an initial position of 0
@@ -79,7 +79,7 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
             onSpin(items[winningIndex]);
           }
         }
-      }, 6000); // Longer than the animation duration to ensure it completes smoothly
+      }, 4200); // Slightly longer than the animation duration to ensure it completes
     }, 10);
   };
 
