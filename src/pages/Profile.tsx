@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {motion} from 'framer-motion';
-import {History, User, DollarSign, Share2, Wallet, Loader} from 'lucide-react';
+import {History, User, DollarSign, Share2, Wallet, Loader, Gift} from 'lucide-react';
 import StarBackground from '../components/StarBackground';
 import StarCard from '../components/StarCard';
 import {useToast} from '../hooks/use-toast';
@@ -8,6 +8,7 @@ import {TonConnectButton} from "@tonconnect/ui-react";
 import WebApp from "@twa-dev/sdk";
 import {apiService} from "@/utils/api.ts";
 import {initUtils} from '@tma.js/sdk';
+import LottieItem from '../components/roulette/LottieItem';
 
 interface Transaction {
     id: number;
@@ -17,20 +18,61 @@ interface Transaction {
     price: string;
 }
 
+interface GiftItem {
+    link: string;
+    title: string;
+    price: number;
+    model?: string;
+    symbol?: string;
+    backdrop?: string;
+    number?: number;
+}
+
 const Profile = () => {
-    const [tab, setTab] = useState<'profile' | 'history'>('profile');
+    const [tab, setTab] = useState<'profile' | 'history' | 'gifts'>('profile');
     const [walletConnected, setWalletConnected] = useState(false);
-    const [transactions, setTransactions] = useState<Transaction[]>([]); // Состояние для хранения транзакций
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [userInfo, setUserInfo] = useState({"ref_user": 0});
-    const [isLoading, setIsLoading] = useState(false); // Состояние для загрузки
+    const [isLoading, setIsLoading] = useState(false);
+    const [selectedGift, setSelectedGift] = useState<GiftItem | null>(null);
     const {toast} = useToast();
     const isFullscreen = WebApp.isFullscreen;
+
+    const [gifts, setGifts] = useState<GiftItem[]>([
+        {
+            'link': 'https://nft.fragment.com/gift/homemadecake-10230.lottie.json',
+            'title': 'Homemade Cake',
+            'price': 0.25,
+            'model': 'Basic 15%',
+            'symbol': 'Gold 5%',
+            'backdrop': 'Blue 10%',
+            'number': Math.floor(Math.random() * 200000) + 1
+        },
+        {
+            'link': 'https://nft.fragment.com/gift/diamondring-18822.lottie.json',
+            'title': 'Diamond Ring',
+            'price': 1.5,
+            'model': 'Premium 5%',
+            'symbol': 'Silver 10%',
+            'backdrop': 'Purple 5%',
+            'number': Math.floor(Math.random() * 200000) + 1
+        },
+        {
+            'link': 'https://nft.fragment.com/gift/eternalrose-1385.lottie.json',
+            'title': 'Eternal Rose',
+            'price': 0.7,
+            'model': 'Standard 10%',
+            'symbol': 'Bronze 15%',
+            'backdrop': 'Red 8%',
+            'number': Math.floor(Math.random() * 200000) + 1
+        }
+    ]);
 
     const [shareLink, setShareLink] = useState('https://t.me/amnyamstarsbot/app');
 
     useEffect(() => {
         const userIdParam = WebApp.initDataUnsafe.user?.id;
-            setShareLink(`https://t.me/amnyamstarsbot/app?startapp=${userIdParam}`);
+        setShareLink(`https://t.me/amnyamstarsbot/app?startapp=${userIdParam}`);
         fetchUserData()
     }, []);
 
@@ -77,13 +119,13 @@ const Profile = () => {
             )
     }
 
-    // const handleCopyReferral = () => {
-    //     navigator.clipboard.writeText('https://star-market.com/ref/user123');
-    //     toast({
-    //         title: "Скопировано",
-    //         description: "Реферальная ссылка скопирована в буфер обмена",
-    //     });
-    // };
+    const handleGiftClick = (gift: GiftItem) => {
+        setSelectedGift(gift);
+    };
+
+    const handleCloseGiftDetail = () => {
+        setSelectedGift(null);
+    };
 
     return (
         <div className="relative min-h-screen pt-4 pb-24" style={{
@@ -124,7 +166,15 @@ const Profile = () => {
                             <History size={18}/>
                             <span>История</span>
                         </button>
-
+                        <button
+                            onClick={() => setTab('gifts')}
+                            className={`flex-1 py-3 px-4 flex items-center justify-center gap-2 transition-all duration-300 ${
+                                tab === 'gifts' ? 'bg-customPurple text-white' : 'text-white/70'
+                            }`}
+                        >
+                            <Gift size={18}/>
+                            <span>Подарки</span>
+                        </button>
                     </div>
 
                     {tab === 'profile' && (
@@ -182,7 +232,6 @@ const Profile = () => {
                                                             className="font-bold text-center">{earnedAmount} TON</span>
                                                         <span className="text-sm text-white/30">заработано</span>
 
-                                                        {/* Иконка информации */}
                                                         <div
                                                             className="absolute top-2 right-2 text-white/40 hover:text-white/60 transition-colors">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16"
@@ -193,7 +242,6 @@ const Profile = () => {
                                                                       strokeLinecap="round"/>
                                                             </svg>
 
-                                                            {/* Всплывающая подсказка */}
                                                             <div
                                                                 className="absolute hidden group-hover:block top-full right-0 mt-1 w-48 bg-black/90 text-white text-xs p-2 rounded-md shadow-lg z-10">
                                                                 Эта функция находится в разработке!
@@ -207,7 +255,6 @@ const Profile = () => {
                                 </div>
                             </StarCard>
 
-                            {/* Referral Program Card */}
                             <StarCard className="mb-6 border border-customPurple/30">
                                 <div className="flex items-center gap-2 mb-4">
                                     <div
@@ -313,8 +360,135 @@ const Profile = () => {
                             </StarCard>
                         </motion.div>
                     )}
+
+                    {tab === 'gifts' && (
+                        <motion.div
+                            initial={{opacity: 0, y: 20}}
+                            animate={{opacity: 1, y: 0}}
+                            transition={{duration: 0.5}}
+                        >
+                            <StarCard className="mb-6">
+                                <h3 className="text-lg font-medium mb-4">Ваши подарки</h3>
+                                
+                                {gifts.length === 0 ? (
+                                    <div className="text-center py-6 text-white/60">
+                                        <Gift size={40} className="mx-auto mb-3 opacity-40" />
+                                        <p>У вас пока нет подарков</p>
+                                        <p className="text-sm mt-2">Выиграйте их в рулетке!</p>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                        {gifts.map((gift, index) => (
+                                            <div 
+                                                key={index} 
+                                                className="bg-white/5 rounded-lg overflow-hidden cursor-pointer hover:bg-white/10 transition-colors border border-white/10 hover:border-white/20"
+                                                onClick={() => handleGiftClick(gift)}
+                                            >
+                                                <div className="w-full aspect-square relative">
+                                                    <LottieItem 
+                                                        animationData={gift.link} 
+                                                        className="w-full h-full"
+                                                    />
+                                                </div>
+                                                <div className="p-2 text-center">
+                                                    <p className="text-xs font-medium truncate">{gift.title}</p>
+                                                    <p className="text-yellow-400 text-xs">{gift.price} TON</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </StarCard>
+                        </motion.div>
+                    )}
                 </div>
             </div>
+
+            {selectedGift && (
+                <div 
+                    className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+                    onClick={handleCloseGiftDetail}
+                >
+                    <div 
+                        className="bg-gradient-to-b from-customPurple/90 to-customMidBlue/90 rounded-2xl p-5 max-w-sm w-full"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-lg font-bold">{selectedGift.title}</h3>
+                            <button 
+                                onClick={handleCloseGiftDetail}
+                                className="p-1 rounded-full bg-white/10 hover:bg-white/20"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M18 6 6 18"/>
+                                    <path d="m6 6 12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div className="w-40 h-40 mx-auto mb-4">
+                            <div className="w-full h-full rounded-lg overflow-hidden border-2 border-white/30 shadow-lg">
+                                <LottieItem 
+                                    animationData={selectedGift.link} 
+                                    className="w-full h-full"
+                                    loop={true}
+                                    autoplay={true}
+                                />
+                            </div>
+                        </div>
+                        
+                        <div className="flex justify-between mb-4">
+                            <span className="text-yellow-400 font-bold">{selectedGift.price} TON</span>
+                            {selectedGift.number && (
+                                <span className="text-white/70 text-sm">#{selectedGift.number}</span>
+                            )}
+                        </div>
+                        
+                        <div className="space-y-2 mb-4">
+                            {selectedGift.model && (
+                                <div className="bg-white/10 p-2 rounded-lg">
+                                    <span className="text-sm">Модель: <span className="text-white/80">{selectedGift.model}</span></span>
+                                </div>
+                            )}
+                            
+                            {selectedGift.symbol && (
+                                <div className="bg-white/10 p-2 rounded-lg">
+                                    <span className="text-sm">Символ: <span className="text-white/80">{selectedGift.symbol}</span></span>
+                                </div>
+                            )}
+                            
+                            {selectedGift.backdrop && (
+                                <div className="bg-white/10 p-2 rounded-lg">
+                                    <span className="text-sm">Фон: <span className="text-white/80">{selectedGift.backdrop}</span></span>
+                                </div>
+                            )}
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-3">
+                            <button
+                                className="py-2 rounded-lg bg-gradient-to-r from-customPurple/80 to-purple-900/80 hover:from-customPurple hover:to-purple-900 flex items-center justify-center gap-1"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/>
+                                    <path d="M16.5 9.4 7.55 4.24"/>
+                                    <polyline points="3.29 7 12 12 20.71 7"/>
+                                    <line x1="12" y1="22" x2="12" y2="12"/>
+                                    <circle cx="18.5" cy="15.5" r="2.5"/>
+                                    <path d="M20.27 17.27 22 19"/>
+                                </svg>
+                                <span className="text-sm">Отправить</span>
+                            </button>
+                            
+                            <button
+                                className="py-2 rounded-lg bg-gradient-to-r from-customPurple/80 to-purple-900/80 hover:from-customPurple hover:to-purple-900 flex items-center justify-center gap-1"
+                            >
+                                <Wallet size={16} />
+                                <span className="text-sm">Продать</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import StarCard from '../StarCard';
 import LottieItem from './LottieItem';
-import { RotateCw } from 'lucide-react';
+import { RotateCw, Gift, Wallet } from 'lucide-react';
 
 interface RouletteResultProps {
   result: {
@@ -14,6 +14,21 @@ interface RouletteResultProps {
 
 const RouletteResult = ({ result, onPlayAgain }: RouletteResultProps) => {
   const isWin = result.chance === 'yes';
+
+  // Placeholder functions for collect and sell actions
+  const handleCollect = () => {
+    // This will be replaced with API call later
+    console.log('Collect prize - API integration pending');
+    // After successful API call, show play again button
+    onPlayAgain();
+  };
+
+  const handleSell = () => {
+    // This will be replaced with API call later
+    console.log('Sell prize - API integration pending');
+    // After successful API call, show play again button
+    onPlayAgain();
+  };
 
   return (
     <motion.div
@@ -43,13 +58,33 @@ const RouletteResult = ({ result, onPlayAgain }: RouletteResultProps) => {
             : 'Попробуйте еще раз, удача обязательно улыбнется!'}
         </p>
         
-        <button
-          onClick={onPlayAgain}
-          className="w-full py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-customPurple to-purple-700 text-white hover:opacity-90"
-        >
-          <RotateCw size={18} />
-          Играть снова
-        </button>
+        {isWin ? (
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              onClick={handleCollect}
+              className="py-3 rounded-xl bg-gradient-to-r from-customPurple/70 to-purple-900/70 hover:from-customPurple hover:to-purple-900 border border-white/10 flex items-center justify-center gap-2"
+            >
+              <Gift size={18} className="mr-1" />
+              Забрать
+            </button>
+            
+            <button
+              onClick={handleSell}
+              className="py-3 rounded-xl bg-gradient-to-r from-customPurple/70 to-purple-900/70 hover:from-customPurple hover:to-purple-900 border border-white/10 flex items-center justify-center gap-2"
+            >
+              <Wallet size={18} className="mr-1" />
+              Продать
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={onPlayAgain}
+            className="w-full py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-customPurple to-purple-700 text-white hover:opacity-90"
+          >
+            <RotateCw size={18} />
+            Играть снова
+          </button>
+        )}
       </StarCard>
     </motion.div>
   );

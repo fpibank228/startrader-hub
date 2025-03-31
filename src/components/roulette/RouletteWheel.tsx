@@ -7,6 +7,7 @@ import PrizeGrid from './PrizeGrid';
 import { useIsMobile } from '../../hooks/use-mobile';
 import RouletteResultModal from './RouletteResultModal';
 import ItemDetailModal from './ItemDetailModal';
+import { basicRouletteItems } from '../../data/rouletteData';
 
 interface RouletteItem {
   chance: string;
@@ -24,7 +25,7 @@ interface RouletteWheelProps {
   onSpin?: (result: RouletteItem) => void;
 }
 
-const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
+const RouletteWheel = ({ items: initialItems, onSpin }: RouletteWheelProps) => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [slidePosition, setSlidePosition] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -32,14 +33,24 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
   const [result, setResult] = useState<RouletteItem | null>(null);
   const [showItemDetail, setShowItemDetail] = useState(false);
   const [selectedItem, setSelectedItem] = useState<RouletteItem | null>(null);
+  const [items, setItems] = useState<RouletteItem[]>(initialItems || []);
   const isMobile = useIsMobile();
 
   // Always use index 6 (7th item) as the winning item for consistency
   const winningIndex = 6;
 
+  // Refresh items data for each spin
+  const refreshItems = () => {
+    // This will get fresh data from basicRouletteItems
+    setItems([...basicRouletteItems]);
+  };
+
   const spinWheel = () => {
     if (isSpinning) return;
 
+    // Refresh items before spinning
+    refreshItems();
+    
     setIsSpinning(true);
     setSelectedIndex(null);
 
@@ -82,6 +93,11 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
       }, 3700); // Match the animation duration in RouletteStrip
     }, 10);
   };
+
+  // Initialize with fresh data on mount
+  useEffect(() => {
+    refreshItems();
+  }, []);
 
   const handleCloseModal = () => {
     setShowResultModal(false);
