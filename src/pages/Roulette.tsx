@@ -5,34 +5,7 @@ import { Star } from 'lucide-react';
 import StarBackground from '../components/StarBackground';
 import RouletteSelector from '../components/roulette/RouletteSelector';
 import WebApp from "@twa-dev/sdk";
-
-// Sample data for the roulette
-const rouletteOptions = [
-  {
-    id: 'basic',
-    title: 'Обычная рулетка',
-    description: 'Испытайте свою удачу с шансом выигрыша',
-    icon: <Star className="w-12 h-12 text-white/90" />,
-    imageBg: 'https://cdn.pixabay.com/photo/2017/02/13/01/26/the-question-mark-2061539_1280.png',
-    path: '/roulette/basic'
-  },
-  {
-    id: 'nft',
-    title: 'NFT рулетка',
-    description: 'Выиграйте уникальные NFT предметы',
-    icon: <Star className="w-12 h-12 text-white/90 opacity-50" />,
-    imageBg: 'https://cdn.pixabay.com/photo/2017/02/13/01/26/the-question-mark-2061539_1280.png',
-    disabled: true
-  },
-  {
-    id: 'upgrade',
-    title: 'Апгрейд',
-    description: 'Улучшите свои существующие предметы',
-    icon: <Star className="w-12 h-12 text-white/90 opacity-50" />,
-    imageBg: 'https://cdn.pixabay.com/photo/2017/02/13/01/26/the-question-mark-2061539_1280.png',
-    disabled: true
-  }
-];
+import { rouletteOptions } from '../data/rouletteData';
 
 const Roulette = () => {
   const isFullscreen = WebApp.isFullscreen;

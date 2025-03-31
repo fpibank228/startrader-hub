@@ -8,6 +8,7 @@ import RouletteWheel from '../components/roulette/RouletteWheel';
 import RouletteResult from '../components/roulette/RouletteResult';
 import { useToast } from '../hooks/use-toast';
 import WebApp from "@twa-dev/sdk";
+import { basicRouletteItems } from '../data/rouletteData';
 
 const BasicRoulette = () => {
   const [gameState, setGameState] = useState<'playing' | 'result'>('playing');
@@ -76,6 +77,7 @@ const BasicRoulette = () => {
           >
             <RouletteWheel 
               onSpin={handleSpinResult}
+              items={basicRouletteItems}
             />
           </motion.div>
         )}

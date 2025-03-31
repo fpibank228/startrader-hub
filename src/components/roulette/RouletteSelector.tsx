@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import StarCard from '../StarCard';
 import { motion } from 'framer-motion';
 import { ChevronRight, Star, Lock } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 
 interface RouletteOption {
   id: string;
   title: string;
   description: string;
-  icon?: React.ReactNode;
+  icon?: string;
   imageBg?: string;
   disabled?: boolean;
   path?: string;
@@ -31,6 +32,19 @@ const RouletteSelector = ({ options, onSelect }: RouletteSelectorProps) => {
     } else if (onSelect) {
       onSelect(option.id);
     }
+  };
+
+  const renderIcon = (iconName: string | undefined) => {
+    if (!iconName) return <Star className="w-12 h-12 text-white opacity-70" />;
+    
+    // @ts-ignore - dynamic icon usage
+    const IconComponent = LucideIcons[iconName];
+    
+    if (IconComponent) {
+      return <IconComponent className="w-12 h-12 text-white/90" />;
+    }
+    
+    return <Star className="w-12 h-12 text-white opacity-70" />;
   };
 
   return (
@@ -55,7 +69,7 @@ const RouletteSelector = ({ options, onSelect }: RouletteSelectorProps) => {
               >
                 <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  {option.icon || <Star className="w-12 h-12 text-white opacity-70" />}
+                  {option.icon ? renderIcon(option.icon) : <Star className="w-12 h-12 text-white opacity-70" />}
                 </div>
               </div>
             )}

@@ -9,57 +9,25 @@ import { useIsMobile } from '../../hooks/use-mobile';
 interface RouletteItem {
   chance: string;
   link: string;
-  image?: string; // Optional image property
+  image?: string;
 }
 
 interface RouletteWheelProps {
+  items: RouletteItem[];
   onSpin?: (result: RouletteItem) => void;
 }
 
-const RouletteWheel = ({ onSpin }: RouletteWheelProps) => {
+const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [slidePosition, setSlidePosition] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const stripRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
-  
-  const items = [
-    {
-      'chance': 'yes',
-      'link': 'https://nft.fragment.com/gift/homemadecake-10230.lottie.json',
-      'image': 'https://cdn.pixabay.com/photo/2017/10/29/12/06/cake-2899717_1280.jpg'
-    },
-    {
-      'chance': 'no',
-      'link': 'https://nft.fragment.com/gift/diamondring-18822.lottie.json',
-      'image': 'https://cdn.pixabay.com/photo/2018/04/16/09/07/ring-3324230_1280.jpg'
-    },
-    {
-      'chance': 'no',
-      'link': 'https://nft.fragment.com/gift/eternalrose-1385.lottie.json',
-      'image': 'https://cdn.pixabay.com/photo/2018/01/29/07/11/flower-3115353_1280.jpg'
-    },
-    {
-      'chance': 'no',
-      'link': 'https://nft.fragment.com/gift/cookieheart-87873.lottie.json',
-      'image': 'https://cdn.pixabay.com/photo/2016/11/22/18/52/cake-1850011_1280.jpg'
-    },
-    {
-      'chance': 'no',
-      'link': 'https://nft.fragment.com/gift/partysparkler-42951.lottie.json',
-      'image': 'https://cdn.pixabay.com/photo/2018/01/04/19/43/sparkler-3061402_1280.jpg'
-    },
-    {
-      'chance': 'no',
-      'link': 'https://nft.fragment.com/gift/partysparkler-42952.lottie.json',
-      'image': 'https://cdn.pixabay.com/photo/2018/01/04/19/43/sparkler-3061402_1280.jpg'
-    },
-  ];
 
   // Find the winning item index (chance === "yes")
   const winningIndex = items.findIndex(item => item.chance === "yes");
-  const safeWinningIndex = 0;
+  const safeWinningIndex = winningIndex >= 0 ? winningIndex : 0;
 
   const spinWheel = () => {
     if (isSpinning) return;
