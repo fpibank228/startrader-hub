@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import StarCard from '../StarCard';
 import { motion } from 'framer-motion';
 import { ChevronRight, Star, Lock } from 'lucide-react';
@@ -11,14 +12,27 @@ interface RouletteOption {
   icon?: React.ReactNode;
   imageBg?: string;
   disabled?: boolean;
+  path?: string;
 }
 
 interface RouletteSelectorProps {
   options: RouletteOption[];
-  onSelect: (id: string) => void;
+  onSelect?: (id: string) => void;
 }
 
 const RouletteSelector = ({ options, onSelect }: RouletteSelectorProps) => {
+  const navigate = useNavigate();
+
+  const handleSelect = (option: RouletteOption) => {
+    if (option.disabled) return;
+    
+    if (option.path) {
+      navigate(option.path);
+    } else if (onSelect) {
+      onSelect(option.id);
+    }
+  };
+
   return (
     <div className="grid gap-4">
       {options.map((option) => (
@@ -32,7 +46,7 @@ const RouletteSelector = ({ options, onSelect }: RouletteSelectorProps) => {
         >
           <StarCard 
             className={`p-0 overflow-hidden ${option.disabled ? 'opacity-70' : 'cursor-pointer hover:shadow-lg transition-shadow'}`}
-            onClick={() => !option.disabled && onSelect(option.id)}
+            onClick={() => !option.disabled && handleSelect(option)}
           >
             {option.imageBg && (
               <div 

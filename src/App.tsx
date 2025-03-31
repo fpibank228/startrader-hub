@@ -1,3 +1,4 @@
+
 import {Toaster} from "@/components/ui/toaster";
 import {Toaster as Sonner} from "@/components/ui/sonner";
 import {TooltipProvider} from "@/components/ui/tooltip";
@@ -7,6 +8,7 @@ import Index from "./pages/Index";
 import Buy from "./pages/Buy";
 import RublePayment from "./pages/RublePayment";
 import Roulette from "./pages/Roulette";
+import BasicRoulette from "./pages/BasicRoulette";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import Navigation from "./components/Navigation";
@@ -43,6 +45,7 @@ const App = () => {
                                 <Route path="/buy" element={<Buy/>}/>
                                 <Route path="/buy/rubles" element={<RublePayment/>}/>
                                 <Route path="/roulette" element={<Roulette/>}/>
+                                <Route path="/roulette/basic" element={<BasicRoulette/>}/>
                                 <Route path="/profile" element={<Profile/>}/>
                                 <Route path="*" element={<NotFound/>}/>
                             </Routes>
