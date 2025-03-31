@@ -141,10 +141,11 @@ const RouletteWheel = ({ onSpin }: RouletteWheelProps) => {
                       <div className={`w-full h-full rounded-lg overflow-hidden border-2 ${
                         isSelected ? 'border-white shadow-[0_0_15px_rgba(255,255,255,0.7)]' : 'border-white/30'
                       } bg-white/10 flex items-center justify-center`}>
-                        {/* Используем заглушку для анимаций во время вращения */}
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-900/30 to-blue-900/30">
-                          <div className="text-3xl font-bold text-white/80">?</div>
-                        </div>
+                        <LottieItem 
+                          animationData={item.link} 
+                          className="w-full h-full"
+                          loop={false}
+                        />
                       </div>
                     </div>
                   );
