@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { memo } from 'react';
 import { Play, Loader2 } from 'lucide-react';
 
 interface SpinButtonProps {
@@ -7,7 +7,8 @@ interface SpinButtonProps {
   onSpin: () => void;
 }
 
-const SpinButton = ({ isSpinning, onSpin }: SpinButtonProps) => {
+// Мемоизируем кнопку, чтобы предотвратить лишние ререндеры
+const SpinButton = memo(({ isSpinning, onSpin }: SpinButtonProps) => {
   return (
     <button
       onClick={onSpin}
@@ -27,6 +28,8 @@ const SpinButton = ({ isSpinning, onSpin }: SpinButtonProps) => {
       )}
     </button>
   );
-};
+});
+
+SpinButton.displayName = 'SpinButton';
 
 export default SpinButton;

@@ -1,4 +1,5 @@
 
+import { memo } from 'react';
 import StarCard from '../StarCard';
 import LottieItem from './LottieItem';
 
@@ -12,7 +13,8 @@ interface PrizeGridProps {
   items: RouletteItem[];
 }
 
-const PrizeGrid = ({ items }: PrizeGridProps) => {
+// Мемоизируем компонент чтобы предотвратить лишние ререндеры
+const PrizeGrid = memo(({ items }: PrizeGridProps) => {
   return (
     <div className="w-full max-w-md mt-4">
       <h3 className="text-center text-lg font-medium mb-4">Возможные выигрыши</h3>
@@ -27,6 +29,7 @@ const PrizeGrid = ({ items }: PrizeGridProps) => {
                 animationData={item.link} 
                 className="w-full h-full"
                 loop={false}
+                autoplay={false}
               />
             </div>
             <div className="text-sm mt-2 text-center">
@@ -37,6 +40,8 @@ const PrizeGrid = ({ items }: PrizeGridProps) => {
       </div>
     </div>
   );
-};
+});
+
+PrizeGrid.displayName = 'PrizeGrid';
 
 export default PrizeGrid;

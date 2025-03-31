@@ -5,13 +5,13 @@ import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import StarBackground from '../components/StarBackground';
 import RouletteWheel from '../components/roulette/RouletteWheel';
-import RouletteResult from '../components/roulette/RouletteResult';
+import RouletteResultModal from '../components/roulette/RouletteResultModal';
 import { useToast } from '../hooks/use-toast';
 import WebApp from "@twa-dev/sdk";
 import { basicRouletteItems } from '../data/rouletteData';
 
 const BasicRoulette = () => {
-  const [gameState, setGameState] = useState<'playing' | 'result'>('playing');
+  const [showResultModal, setShowResultModal] = useState(false);
   const [result, setResult] = useState<any>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -19,12 +19,16 @@ const BasicRoulette = () => {
 
   const handleSpinResult = (result: any) => {
     setResult(result);
-    setGameState('result');
+    setShowResultModal(true);
   };
 
   const handlePlayAgain = () => {
-    setGameState('playing');
+    setShowResultModal(false);
     setResult(null);
+  };
+
+  const handleCloseModal = () => {
+    setShowResultModal(false);
   };
 
   const handleBack = () => {
@@ -56,33 +60,25 @@ const BasicRoulette = () => {
           </motion.h1>
         </div>
 
-        {gameState === 'playing' && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="max-w-md mx-auto"
-          >
-            <RouletteWheel 
-              onSpin={handleSpinResult}
-              items={basicRouletteItems}
-            />
-          </motion.div>
-        )}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-md mx-auto"
+        >
+          <RouletteWheel 
+            onSpin={handleSpinResult}
+            items={basicRouletteItems}
+          />
+        </motion.div>
 
-        {gameState === 'result' && result && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="max-w-md mx-auto"
-          >
-            <RouletteResult 
-              result={result}
-              onPlayAgain={handlePlayAgain}
-            />
-          </motion.div>
-        )}
+        {/* Модальное окно с результатом вместо отдельной страницы */}
+        <RouletteResultModal 
+          isOpen={showResultModal}
+          onClose={handleCloseModal}
+          result={result}
+          onPlayAgain={handlePlayAgain}
+        />
       </div>
     </div>
   );

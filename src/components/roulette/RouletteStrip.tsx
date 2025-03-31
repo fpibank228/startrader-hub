@@ -1,6 +1,6 @@
 
 import { motion } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, memo } from 'react';
 import LottieItem from './LottieItem';
 
 interface RouletteItem {
@@ -16,8 +16,12 @@ interface RouletteStripProps {
   selectedIndex: number | null;
 }
 
-const RouletteStrip = ({ items, slidePosition, isSpinning, selectedIndex }: RouletteStripProps) => {
+// Мемоизируем компонент и уменьшим количество повторений элементов
+const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }: RouletteStripProps) => {
   const stripRef = useRef<HTMLDivElement>(null);
+  
+  // Уменьшаем количество повторений с 7 до 5
+  const repeatCount = 5;
   
   return (
     <motion.div 
@@ -32,11 +36,12 @@ const RouletteStrip = ({ items, slidePosition, isSpinning, selectedIndex }: Roul
         type: "tween"
       }}
     >
-      {/* Repeat items multiple times to create illusion of infinite strip */}
-      {[...Array(7)].map((_, repeatIndex) => (
+      {/* Уменьшаем количество повторений для оптимизации */}
+      {[...Array(repeatCount)].map((_, repeatIndex) => (
         <div key={repeatIndex} className="flex items-center gap-6">
           {items.map((item, index) => {
             const isSelected = selectedIndex === index && repeatIndex === 3;
+            // Оптимизация: не показываем анимацию для неактивных элементов
             return (
               <div 
                 key={`${repeatIndex}-${index}`}
@@ -47,12 +52,11 @@ const RouletteStrip = ({ items, slidePosition, isSpinning, selectedIndex }: Roul
                 <div className={`w-full h-full rounded-lg overflow-hidden border-2 ${
                   isSelected ? 'border-white shadow-[0_0_15px_rgba(255,255,255,0.7)]' : 'border-white/30'
                 } bg-white/10 flex items-center justify-center`}>
-                  {/* Use LottieItem with autoplay=false to show only the first frame */}
                   <LottieItem 
                     animationData={item.link} 
                     className="w-full h-full"
-                    loop={false}
-                    autoplay={false}
+                    loop={isSelected}
+                    autoplay={isSelected}
                   />
                 </div>
               </div>
@@ -62,6 +66,8 @@ const RouletteStrip = ({ items, slidePosition, isSpinning, selectedIndex }: Roul
       ))}
     </motion.div>
   );
-};
+});
+
+RouletteStrip.displayName = 'RouletteStrip';
 
 export default RouletteStrip;

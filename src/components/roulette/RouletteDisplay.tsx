@@ -1,5 +1,5 @@
 
-import { useRef } from 'react';
+import { useRef, memo } from 'react';
 import RouletteStrip from './RouletteStrip';
 
 interface RouletteItem {
@@ -15,7 +15,8 @@ interface RouletteDisplayProps {
   selectedIndex: number | null;
 }
 
-const RouletteDisplay = ({ items, slidePosition, isSpinning, selectedIndex }: RouletteDisplayProps) => {
+// Мемоизируем компонент чтобы предотвратить лишние ререндеры
+const RouletteDisplay = memo(({ items, slidePosition, isSpinning, selectedIndex }: RouletteDisplayProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   
   return (
@@ -37,6 +38,8 @@ const RouletteDisplay = ({ items, slidePosition, isSpinning, selectedIndex }: Ro
       />
     </div>
   );
-};
+});
+
+RouletteDisplay.displayName = 'RouletteDisplay';
 
 export default RouletteDisplay;
