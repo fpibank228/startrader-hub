@@ -42,6 +42,7 @@ const RublePayment = () => {
         const fetchPaymentUrl = async () => {
             try {
                 setIsLoading(true);
+                console.log(state?.price || '0')
                 const response = await apiService.generatePayLink(parseInt(state?.price || '0'), state?.username);
                 setPaymentUrl(response.data.data.url);
                 setIsLoading(false);
@@ -163,22 +164,7 @@ const RublePayment = () => {
                                         Перейти к оплате
                                     </button>
 
-                                    <button
-                                        onClick={checkPaymentStatus}
-                                        disabled={isChecking}
-                                        className={`w-full mt-4 py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-300 ${
-                                            isChecking
-                                                ? 'bg-white/10 text-white/50 cursor-not-allowed'
-                                                : 'bg-white/20 text-white hover:bg-white/30'
-                                        }`}
-                                    >
-                                        {isChecking ? (
-                                            <Loader2 className="h-4 w-4 animate-spin"/>
-                                        ) : (
-                                            <Check size={18}/>
-                                        )}
-                                        {isChecking ? 'Проверка...' : 'Я оплатил, проверить'}
-                                    </button>
+                                    <p className="text-white/70">В случае успешной оплаты звезды сами зачислятся вам на баланс!</p>
                                 </>
                             )}
                         </div>
