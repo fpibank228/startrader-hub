@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import StarCard from '../StarCard';
 import RouletteDisplay from './RouletteDisplay';
@@ -86,11 +87,21 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
 
   const handleCloseModal = () => {
     setShowResultModal(false);
+    
+    // Reset wheel position after modal is closed
+    setTimeout(() => {
+      setSlidePosition(0);
+      setSelectedIndex(null);
+    }, 300); // Small delay to ensure modal closes first
   };
 
   const handlePlayAgain = () => {
     setShowResultModal(false);
     setResult(null);
+    
+    // Reset wheel position for next spin
+    setSlidePosition(0);
+    setSelectedIndex(null);
   };
 
   const handleItemClick = (item: RouletteItem) => {
