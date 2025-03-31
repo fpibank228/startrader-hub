@@ -1,5 +1,4 @@
-
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import StarCard from '../StarCard';
 import LottieItem from './LottieItem';
 
@@ -19,16 +18,29 @@ interface PrizeGridProps {
   onItemClick?: (item: RouletteItem) => void;
 }
 
+// Функция для перемешивания массива
+const shuffleArray = <T,>(array: T[]): T[] => {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+};
+
 // Мемоизируем компонент чтобы предотвратить лишние ререндеры
 const PrizeGrid = memo(({ items, onItemClick }: PrizeGridProps) => {
   // Make sure items is never undefined
   const safeItems = items || [];
   
+  // Перемешиваем элементы с помощью useMemo, чтобы порядок не менялся при каждом рендере
+  const shuffledItems = useMemo(() => shuffleArray(safeItems), [safeItems]);
+  
   return (
     <div className="w-full max-w-md mt-4">
       <h3 className="text-center text-lg font-medium mb-4">Возможные выигрыши</h3>
       <div className="grid grid-cols-3 gap-4">
-        {safeItems.map((item, index) => (
+        {shuffledItems.map((item, index) => (
           <StarCard 
             key={index} 
             className="p-3 flex flex-col items-center cursor-pointer hover:bg-white/10 transition-colors"

@@ -23,7 +23,7 @@ const RouletteResult = ({ result, onPlayAgain }: RouletteResultProps) => {
     >
       <StarCard className="p-6 text-center">
         <h2 className="text-xl font-bold mb-4">
-          {isWin ? '🎉 Поздравляем! Вы выиграли!' : 'К сожалению, не повезло'}
+          {isWin ? '🎉 Поздравляем!' : 'К сожалению, не повезло'}
         </h2>
         
         <div className="my-6 mx-auto w-40 h-40">
