@@ -7,6 +7,7 @@ interface RouletteItem {
   chance: string;
   link: string;
   title: string;
+  price: number;
 }
 
 interface PrizeGridProps {
@@ -34,6 +35,9 @@ const PrizeGrid = memo(({ items }: PrizeGridProps) => {
             </div>
             <div className="text-sm mt-2 text-center">
               {item.title}
+            </div>
+            <div className="text-xs mt-1 text-yellow-400 font-medium">
+              {item.price} TON
             </div>
           </StarCard>
         ))}
