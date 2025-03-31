@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import StarCard from '../StarCard';
 import RouletteDisplay from './RouletteDisplay';
@@ -46,9 +45,9 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
     // Fixed item width for consistency
     const itemWidth = 120;
     
-    // Calculate number of full rotations to make (3-5 rotations for better visual effect)
+    // Calculate number of full rotations to make (4-6 rotations for better visual effect)
     const totalItems = items.length;
-    const fullRotations = 4; // Do 4 full rotations
+    const fullRotations = 5; // Increased to 5 full rotations
     const fullRotationDistance = totalItems * itemWidth * fullRotations;
     
     // Start with an initial position of 0
@@ -57,9 +56,8 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
     // Short delay before starting the animation
     setTimeout(() => {
       // Calculate final position: full rotations + position to center the winning item
-      // We're using the middle set of items (second repetition)
-      // Adding totalItems to winningIndex positions it in the middle set
-      const middleSetOffset = totalItems + winningIndex;
+      // We're using the middle set of items (third repetition since we now have 5 repetitions)
+      const middleSetOffset = totalItems * 2 + winningIndex; // Position in the third repetition
       const finalPosition = -(fullRotationDistance + (middleSetOffset + 0.5) * itemWidth);
       
       // Start the animation to the final position

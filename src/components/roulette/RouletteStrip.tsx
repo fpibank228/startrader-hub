@@ -25,8 +25,8 @@ const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }:
   const stripRef = useRef<HTMLDivElement>(null);
   
   // Create a repeated array of items for continuous spinning effect
-  // Repeat items 3 times to ensure there are enough items to fill the strip during animation
-  const repeatedItems = [...items, ...items, ...items];
+  // Repeat items 5 times instead of 3 to ensure there are plenty of items to fill the strip during animation
+  const repeatedItems = [...items, ...items, ...items, ...items, ...items];
   
   return (
     <motion.div 
@@ -44,7 +44,7 @@ const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }:
       {repeatedItems.map((item, index) => {
         // Calculate the original index to determine if this item is selected
         const originalIndex = index % items.length;
-        const isSelected = selectedIndex === originalIndex && Math.floor(index / items.length) === 1;
+        const isSelected = selectedIndex === originalIndex && Math.floor(index / items.length) === 2;
         
         return (
           <div 
