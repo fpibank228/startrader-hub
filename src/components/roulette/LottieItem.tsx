@@ -7,9 +7,10 @@ interface LottieItemProps {
   animationData: string;
   className?: string;
   loop?: boolean;
+  autoplay?: boolean;
 }
 
-const LottieItem = ({ animationData, className = '', loop = true }: LottieItemProps) => {
+const LottieItem = ({ animationData, className = '', loop = true, autoplay = true }: LottieItemProps) => {
   const [animation, setAnimation] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -51,7 +52,7 @@ const LottieItem = ({ animationData, className = '', loop = true }: LottieItemPr
         <Lottie
           animationData={animation}
           loop={loop}
-          autoplay={true}
+          autoplay={autoplay}
           style={{ width: '100%', height: '100%' }}
         />
       )}

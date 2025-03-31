@@ -9,7 +9,7 @@ import { useIsMobile } from '../../hooks/use-mobile';
 interface RouletteItem {
   chance: string;
   link: string;
-  image?: string; // Adding an optional image property
+  image?: string; // Optional image property
 }
 
 interface RouletteWheelProps {
@@ -148,11 +148,12 @@ const RouletteWheel = ({ onSpin }: RouletteWheelProps) => {
                       <div className={`w-full h-full rounded-lg overflow-hidden border-2 ${
                         isSelected ? 'border-white shadow-[0_0_15px_rgba(255,255,255,0.7)]' : 'border-white/30'
                       } bg-white/10 flex items-center justify-center`}>
-                        {/* Use static images instead of Lottie animations during the spin */}
-                        <img 
-                          src={item.image} 
-                          alt={`Prize ${index}`}
-                          className="w-full h-full object-cover"
+                        {/* Use LottieItem with autoplay=false to show only the first frame */}
+                        <LottieItem 
+                          animationData={item.link} 
+                          className="w-full h-full"
+                          loop={false}
+                          autoplay={false}
                         />
                       </div>
                     </div>
