@@ -58,7 +58,7 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
     setTimeout(() => {
       // Calculate final position: full rotations + position to center the winning item
       // We're using the middle set of items (third repetition since we now have 5 repetitions)
-      const middleSetOffset = totalItems * 2 + winningIndex; // Position in the third repetition
+      const middleSetOffset = totalItems + winningIndex; // Position in the third repetition
       const finalPosition = -(fullRotationDistance + (middleSetOffset + 0.5) * itemWidth);
       
       // Start the animation to the final position
