@@ -17,7 +17,6 @@ const rouletteOptions = [
     description: 'Испытайте свою удачу с шансом выигрыша',
     icon: <Star className="w-12 h-12 text-white/90" />,
     imageBg: 'https://cdn.pixabay.com/photo/2017/02/13/01/26/the-question-mark-2061539_1280.png',
-    disabled: true
   },
   {
     id: 'nft',
