@@ -2,6 +2,7 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import LottieItem from './LottieItem';
 import { motion } from 'framer-motion';
+import { X } from 'lucide-react';
 
 interface RouletteItem {
   chance: string;
@@ -30,6 +31,14 @@ const ItemDetailModal = ({ isOpen, onClose, item }: ItemDetailModalProps) => {
           transition={{ duration: 0.4 }}
           className="relative"
         >
+          {/* Custom close button */}
+          <button
+            onClick={onClose}
+            className="absolute -top-2 -right-2 z-10 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300"
+          >
+            <X size={18} className="text-white/80" />
+          </button>
+          
           {/* Decorative elements */}
           <div className="absolute -top-4 -right-4 w-32 h-32 bg-gradient-radial from-purple-500/30 to-transparent rounded-full blur-xl"></div>
           <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-radial from-blue-500/20 to-transparent rounded-full blur-xl"></div>

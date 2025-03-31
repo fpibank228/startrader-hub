@@ -36,9 +36,9 @@ const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }:
         x: slidePosition 
       }}
       transition={{ 
-        duration: isSpinning ? 4 : 0, // 4 seconds for spin animation
+        duration: isSpinning ? 4 : 0.2, // 4 seconds for spin, 0.2 for reset
         ease: "easeOut", // Simple easeOut for consistent deceleration
-        type: "tween", // Using tween instead of spring for more predictable animation
+        type: "tween", // Using tween for more predictable animation
       }}
     >
       {repeatedItems.map((item, index) => {
@@ -49,7 +49,7 @@ const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }:
         return (
           <div 
             key={`${index}-${item.title}`}
-            className={`w-24 h-24 flex-shrink-0 ${
+            className={`w-24 h-24 flex-shrink-0 transition-transform ${
               isSelected ? 'scale-110 z-10' : ''
             }`}
           >

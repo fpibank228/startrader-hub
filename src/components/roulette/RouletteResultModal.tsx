@@ -60,6 +60,12 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
           className="relative"
         >
           {/* Custom close button */}
+          <button 
+            onClick={onClose}
+            className="absolute -top-2 -right-2 z-10 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300"
+          >
+            <X size={18} className="text-white/80" />
+          </button>
           
           {/* Decorative elements for modal */}
           <div className="absolute -top-4 -right-4 w-32 h-32 bg-gradient-radial from-purple-500/30 to-transparent rounded-full blur-xl"></div>

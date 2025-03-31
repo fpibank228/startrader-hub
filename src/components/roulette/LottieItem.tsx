@@ -2,6 +2,7 @@
 import { useEffect, useState, memo } from 'react';
 import Lottie from "lottie-react";
 import { Loader2 } from 'lucide-react';
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface LottieItemProps {
   animationData: string;
@@ -54,7 +55,15 @@ const LottieItem = memo(({ animationData, className = '', loop = true, autoplay 
   }, [animationData, animation]);
 
   if (isLoading) {
-    return <div className={`flex items-center justify-center ${className}`}><Loader2 className="w-6 h-6 animate-spin" /></div>;
+    return (
+      <div className={`flex items-center justify-center ${className}`}>
+        <Skeleton className="w-full h-full rounded-lg bg-white/10">
+          <div className="flex items-center justify-center w-full h-full">
+            <Loader2 className="w-6 h-6 animate-spin text-white/70" />
+          </div>
+        </Skeleton>
+      </div>
+    );
   }
 
   if (error) {

@@ -72,7 +72,7 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
         setSelectedIndex(winningIndex);
         setIsSpinning(false);
         
-        // Show the result modal
+        // Prepare result data and show modal immediately
         if (items && items.length > winningIndex) {
           setResult(items[winningIndex]);
           setShowResultModal(true);
@@ -81,7 +81,7 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
             onSpin(items[winningIndex]);
           }
         }
-      }, 4200); // Slightly longer than the animation duration to ensure it completes
+      }, 4000); // Slightly shorter than animation duration for better UX
     }, 10); // Small delay before animation starts for better visual effect
   };
 
@@ -92,7 +92,7 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
     setTimeout(() => {
       setSlidePosition(0);
       setSelectedIndex(null);
-    }, 300); // Small delay to ensure modal closes first
+    }, 100); // Faster reset
   };
 
   const handlePlayAgain = () => {
@@ -105,6 +105,7 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
   };
 
   const handleItemClick = (item: RouletteItem) => {
+    // Immediately show loading state in modal
     setSelectedItem(item);
     setShowItemDetail(true);
   };
