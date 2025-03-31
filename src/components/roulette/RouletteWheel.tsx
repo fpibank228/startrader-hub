@@ -46,9 +46,9 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
     // Fixed item width for consistency
     const itemWidth = 120;
     
-    // Calculate number of full rotations to make (3-4 rotations)
+    // Calculate number of full rotations to make (3-5 rotations for better visual effect)
     const totalItems = items.length;
-    const fullRotations = 3; // Do 3 full rotations
+    const fullRotations = 4; // Do 4 full rotations
     const fullRotationDistance = totalItems * itemWidth * fullRotations;
     
     // Start with an initial position of 0
@@ -57,8 +57,10 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
     // Short delay before starting the animation
     setTimeout(() => {
       // Calculate final position: full rotations + position to center the winning item
-      // Negative value moves the strip to the left
-      const finalPosition = -(fullRotationDistance + (winningIndex + 0.5) * itemWidth);
+      // We're using the middle set of items (second repetition)
+      // Adding totalItems to winningIndex positions it in the middle set
+      const middleSetOffset = totalItems + winningIndex;
+      const finalPosition = -(fullRotationDistance + (middleSetOffset + 0.5) * itemWidth);
       
       // Start the animation to the final position
       setSlidePosition(finalPosition);

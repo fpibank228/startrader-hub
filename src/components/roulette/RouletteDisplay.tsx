@@ -7,6 +7,9 @@ interface RouletteItem {
   link: string;
   title: string;
   number?: number;
+  model?: string;
+  symbol?: string;
+  backdrop?: string;
 }
 
 interface RouletteDisplayProps {

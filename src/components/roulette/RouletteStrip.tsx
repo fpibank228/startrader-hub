@@ -8,6 +8,9 @@ interface RouletteItem {
   link: string;
   title: string;
   number?: number;
+  model?: string;
+  symbol?: string;
+  backdrop?: string;
 }
 
 interface RouletteStripProps {
@@ -17,9 +20,13 @@ interface RouletteStripProps {
   selectedIndex: number | null;
 }
 
-// Simplify the strip to ensure consistent behavior
+// Мемоизируем компонент чтобы предотвратить лишние ререндеры
 const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }: RouletteStripProps) => {
   const stripRef = useRef<HTMLDivElement>(null);
+  
+  // Create a repeated array of items for continuous spinning effect
+  // Repeat items 3 times to ensure there are enough items to fill the strip during animation
+  const repeatedItems = [...items, ...items, ...items];
   
   return (
     <motion.div 
@@ -34,12 +41,14 @@ const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }:
         type: "tween"
       }}
     >
-      {/* Use a simple array of items without repetition for more consistent behavior */}
-      {items.map((item, index) => {
-        const isSelected = selectedIndex === index;
+      {repeatedItems.map((item, index) => {
+        // Calculate the original index to determine if this item is selected
+        const originalIndex = index % items.length;
+        const isSelected = selectedIndex === originalIndex && Math.floor(index / items.length) === 1;
+        
         return (
           <div 
-            key={index}
+            key={`${index}-${item.title}`}
             className={`w-24 h-24 flex-shrink-0 ${
               isSelected ? 'scale-110 z-10' : ''
             }`}
