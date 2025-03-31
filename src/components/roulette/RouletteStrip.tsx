@@ -29,7 +29,7 @@ const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }:
       }}
       transition={{ 
         duration: isSpinning ? 5 : 0,
-        ease: [0.1, 0.8, 0.5, 1],
+        ease: "easeInOut",
         type: "tween"
       }}
     >

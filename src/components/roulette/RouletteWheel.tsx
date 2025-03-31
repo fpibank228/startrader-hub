@@ -45,18 +45,19 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
     // Fixed item width for consistency
     const itemWidth = 120;
     
-    // Always target the 7th item (index 6) to appear in the center
-    // Regardless of screen size, we'll position this item in the center
+    // Calculate number of full rotations to make (3-4 rotations)
+    const totalItems = items.length;
+    const fullRotations = 3; // Do 3 full rotations
+    const fullRotationDistance = totalItems * itemWidth * fullRotations;
     
     // Start with an initial position of 0
     setSlidePosition(0);
     
     // Short delay before starting the animation
     setTimeout(() => {
-      // Calculate a position that will place the target item in the center
-      // We use a fixed calculation that works on all screen sizes
+      // Calculate final position: full rotations + position to center the winning item
       // Negative value moves the strip to the left
-      const finalPosition = -((winningIndex + 0.5) * itemWidth);
+      const finalPosition = -(fullRotationDistance + (winningIndex + 0.5) * itemWidth);
       
       // Start the animation to the final position
       setSlidePosition(finalPosition);

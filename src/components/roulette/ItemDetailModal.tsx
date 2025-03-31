@@ -22,7 +22,7 @@ interface ItemDetailModalProps {
 const ItemDetailModal = ({ isOpen, onClose, item }: ItemDetailModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-gradient-to-b from-customPurple/90 to-black/90 border border-white/20 p-6 text-center max-w-sm mx-auto rounded-2xl">
+      <DialogContent className="bg-gradient-to-b from-customPurple/90 to-customMidBlue/90 border border-white/20 p-6 text-center max-w-sm mx-auto rounded-2xl">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
