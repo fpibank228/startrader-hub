@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import StarCard from '../StarCard';
 import RouletteDisplay from './RouletteDisplay';
@@ -43,29 +42,31 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
     setIsSpinning(true);
     setSelectedIndex(null);
     
-    // Fixed item width for consistency
-    const itemWidth = 120;
+    // Fixed item width plus gap for more precise calculations
+    const itemWidth = 96 + 16; // Each item is 96px wide (24*4) plus 16px gap
     
-    // Calculate number of full rotations to make
+    // Calculate the winning position more precisely
     const totalItems = items.length;
-    const fullRotations = 2; // Reduced to 2 full rotations
-    const fullRotationDistance = totalItems * itemWidth * fullRotations;
+    const fullRotations = 2; // 2 full rotations for consistency
     
     // Start with an initial position of 0
     setSlidePosition(0);
     
     // Short delay before starting the animation
     setTimeout(() => {
-      // Calculate final position: full rotations + position to center the winning item
-      // We're using the middle set of items (third repetition since we now have 5 repetitions)
-      const middleSetOffset = totalItems + winningIndex; // Position in the third repetition
-      const finalPosition = -(fullRotationDistance + (middleSetOffset + 0.5) * itemWidth);
+      // Calculate the final position to ensure the 7th item (index 6) is centered
+      // We're using the third repetition of items (since we have 5 repetitions in RouletteStrip)
+      const targetSetIndex = 2; // Use the middle (third) set for stability
+      const targetItemPosition = targetSetIndex * totalItems + winningIndex;
+      
+      // Calculate the exact pixel position
+      // We add 0.5 to center the item precisely in the indicator
+      const finalPosition = -((targetItemPosition + 0.5) * itemWidth);
       
       // Start the animation to the final position
       setSlidePosition(finalPosition);
       
-      // Set a timeout for when the animation completes, with a slightly longer duration
-      // to account for the slower deceleration at the end
+      // Set a timeout for when the animation completes
       setTimeout(() => {
         setSelectedIndex(winningIndex);
         setIsSpinning(false);
@@ -80,7 +81,7 @@ const RouletteWheel = ({ items, onSpin }: RouletteWheelProps) => {
           }
         }
       }, 4200); // Slightly longer than the animation duration to ensure it completes
-    }, 10);
+    }, 50); // Small delay before animation starts for better visual effect
   };
 
   const handleCloseModal = () => {

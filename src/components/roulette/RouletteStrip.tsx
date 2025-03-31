@@ -25,7 +25,7 @@ const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }:
   const stripRef = useRef<HTMLDivElement>(null);
   
   // Create a repeated array of items for continuous spinning effect
-  // Repeat items 5 times instead of 3 to ensure there are plenty of items to fill the strip during animation
+  // Repeat items 5 times to ensure there are plenty of items to fill the strip during animation
   const repeatedItems = [...items, ...items, ...items, ...items, ...items];
   
   return (
@@ -37,10 +37,8 @@ const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }:
       }}
       transition={{ 
         duration: isSpinning ? 4 : 0, // 4 seconds for spin animation
-        ease: [0.1, 0.6, 0.3, 1], // Custom cubic-bezier curve for smooth deceleration
-        type: "spring",
-        damping: 70, // Higher damping for smoother stop
-        stiffness: 80 // Lower stiffness for less abrupt stop
+        ease: "easeOut", // Simple easeOut for consistent deceleration
+        type: "tween", // Using tween instead of spring for more predictable animation
       }}
     >
       {repeatedItems.map((item, index) => {
