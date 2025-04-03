@@ -19,13 +19,14 @@ interface Transaction {
 }
 
 interface GiftItem {
-    link: string;
+    url: string;
     title: string;
     price: number;
     model?: string;
+    name?: string;
     symbol?: string;
     backdrop?: string;
-    number?: number;
+    collectible_id?: number;
 }
 
 const Profile = () => {
@@ -39,33 +40,6 @@ const Profile = () => {
     const isFullscreen = WebApp.isFullscreen;
 
     const [gifts, setGifts] = useState<GiftItem[]>([
-        {
-            'link': 'https://nft.fragment.com/gift/homemadecake-10230.lottie.json',
-            'title': 'Homemade Cake',
-            'price': 0.25,
-            'model': 'Basic 15%',
-            'symbol': 'Gold 5%',
-            'backdrop': 'Blue 10%',
-            'number': Math.floor(Math.random() * 200000) + 1
-        },
-        {
-            'link': 'https://nft.fragment.com/gift/diamondring-18822.lottie.json',
-            'title': 'Diamond Ring',
-            'price': 1.5,
-            'model': 'Premium 5%',
-            'symbol': 'Silver 10%',
-            'backdrop': 'Purple 5%',
-            'number': Math.floor(Math.random() * 200000) + 1
-        },
-        {
-            'link': 'https://nft.fragment.com/gift/eternalrose-1385.lottie.json',
-            'title': 'Eternal Rose',
-            'price': 0.7,
-            'model': 'Standard 10%',
-            'symbol': 'Bronze 15%',
-            'backdrop': 'Red 8%',
-            'number': Math.floor(Math.random() * 200000) + 1
-        }
     ]);
 
     const [shareLink, setShareLink] = useState('https://t.me/amnyamstarsbot/app');
@@ -83,6 +57,8 @@ const Profile = () => {
             const data = await response.data;
             setTransactions(data["transactions"]);
             setUserInfo(data["user_info"]);
+            console.log("Data gifts:", data["gifts"]);
+            setGifts(data["gifts"]);
         } catch (error) {
             console.error(error);
             toast({
@@ -379,14 +355,14 @@ const Profile = () => {
                                 ) : (
                                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                                         {gifts.map((gift, index) => (
-                                            <div 
-                                                key={index} 
+                                            <div
+                                                key={index}
                                                 className="bg-white/5 rounded-lg overflow-hidden cursor-pointer hover:bg-white/10 transition-colors border border-white/10 hover:border-white/20"
                                                 onClick={() => handleGiftClick(gift)}
                                             >
                                                 <div className="w-full aspect-square relative">
-                                                    <LottieItem 
-                                                        animationData={gift.link} 
+                                                    <LottieItem
+                                                        animationData={`https://nft.fragment.com/gift/${gift.name.toLowerCase()}.lottie.json`}
                                                         className="w-full h-full"
                                                     />
                                                 </div>
@@ -428,8 +404,8 @@ const Profile = () => {
                         
                         <div className="w-40 h-40 mx-auto mb-4">
                             <div className="w-full h-full rounded-lg overflow-hidden border-2 border-white/30 shadow-lg">
-                                <LottieItem 
-                                    animationData={selectedGift.link} 
+                                <LottieItem
+                                    animationData={`https://nft.fragment.com/gift/${selectedGift.name.toLowerCase()}.lottie.json`}
                                     className="w-full h-full"
                                     loop={true}
                                     autoplay={true}
@@ -439,8 +415,8 @@ const Profile = () => {
                         
                         <div className="flex justify-between mb-4">
                             <span className="text-yellow-400 font-bold">{selectedGift.price} TON</span>
-                            {selectedGift.number && (
-                                <span className="text-white/70 text-sm">#{selectedGift.number}</span>
+                            {selectedGift.collectible_id && (
+                                <span className="text-white/70 text-sm">#{selectedGift.collectible_id}</span>
                             )}
                         </div>
                         
@@ -476,7 +452,7 @@ const Profile = () => {
                                     <circle cx="18.5" cy="15.5" r="2.5"/>
                                     <path d="M20.27 17.27 22 19"/>
                                 </svg>
-                                <span className="text-sm">Отправить</span>
+                                <span className="text-sm">Вывести</span>
                             </button>
                             
                             <button
