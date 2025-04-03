@@ -1,6 +1,7 @@
+
 import React, {useState, useEffect} from 'react';
 import {motion} from 'framer-motion';
-import {History, User, DollarSign, Share2, Wallet, Loader, Gift} from 'lucide-react';
+import {History, User, DollarSign, Share2, Wallet, Loader, Gift, CreditCard, Copy} from 'lucide-react';
 import StarBackground from '../components/StarBackground';
 import StarCard from '../components/StarCard';
 import {useToast} from '../hooks/use-toast';
@@ -9,6 +10,15 @@ import WebApp from "@twa-dev/sdk";
 import {apiService} from "@/utils/api.ts";
 import {initUtils} from '@tma.js/sdk';
 import LottieItem from '../components/roulette/LottieItem';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from 'react-router-dom';
 
 interface Transaction {
     id: number;
@@ -33,27 +43,29 @@ const Profile = () => {
     const [tab, setTab] = useState<'profile' | 'history' | 'gifts'>('profile');
     const [walletConnected, setWalletConnected] = useState(false);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
-    const [userInfo, setUserInfo] = useState({"ref_user": 0});
+    const [userInfo, setUserInfo] = useState({"ref_user": 0, "balance": 0});
     const [isLoading, setIsLoading] = useState(false);
     const [selectedGift, setSelectedGift] = useState<GiftItem | null>(null);
+    const [isTopUpDialogOpen, setIsTopUpDialogOpen] = useState(false);
+    const [isGiftDialogOpen, setIsGiftDialogOpen] = useState(false);
     const {toast} = useToast();
     const isFullscreen = WebApp.isFullscreen;
+    const navigate = useNavigate();
 
-    const [gifts, setGifts] = useState<GiftItem[]>([
-    ]);
+    const [gifts, setGifts] = useState<GiftItem[]>([]);
 
     const [shareLink, setShareLink] = useState('https://t.me/amnyamstarsbot/app');
 
     useEffect(() => {
         const userIdParam = WebApp.initDataUnsafe.user?.id;
         setShareLink(`https://t.me/amnyamstarsbot/app?startapp=${userIdParam}`);
-        fetchUserData()
+        fetchUserData();
     }, []);
 
     const fetchUserData = async () => {
         setIsLoading(true);
         try {
-            const response = await apiService.getUserInfo()
+            const response = await apiService.getUserInfo();
             const data = await response.data;
             setTransactions(data["transactions"]);
             setUserInfo(data["user_info"]);
@@ -88,12 +100,26 @@ const Profile = () => {
         });
     };
 
+    const handleTopUpClick = () => {
+        setIsTopUpDialogOpen(true);
+    };
+
+    const handleCryptoTopUpClick = () => {
+        setIsTopUpDialogOpen(false);
+        navigate('/buy');
+    };
+
+    const handleGiftTopUpClick = () => {
+        setIsTopUpDialogOpen(false);
+        setIsGiftDialogOpen(true);
+    };
+
     const handleShareLink = () => {
         const utils = initUtils();
         utils.shareURL(shareLink,
             '😁Привет! Добро пожаловать в нашего бота для покупки звёзд и казино!\n'
-            )
-    }
+            );
+    };
 
     const handleGiftClick = (gift: GiftItem) => {
         setSelectedGift(gift);
@@ -101,6 +127,14 @@ const Profile = () => {
 
     const handleCloseGiftDetail = () => {
         setSelectedGift(null);
+    };
+
+    const copyGiftUsername = () => {
+        navigator.clipboard.writeText('@giftchance');
+        toast({
+            title: "Скопировано",
+            description: "Имя пользователя скопировано в буфер обмена",
+        });
     };
 
     return (
@@ -176,6 +210,32 @@ const Profile = () => {
                                     <h2 className="text-xl font-bold mb-1">{WebApp.initDataUnsafe.user ? WebApp.initDataUnsafe.user.first_name : "error"}</h2>
                                     <p className="text-white/70 text-sm mb-4">@{WebApp.initDataUnsafe.user ? WebApp.initDataUnsafe.user.username : "error"}</p>
                                     <TonConnectButton className={`mb-4`}/>
+
+                                    {/* Balance display card */}
+                                    <div className="w-full bg-gradient-to-r from-customPurple to-customMidBlue rounded-lg p-4 mb-4 relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                <path d="M15 9C15 8 14 6 12 6C10 6 9 7.5 9 9C9 10.5 10 11 11 11.5C12 12 13 12.5 13 14C13 15.5 12 17 10 17C8 17 7 15.5 7 14.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                <path d="M12 5V6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                <path d="M12 18V19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                            </svg>
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <p className="text-white/70 mb-1">Баланс</p>
+                                            <div className="flex items-center justify-between">
+                                                <h3 className="text-2xl font-bold text-white">{userInfo.balance || '0.00'} TON</h3>
+                                                <Button 
+                                                    onClick={handleTopUpClick} 
+                                                    variant="secondary" 
+                                                    className="bg-white/20 text-white hover:bg-white/30"
+                                                >
+                                                    <CreditCard size={16} className="mr-1" /> 
+                                                    Пополнить
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div className="w-full h-0.5 bg-white/10 my-4"></div>
 
@@ -379,6 +439,66 @@ const Profile = () => {
                     )}
                 </div>
             </div>
+
+            {/* TopUp Dialog */}
+            <Dialog open={isTopUpDialogOpen} onOpenChange={setIsTopUpDialogOpen}>
+                <DialogContent className="bg-gradient-to-b from-customMidBlue to-customPurple/90 border-none">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl text-center">Пополнить баланс</DialogTitle>
+                        <DialogDescription className="text-center text-white/70">
+                            Выберите способ пополнения
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid grid-cols-1 gap-4 mt-4">
+                        <Button 
+                            variant="outline" 
+                            className="py-6 bg-white/10 hover:bg-white/20 border-white/20"
+                            onClick={handleCryptoTopUpClick}
+                        >
+                            <Wallet className="mr-2" size={20} />
+                            <div className="flex flex-col items-start">
+                                <span className="font-medium">Криптовалюта</span>
+                                <span className="text-xs text-white/70">Пополнить в TON</span>
+                            </div>
+                        </Button>
+                        
+                        <Button 
+                            variant="outline" 
+                            className="py-6 bg-white/10 hover:bg-white/20 border-white/20"
+                            onClick={handleGiftTopUpClick}
+                        >
+                            <Gift className="mr-2" size={20} />
+                            <div className="flex flex-col items-start">
+                                <span className="font-medium">Подарки</span>
+                                <span className="text-xs text-white/70">Перевести подарки в TON</span>
+                            </div>
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
+
+            {/* Gift TopUp Dialog */}
+            <Dialog open={isGiftDialogOpen} onOpenChange={setIsGiftDialogOpen}>
+                <DialogContent className="bg-gradient-to-b from-customMidBlue to-customPurple/90 border-none">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl text-center">Пополнить подарками</DialogTitle>
+                        <DialogDescription className="text-center text-white/70">
+                            Для пополнения отправьте подарок пользователю
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex flex-col items-center gap-4 mt-4">
+                        <div className="bg-white/10 w-full p-4 rounded-lg flex items-center justify-between">
+                            <span className="font-mono">@giftchance</span>
+                            <Button variant="ghost" size="sm" onClick={copyGiftUsername} className="hover:bg-white/10">
+                                <Copy size={16} />
+                            </Button>
+                        </div>
+                        <p className="text-sm text-white/70 text-center">
+                            Перешлите желаемый подарок на указанный выше аккаунт, и мы автоматически пополним ваш баланс.
+                        </p>
+                    </div>
+                </DialogContent>
+            </Dialog>
 
             {selectedGift && (
                 <div 
