@@ -6,6 +6,7 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Index from "./pages/Index";
 import Buy from "./pages/Buy";
+import CryptoTopup from "./pages/CryptoTopup";
 import RublePayment from "./pages/RublePayment";
 import Roulette from "./pages/Roulette";
 import BasicRoulette from "./pages/BasicRoulette";
@@ -44,6 +45,7 @@ const App = () => {
                                 <Route path="/" element={<Index/>}/>
                                 <Route path="/buy" element={<Buy/>}/>
                                 <Route path="/buy/rubles" element={<RublePayment/>}/>
+                                <Route path="/topup" element={<CryptoTopup/>}/>
                                 <Route path="/roulette" element={<Roulette/>}/>
                                 <Route path="/roulette/basic" element={<BasicRoulette/>}/>
                                 <Route path="/profile" element={<Profile/>}/>
