@@ -8,6 +8,7 @@ interface RouletteItem {
   title: string;
   price: number;
   isWin?: boolean;
+  name?: string;
   [key: string]: any;
 }
 
@@ -15,18 +16,20 @@ interface WheelRouletteProps {
   items: RouletteItem[];
   multiplier: number;
   forceWin?: boolean; // Optional prop to force a win (for demo purposes)
+  onSpinComplete?: (result: boolean) => void; // Callback when spin completes
 }
 
 // Check if a URL is a Lottie animation (ends with .json)
 const isLottieAnimation = (url: string): boolean => {
-  return url.toLowerCase().endsWith('.json');
+  return url?.toLowerCase().endsWith('.json');
 };
 
-export const WheelRoulette = ({ items, multiplier, forceWin }: WheelRouletteProps) => {
+export const WheelRoulette = ({ items, multiplier, forceWin, onSpinComplete }: WheelRouletteProps) => {
   const [rotation, setRotation] = useState(0);
   const wheelRef = useRef<HTMLDivElement>(null);
   const [wheelItems, setWheelItems] = useState<RouletteItem[]>([]);
   const [isWin, setIsWin] = useState(false);
+  const [isSpinning, setIsSpinning] = useState(false);
   
   // Set up items based on multiplier and determine win/loss
   useEffect(() => {
@@ -92,6 +95,9 @@ export const WheelRoulette = ({ items, multiplier, forceWin }: WheelRouletteProp
   useEffect(() => {
     if (wheelItems.length === 0) return;
     
+    // Set spinning state to true when wheel starts spinning
+    setIsSpinning(true);
+    
     // Find the winning segment index (marked as isWin)
     const winItemIndex = wheelItems.findIndex(item => item.isWin);
     
@@ -125,8 +131,16 @@ export const WheelRoulette = ({ items, multiplier, forceWin }: WheelRouletteProp
     // Set the final rotation value after a short delay
     setTimeout(() => {
       setRotation(finalRotation + randomOffset);
+      
+      // Trigger the callback when animation completes - waiting for wheel to stop completely
+      setTimeout(() => {
+        setIsSpinning(false);
+        if (onSpinComplete) {
+          onSpinComplete(isWin);
+        }
+      }, 5000); // Wait for the animation to complete (5 seconds)
     }, 300);
-  }, [wheelItems, items, isWin]);
+  }, [wheelItems, items, isWin, onSpinComplete]);
 
   // Calculate wheel dimensions
   const wheelSize = 280;
@@ -213,9 +227,15 @@ export const WheelRoulette = ({ items, multiplier, forceWin }: WheelRouletteProp
                       top: `calc(50% + ${itemY * (wheelSize / 100)}px - 30px)`,
                     }}
                   >
-                    {isLottieAnimation(item.link) ? (
+                    {/* Conditionally render Lottie or Image based on file type */}
+                    {item.link && isLottieAnimation(item.link) ? (
                       <LottieItem 
                         animationData={item.link} 
+                        className="w-full h-full"
+                      />
+                    ) : item.name && item.name.length > 0 ? (
+                      <LottieItem 
+                        animationData={`https://nft.fragment.com/gift/${item.name.toLowerCase()}.lottie.json`} 
                         className="w-full h-full"
                       />
                     ) : (
@@ -227,7 +247,7 @@ export const WheelRoulette = ({ items, multiplier, forceWin }: WheelRouletteProp
                           // Fallback if image fails to load
                           const target = e.target as HTMLImageElement;
                           target.onerror = null;
-                          target.src = 'https://nft.fragment.com/gift/signetring.lottie.json';
+                          target.src = 'https://placehold.co/100x100/purple/white?text=Item';
                         }}
                       />
                     )}

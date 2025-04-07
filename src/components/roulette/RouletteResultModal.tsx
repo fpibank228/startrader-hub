@@ -1,191 +1,159 @@
+
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Button } from "../ui/button";
+import { Confetti } from "lucide-react";
 import LottieItem from './LottieItem';
-import { RotateCw, Gift, Wallet, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useTonPrice } from '@/hooks/useTonPrice';
-import { useState } from 'react';
+
+interface RouletteItem {
+  chance?: string;
+  link?: string;
+  title?: string;
+  price?: number;
+  model?: string;
+  symbol?: string;
+  backdrop?: string;
+  number?: number;
+  name?: string;
+}
 
 interface RouletteResultModalProps {
   isOpen: boolean;
   onClose: () => void;
-  result: {
-    chance: string;
-    link: string;
-    title: string;
-    price: number;
-    model?: string;
-    symbol?: string;
-    backdrop?: string;
-    number?: number;
-  } | null;
-  onPlayAgain: () => void;
+  result: RouletteItem | null;
+  onPlayAgain?: () => void;
 }
 
+// Helper function to check if a URL is for a Lottie animation
+const isLottieAnimation = (url: string): boolean => {
+  return url?.toLowerCase().endsWith('.json');
+};
+
 const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteResultModalProps) => {
-  const [showButtons, setShowButtons] = useState(true);
-  const [action, setAction] = useState<'collect' | 'sell' | null>(null);
-  const tonPrice = useTonPrice();
-  
-  if (!result) return null;
-  
-  const isWin = result.chance === 'yes';
-  const usdPrice = tonPrice ? (result.price * tonPrice).toFixed(2) : 'загрузка...';
-
-  const handlePlayAgain = () => {
-    setShowButtons(true);
-    setAction(null);
-    onPlayAgain();
-    onClose();
-  };
-
-  const handleCollect = () => {
-    setShowButtons(false);
-    setAction('collect');
-  };
-
-  const handleSell = () => {
-    setShowButtons(false);
-    setAction('sell');
-  };
+  if (!result) {
+    return null;
+  }
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="bg-gradient-to-b from-customMidBlue to-customPurple/90 border-none max-w-md p-0 overflow-hidden">
+        <DialogHeader className="p-4 pb-0">
+          <DialogTitle className="text-xl text-center">Ваш выигрыш!</DialogTitle>
+        </DialogHeader>
+
+        <div className="flex flex-col items-center p-4">
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center"
-            onClick={onClose}
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ 
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+              delay: 0.2
+            }}
+            className="relative w-52 h-52 mb-4"
           >
-            {/* Modal */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              className="relative w-[calc(100%-2rem)] max-w-sm mx-auto"
-            >
-              <div className="bg-gradient-to-b from-customPurple/90 to-customMidBlue/90 border-none p-6 sm:p-8 text-center rounded-3xl shadow-[0_0_30px_rgba(53,0,211,0.4)]">
-                <div className="relative">
-                  {/* Custom close button */}
-                  <button 
-                    onClick={onClose}
-                    className="absolute -top-2 -right-2 z-10 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300"
-                  >
-                    <X size={18} className="text-white/80" />
-                  </button>
-                  
-                  {/* Decorative elements for modal */}
-                  <div className="absolute -top-4 -right-4 w-32 h-32 bg-gradient-radial from-purple-500/30 to-transparent rounded-full blur-xl"></div>
-                  <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-radial from-blue-500/20 to-transparent rounded-full blur-xl"></div>
-                  
-                  <h2 className="text-lg sm:text-xl font-bold mb-4">
-                    {isWin ? '🎉 Поздравляем!' : 'К сожалению, не повезло'}
-                  </h2>
-                  
-                  <div className="my-4 sm:my-6 mx-auto w-32 h-32 sm:w-40 sm:h-40 relative">
-                    <div className={`w-full h-full rounded-xl overflow-hidden border-2 ${
-                      isWin ? 'border-yellow-400 shadow-[0_0_20px_rgba(255,215,0,0.6)]' : 'border-white/50'
-                    }`}>
-                      <LottieItem 
-                        animationData={result.link} 
-                        className="w-full h-full"
-                      />
-                    </div>
-                  </div>
-                  
-                  <h3 className="text-lg font-semibold mb-1">{result.title}</h3>
-                  
-                  <div className="flex justify-center items-center gap-2 mb-2">
-                    <span className="text-yellow-400 font-bold">{result.price} TON</span>
-                    <span className="text-sm text-white/60">≈ ${usdPrice}</span>
-                  </div>
-                  
-                  {result.number && (
-                    <div className="text-white/70 text-sm mb-3">
-                      #{result.number}
-                    </div>
-                  )}
-                  
-                  {/* Display attributes if available */}
-                  {(result.model || result.symbol || result.backdrop) && (
-                    <div className="grid grid-cols-1 gap-2 mb-4 text-sm">
-                      {result.model && (
-                        <div className="bg-white/10 p-2 rounded-lg border border-white/10">
-                          Модель: <span className="text-white/80">{result.model}</span>
-                        </div>
-                      )}
-                      {result.symbol && (
-                        <div className="bg-white/10 p-2 rounded-lg border border-white/10">
-                          Символ: <span className="text-white/80">{result.symbol}</span>
-                        </div>
-                      )}
-                      {result.backdrop && (
-                        <div className="bg-white/10 p-2 rounded-lg border border-white/10">
-                          Фон: <span className="text-white/80">{result.backdrop}</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  
-                  {isWin && showButtons ? (
-                    <div className="grid grid-cols-2 gap-3 mt-4">
-                      <Button
-                        onClick={handleCollect}
-                        variant="secondary"
-                        className="py-3 rounded-xl bg-gradient-to-r from-customPurple/70 to-purple-900/70 hover:from-customPurple hover:to-purple-900 border border-white/10"
-                      >
-                        <Gift size={18} className="mr-1" />
-                        Забрать
-                      </Button>
-                      
-                      <Button
-                        onClick={handleSell}
-                        variant="secondary"
-                        className="py-3 rounded-xl bg-gradient-to-r from-customPurple/70 to-purple-900/70 hover:from-customPurple hover:to-purple-900 border border-white/10"
-                      >
-                        <Wallet size={18} className="mr-1" />
-                        Продать
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="mt-4">
-                      {action === 'collect' ? (
-                        <p className="text-white/80 mb-6">
-                          Ваш подарок успешно добавлен в коллекцию!
-                        </p>
-                      ) : action === 'sell' ? (
-                        <p className="text-white/80 mb-6">
-                          {result.price} TON будет отправлено на ваш кошелек!
-                        </p>
-                      ) : (
-                        <p className="text-white/80 mb-6">
-                          {isWin 
-                            ? 'Ваш приз зачислен на счет!'
-                            : 'Попробуйте еще раз, удача обязательно улыбнется!'}
-                        </p>
-                      )}
-                      
-                      <button
-                        onClick={handlePlayAgain}
-                        className="w-full py-3 px-6 rounded-xl font-medium flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-customPurple to-purple-700 text-white hover:opacity-90"
-                      >
-                        <RotateCw size={18} />
-                        Играть снова
-                      </button>
-                    </div>
-                  )}
-                </div>
+            {/* Animated stars in the background */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="absolute w-full h-full">
+                {[...Array(8)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-4 h-4 bg-yellow-300 rounded-full"
+                    style={{
+                      left: `${Math.random() * 100}%`,
+                      top: `${Math.random() * 100}%`,
+                    }}
+                    animate={{
+                      scale: [1, 1.5, 1],
+                      opacity: [0.7, 1, 0.7],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      delay: Math.random() * 2,
+                    }}
+                  />
+                ))}
               </div>
-            </motion.div>
+            </div>
+
+            {/* The prize item - support both Lottie and images */}
+            <div className="relative z-10 w-full h-full flex items-center justify-center">
+              <div className="w-40 h-40 rounded-lg bg-white/10 p-4 border border-white/20 flex items-center justify-center overflow-hidden">
+                {/* Different display based on what data we have */}
+                {result.name ? (
+                  // Display with name (Lottie)
+                  <LottieItem 
+                    animationData={`https://nft.fragment.com/gift/${result.name.toLowerCase()}.lottie.json`}
+                    className="w-full h-full"
+                    loop={true}
+                  />
+                ) : result.link && isLottieAnimation(result.link) ? (
+                  // Direct Lottie URL
+                  <LottieItem 
+                    animationData={result.link}
+                    className="w-full h-full"
+                    loop={true}
+                  />
+                ) : result.link ? (
+                  // Regular image
+                  <img 
+                    src={result.link} 
+                    alt={result.title || "Prize"}
+                    className="w-full h-full object-contain"
+                    onError={(e) => {
+                      // Fallback if image fails to load
+                      const target = e.target as HTMLImageElement;
+                      target.onerror = null;
+                      target.src = 'https://placehold.co/100x100/purple/white?text=Prize';
+                    }}
+                  />
+                ) : (
+                  // Fallback display if no proper image source
+                  <div className="text-center text-white/80">
+                    <Confetti size={48} className="mx-auto mb-2" />
+                    <p>Приз</p>
+                  </div>
+                )}
+              </div>
+            </div>
           </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="text-center mb-6"
+          >
+            <h3 className="text-xl font-bold mb-1">{result.title || "Поздравляем!"}</h3>
+            {result.price && (
+              <p className="text-yellow-400 font-medium text-lg">{result.price} TON</p>
+            )}
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+            <Button
+              variant="outline"
+              onClick={onClose}
+              className="w-full bg-white/10 border-white/20 hover:bg-white/20"
+            >
+              Закрыть
+            </Button>
+            
+            {onPlayAgain && (
+              <Button
+                onClick={onPlayAgain}
+                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+              >
+                Играть снова
+              </Button>
+            )}
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

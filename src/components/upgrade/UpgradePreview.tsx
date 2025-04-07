@@ -58,10 +58,13 @@ const UpgradePreview = ({
         const randomSuccess = Math.random() < successProbability;
         setIsSuccess(randomSuccess);
 
-        // After the animation completes, show the result
-        setTimeout(() => {
-            setStage('result');
-        }, 5000); // Match to wheel animation duration
+        // We'll use the onSpinComplete callback to transition to result stage
+        // instead of using a setTimeout here
+    };
+
+    // Handle spin completion from WheelRoulette component
+    const handleSpinComplete = (success: boolean) => {
+        setStage('result');
     };
 
     const handleCompleteUpgrade = () => {
@@ -130,10 +133,24 @@ const UpgradePreview = ({
 
                                     <div
                                         className="w-32 h-32 mx-auto bg-white/10 rounded-lg p-2 border border-white/20">
-                                        <LottieItem
-                                            animationData={`https://nft.fragment.com/gift/${potentialReward.name.toLowerCase()}.lottie.json`}
-                                            className="w-full h-full"
-                                        />
+                                        {potentialReward.name ? (
+                                            <LottieItem
+                                                animationData={`https://nft.fragment.com/gift/${potentialReward.name.toLowerCase()}.lottie.json`}
+                                                className="w-full h-full"
+                                            />
+                                        ) : (
+                                            <img 
+                                                src={potentialReward.link} 
+                                                alt={potentialReward.title}
+                                                className="w-full h-full object-contain"
+                                                onError={(e) => {
+                                                    // Fallback if image fails to load
+                                                    const target = e.target as HTMLImageElement;
+                                                    target.onerror = null;
+                                                    target.src = 'https://placehold.co/100x100/purple/white?text=Item';
+                                                }}
+                                            />
+                                        )}
                                     </div>
 
                                     <p className="mt-2 font-bold">{potentialReward.title}</p>
@@ -157,6 +174,7 @@ const UpgradePreview = ({
                                 items={wheelItems} 
                                 multiplier={multiplier}
                                 forceWin={isSuccess} // Pass the predetermined success value
+                                onSpinComplete={handleSpinComplete} // Add the callback
                             />
                         </div>
                     )}
@@ -184,10 +202,24 @@ const UpgradePreview = ({
 
                                     <div
                                         className="w-40 h-40 mx-auto bg-white/10 rounded-lg p-2 border border-white/20 mb-4">
-                                        <LottieItem
-                                            animationData={`https://nft.fragment.com/gift/${potentialReward.name.toLowerCase()}.lottie.json`}
-                                            className="w-full h-full"
-                                        />
+                                        {potentialReward.name ? (
+                                            <LottieItem
+                                                animationData={`https://nft.fragment.com/gift/${potentialReward.name.toLowerCase()}.lottie.json`}
+                                                className="w-full h-full"
+                                            />
+                                        ) : (
+                                            <img 
+                                                src={potentialReward.link} 
+                                                alt={potentialReward.title}
+                                                className="w-full h-full object-contain"
+                                                onError={(e) => {
+                                                    // Fallback if image fails to load
+                                                    const target = e.target as HTMLImageElement;
+                                                    target.onerror = null;
+                                                    target.src = 'https://placehold.co/100x100/purple/white?text=Item';
+                                                }}
+                                            />
+                                        )}
                                     </div>
 
                                     <p className="font-bold">{potentialReward.title}</p>
