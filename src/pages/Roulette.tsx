@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
@@ -9,8 +10,7 @@ import { rouletteOptions } from '../data/rouletteData';
 const Roulette = () => {
   const isFullscreen = WebApp.isFullscreen;
 
-  // Filter out the basic option only
-  // We're keeping the NFT option for navigation, but it's handled differently now
+  // Use all options, now the upgrade option is properly linked in the router
   const displayOptions = rouletteOptions;
 
   return (

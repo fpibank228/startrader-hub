@@ -15,6 +15,11 @@ interface WheelRouletteProps {
   items: RouletteItem[];
 }
 
+// Check if a URL is a Lottie animation (ends with .json)
+const isLottieAnimation = (url: string): boolean => {
+  return url.toLowerCase().endsWith('.json');
+};
+
 export const WheelRoulette = ({ items }: WheelRouletteProps) => {
   const [rotation, setRotation] = useState(0);
   const wheelRef = useRef<HTMLDivElement>(null);
@@ -122,17 +127,24 @@ export const WheelRoulette = ({ items }: WheelRouletteProps) => {
                     top: `calc(50% + ${itemY * (wheelSize / 100)}px - 30px)`,
                   }}
                 >
-                  <img 
-                    src={item.link} 
-                    alt={item.title}
-                    className="w-full h-full object-contain p-1"
-                    onError={(e) => {
-                      // Fallback if image fails to load
-                      const target = e.target as HTMLImageElement;
-                      target.onerror = null;
-                      target.src = 'https://nft.fragment.com/gift/signetring.lottie.json';
-                    }}
-                  />
+                  {isLottieAnimation(item.link) ? (
+                    <LottieItem 
+                      animationData={item.link} 
+                      className="w-full h-full"
+                    />
+                  ) : (
+                    <img 
+                      src={item.link} 
+                      alt={item.title}
+                      className="w-full h-full object-contain p-1"
+                      onError={(e) => {
+                        // Fallback if image fails to load
+                        const target = e.target as HTMLImageElement;
+                        target.onerror = null;
+                        target.src = 'https://nft.fragment.com/gift/signetring.lottie.json';
+                      }}
+                    />
+                  )}
                 </div>
               </div>
             );
