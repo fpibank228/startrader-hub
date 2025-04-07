@@ -1,3 +1,4 @@
+
 import React, {useState, useEffect} from 'react';
 import {motion, AnimatePresence} from 'framer-motion';
 import {Dialog, DialogContent, DialogHeader, DialogTitle} from "@/components/ui/dialog";
@@ -75,11 +76,12 @@ const UpgradePreview = ({
         }
     }, [isOpen]);
 
-    // Set up the wheel items with the potential reward
+    // Set up the wheel items with the potential reward and selected gifts
     const wheelItems = [
         {...potentialReward, isWin: true},
-        ...selectedGifts.slice(0, 5).map(gift => ({...gift, isWin: false}))
+        ...selectedGifts.slice(0, multiplier - 1).map(gift => ({...gift, isWin: false}))
     ];
+    
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
             <DialogContent
@@ -151,7 +153,11 @@ const UpgradePreview = ({
 
                     {stage === 'spinning' && (
                         <div className="py-4">
-                            <WheelRoulette items={wheelItems}/>
+                            <WheelRoulette 
+                                items={wheelItems} 
+                                multiplier={multiplier}
+                                forceWin={isSuccess} // Pass the predetermined success value
+                            />
                         </div>
                     )}
 

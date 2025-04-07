@@ -13,6 +13,8 @@ interface RouletteItem {
 
 interface WheelRouletteProps {
   items: RouletteItem[];
+  multiplier: number;
+  forceWin?: boolean; // Optional prop to force a win (for demo purposes)
 }
 
 // Check if a URL is a Lottie animation (ends with .json)
@@ -20,17 +22,89 @@ const isLottieAnimation = (url: string): boolean => {
   return url.toLowerCase().endsWith('.json');
 };
 
-export const WheelRoulette = ({ items }: WheelRouletteProps) => {
+export const WheelRoulette = ({ items, multiplier, forceWin }: WheelRouletteProps) => {
   const [rotation, setRotation] = useState(0);
   const wheelRef = useRef<HTMLDivElement>(null);
+  const [wheelItems, setWheelItems] = useState<RouletteItem[]>([]);
+  const [isWin, setIsWin] = useState(false);
+  
+  // Set up items based on multiplier and determine win/loss
+  useEffect(() => {
+    // Determine if this spin is a win or loss
+    // If forceWin is provided, use that value, otherwise use random
+    const win = forceWin !== undefined ? forceWin : Math.random() < 0.5;
+    setIsWin(win);
+    
+    // Always include the potential reward as the first item
+    const targetItem = items.find(item => item.isWin) || items[0];
+    
+    // For multiplier x2, show 2 segments (win item + empty/loss item)
+    // For multiplier x5, show 5 segments
+    // For multiplier x10, show 10 segments
+    let totalSegments = multiplier;
+    if (totalSegments < 2) totalSegments = 2; // Minimum 2 segments
+    if (totalSegments > 10) totalSegments = 10; // Maximum 10 segments
+    
+    // Create the wheel items array
+    let wheelItemsArr: RouletteItem[] = [];
+    
+    if (win) {
+      // If win, include the winning item and fill rest with empty/basic items
+      wheelItemsArr.push({...targetItem, isWin: true});
+      
+      // Fill the remaining segments with other items or empty items
+      const otherItems = items.filter(item => !item.isWin).slice(0, totalSegments - 1);
+      wheelItemsArr = [...wheelItemsArr, ...otherItems];
+      
+      // If we don't have enough items, add empty placeholders
+      while (wheelItemsArr.length < totalSegments) {
+        wheelItemsArr.push({
+          link: "https://nft.fragment.com/gift/lolpop.lottie.json", // fallback item
+          title: "Placeholder",
+          price: 0.1,
+          isWin: false
+        });
+      }
+    } else {
+      // If loss, all segments are non-winning items
+      // Put the "winning" item at a random position for display
+      const winningPosition = Math.floor(Math.random() * totalSegments);
+      
+      for (let i = 0; i < totalSegments; i++) {
+        if (i === winningPosition) {
+          // This is visually the "winning" item, but the actual win/loss is determined by isWin state
+          wheelItemsArr.push({...targetItem, isWin: false});
+        } else {
+          // Add other items or placeholders
+          const otherItem = items.filter(item => !item.isWin)[i % items.length];
+          if (otherItem) {
+            wheelItemsArr.push({...otherItem, isWin: false});
+          } else {
+            wheelItemsArr.push({
+              link: "https://nft.fragment.com/gift/lolpop.lottie.json",
+              title: "Placeholder",
+              price: 0.1,
+              isWin: false
+            });
+          }
+        }
+      }
+    }
+    
+    setWheelItems(wheelItemsArr);
+  }, [items, multiplier, forceWin]);
   
   // Start spinning the wheel automatically
   useEffect(() => {
-    const winItemIndex = items.findIndex(item => item.isWin);
+    if (wheelItems.length === 0) return;
+    
+    // Find the winning segment index (marked as isWin)
+    const winItemIndex = wheelItems.findIndex(item => item.isWin);
+    // If there's no winning item (all items have isWin=false), use index 0
     const winningIndex = winItemIndex !== -1 ? winItemIndex : 0;
     
     // Calculate the winning segment angle
-    const segmentAngle = 360 / items.length;
+    const segmentAngle = 360 / wheelItems.length;
     
     // Calculate target rotation to position winning segment at the top
     const targetPosition = 270 - (winningIndex * segmentAngle);
@@ -44,7 +118,7 @@ export const WheelRoulette = ({ items }: WheelRouletteProps) => {
     setTimeout(() => {
       setRotation(finalRotation + randomOffset);
     }, 300);
-  }, [items]);
+  }, [wheelItems]);
 
   // Calculate wheel dimensions
   const wheelSize = 280;
@@ -74,8 +148,8 @@ export const WheelRoulette = ({ items }: WheelRouletteProps) => {
           }}
         >
           {/* Wheel segments */}
-          {items.map((item, index) => {
-            const segmentAngle = 360 / items.length;
+          {wheelItems.map((item, index) => {
+            const segmentAngle = 360 / wheelItems.length;
             const angle = index * segmentAngle;
             
             // Alternate background colors
@@ -162,6 +236,7 @@ export const WheelRoulette = ({ items }: WheelRouletteProps) => {
           >
             <div className="text-white font-bold text-center">
               <span className="text-xs block opacity-80">АПГРЕЙД</span>
+              {multiplier && <span className="text-xs block opacity-80">x{multiplier}</span>}
             </div>
           </div>
         </motion.div>
