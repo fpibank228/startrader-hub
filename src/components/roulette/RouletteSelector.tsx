@@ -1,49 +1,96 @@
 
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StarCard from '../StarCard';
+import { motion } from 'framer-motion';
+import { ChevronRight, Star, Lock } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 
 interface RouletteOption {
   id: string;
   title: string;
   description: string;
-  minLevel?: number;
-  image: string;
+  icon?: string;
+  imageBg?: string;
+  disabled?: boolean;
+  path?: string;
 }
 
 interface RouletteSelectorProps {
   options: RouletteOption[];
+  onSelect?: (id: string) => void;
 }
 
-const RouletteSelector = ({ options }: RouletteSelectorProps) => {
+const RouletteSelector = ({ options, onSelect }: RouletteSelectorProps) => {
   const navigate = useNavigate();
 
-  const handleOptionClick = (optionId: string) => {
-    if (optionId === 'basic') {
+  const handleSelect = (option: RouletteOption) => {
+    if (option.disabled) return;
+
+    if (option.id === 'basic') {
       navigate('/roulette/basic');
-    } else if (optionId === 'nft') {
+    } else if (option.id === 'nft') {
       // Redirect directly to fixed roulette for NFT option
       navigate('/roulette/fixed');
     }
   };
 
+  const renderIcon = (iconName: string | undefined) => {
+    if (!iconName) return <Star className="w-12 h-12 text-white opacity-70" />;
+
+    // @ts-ignore - dynamic icon usage
+    const IconComponent = LucideIcons[iconName];
+
+    if (IconComponent) {
+      return <IconComponent className="w-12 h-12 text-white/90" />;
+    }
+
+    return <Star className="w-12 h-12 text-white opacity-70" />;
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {options.map((option) => (
-        <div key={option.id} onClick={() => handleOptionClick(option.id)}>
-          <StarCard className="p-4 cursor-pointer hover:bg-white/5 transition-colors">
-            <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-700 to-blue-600 flex items-center justify-center">
-                <img src={option.image} alt={option.title} className="w-8 h-8" />
-              </div>
-              <div>
-                <h3 className="text-lg font-medium">{option.title}</h3>
-                <p className="text-white/70 text-sm">{option.description}</p>
-              </div>
-            </div>
-          </StarCard>
-        </div>
-      ))}
-    </div>
+      <div className="grid gap-4">
+        {options.map((option) => (
+            <motion.div
+                key={option.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                whileHover={{ scale: option.disabled ? 1 : 1.02 }}
+                whileTap={{ scale: option.disabled ? 1 : 0.98 }}
+            >
+              <StarCard
+                  className={`p-0 overflow-hidden ${option.disabled ? 'opacity-70' : 'cursor-pointer hover:shadow-lg transition-shadow'}`}
+                  onClick={() => !option.disabled && handleSelect(option)}
+              >
+                {option.imageBg && (
+                    <div
+                        className="w-full h-32 bg-cover bg-center relative"
+                        style={{ backgroundImage: `url(${option.imageBg})` }}
+                    >
+                      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        {option.icon ? renderIcon(option.icon) : <Star className="w-12 h-12 text-white opacity-70" />}
+                      </div>
+                    </div>
+                )}
+
+                <div className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold flex items-center gap-2">
+                        {option.title}
+                        {option.disabled && <Lock size={14} className="text-white/60" />}
+                      </h3>
+                      <p className="text-sm text-white/70">{option.description}</p>
+                    </div>
+                    {!option.disabled && <ChevronRight className="w-5 h-5 text-white/60" />}
+                  </div>
+                </div>
+              </StarCard>
+            </motion.div>
+        ))}
+      </div>
   );
 };
 
