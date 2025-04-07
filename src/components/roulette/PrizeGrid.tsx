@@ -1,6 +1,6 @@
-
 import { memo, useMemo } from 'react';
 import StarCard from '../StarCard';
+import LottieItem from './LottieItem';
 
 interface RouletteItem {
   chance: string;
@@ -47,10 +47,11 @@ const PrizeGrid = memo(({ items, onItemClick }: PrizeGridProps) => {
             onClick={() => onItemClick && onItemClick(item)}
           >
             <div className="w-20 h-20 rounded-lg overflow-hidden border border-white/30 shadow-[0_0_5px_rgba(255,255,255,0.2)]">
-              <img 
-                src={item.link} 
-                alt={item.title}
-                className="w-full h-full object-contain"
+              <LottieItem 
+                animationData={item.link} 
+                className="w-full h-full"
+                loop={false}
+                autoplay={false}
               />
             </div>
             <div className="text-sm mt-2 text-center font-medium">

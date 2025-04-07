@@ -40,11 +40,11 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
 
   // Initialize with fresh data on mount
   useEffect(() => {
-    // Make sure we have exactly 6 items for the wheel
+    // Make sure we have exactly 6 items, taking first 6 from initialItems
     const sixItems = initialItems.slice(0, WHEEL_SEGMENTS);
     
     // Make sure to have at least one win item
-    const hasWinItem = sixItems.some(item => item.isWin || item.chance === 'yes');
+    const hasWinItem = sixItems.some(item => item.isWin);
     
     if (!hasWinItem && sixItems.length > 0) {
       // If no win item is specified, make the first one a winner
@@ -60,7 +60,7 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
     setIsSpinning(true);
     
     // Find the winning item
-    const winItemIndex = items.findIndex(item => item.isWin || item.chance === 'yes');
+    const winItemIndex = items.findIndex(item => item.isWin);
     const winningIndex = winItemIndex !== -1 ? winItemIndex : 0;
     
     // Calculate angle for the winning segment
@@ -150,9 +150,8 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
                 
                 // Create alternating colors for the segments
                 const isEven = index % 2 === 0;
-                const isWin = item.isWin || item.chance === 'yes';
                 const segmentColor = isEven ? 'rgba(96, 44, 128, 0.6)' : 'rgba(128, 58, 171, 0.6)';
-                const borderColor = isWin ? 'rgba(255, 215, 0, 0.6)' : 'rgba(255, 255, 255, 0.2)';
+                const borderColor = item.isWin ? 'rgba(255, 215, 0, 0.6)' : 'rgba(255, 255, 255, 0.2)';
                 
                 return (
                   <div 
@@ -220,7 +219,7 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
       </StarCard>
 
       {/* Показываем все возможные выигрыши под рулеткой */}
-      <PrizeGrid items={initialItems} onItemClick={handleItemClick} />
+      <PrizeGrid items={items} onItemClick={handleItemClick} />
 
       {/* Модальное окно с результатом */}
       <RouletteResultModal
