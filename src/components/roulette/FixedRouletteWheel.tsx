@@ -50,12 +50,12 @@ const FixedRouletteWheel = ({ items: initialItems, onSpin }: FixedRouletteWheelP
     setIsSpinning(true);
     setSelectedIndex(null);
 
-    // Fixed item width - using smaller 120px items with 16px gaps (gap-4)
-    const itemWidth = 120;
-    const itemGap = 16;
+    // Dynamic item dimensions based on mobile or desktop view
+    const itemWidth = isMobile ? 80 : 120; // Smaller on mobile
+    const itemGap = isMobile ? 12 : 16;    // Smaller gap on mobile
     const totalItemSpace = itemWidth + itemGap;
     
-    // Calculate random offset from center (between -60 and +60 pixels)
+    // Calculate random offset from center (between -itemWidth/2 and +itemWidth/2 pixels)
     // This makes the wheel stop slightly before or after the exact center for variability
     const randomOffset = Math.floor(Math.random() * itemWidth) - (itemWidth / 2);
     

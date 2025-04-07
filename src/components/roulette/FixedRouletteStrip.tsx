@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { useRef, memo } from 'react';
 import LottieItem from './LottieItem';
+import { useIsMobile } from '../../hooks/use-mobile';
 
 interface RouletteItem {
   chance: string;
@@ -22,6 +23,7 @@ interface FixedRouletteStripProps {
 
 const FixedRouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }: FixedRouletteStripProps) => {
   const stripRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
   
   // Create a repeated array of items for continuous spinning effect
   // Repeat items 5 times to ensure there are plenty of items to fill the strip during animation
@@ -30,7 +32,8 @@ const FixedRouletteStrip = memo(({ items, slidePosition, isSpinning, selectedInd
   return (
     <motion.div 
       ref={stripRef}
-      className="absolute top-0 bottom-0 flex items-center gap-4 px-4" // Added gap-4 for spacing between items
+      className="absolute top-0 bottom-0 flex items-center px-4"
+      style={{ gap: isMobile ? '12px' : '16px' }}
       animate={{ 
         x: slidePosition 
       }}
@@ -45,13 +48,16 @@ const FixedRouletteStrip = memo(({ items, slidePosition, isSpinning, selectedInd
         const originalIndex = index % items.length;
         const isSelected = selectedIndex === originalIndex && Math.floor(index / items.length) === 2;
         
+        // Item size based on mobile or desktop
+        const itemSize = isMobile ? 80 : 120; // Smaller size on mobile
+        
         return (
           <div 
             key={`${index}-${item.title}`}
             className={`flex-shrink-0 transition-transform ${
               isSelected ? 'scale-110 z-10' : ''
             }`}
-            style={{ width: '120px', height: '120px' }} // Reduced from 140px to 120px
+            style={{ width: `${itemSize}px`, height: `${itemSize}px` }}
           >
             <div className={`w-full h-full rounded-lg overflow-hidden border-2 ${
               isSelected ? 'border-white shadow-[0_0_15px_rgba(255,255,255,0.7)]' : 'border-white/30'

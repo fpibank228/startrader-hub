@@ -1,6 +1,7 @@
 
 import { useRef, memo } from 'react';
 import FixedRouletteStrip from './FixedRouletteStrip';
+import { useIsMobile } from '../../hooks/use-mobile';
 
 interface RouletteItem {
   chance: string;
@@ -21,6 +22,7 @@ interface FixedRouletteDisplayProps {
 
 const FixedRouletteDisplay = memo(({ items, slidePosition, isSpinning, selectedIndex }: FixedRouletteDisplayProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
   
   // Make sure items is never undefined
   const safeItems = items || [];
@@ -28,8 +30,11 @@ const FixedRouletteDisplay = memo(({ items, slidePosition, isSpinning, selectedI
   return (
     <div 
       ref={containerRef}
-      className="relative h-40 w-full mx-auto bg-gradient-to-r from-purple-900/50 via-blue-900/50 to-purple-900/50 rounded-xl overflow-hidden"
-      style={{ width: '420px' }} // Fixed width for consistency
+      className="relative mx-auto bg-gradient-to-r from-purple-900/50 via-blue-900/50 to-purple-900/50 rounded-xl overflow-hidden"
+      style={{ 
+        width: isMobile ? '300px' : '420px', // Smaller width on mobile
+        height: isMobile ? '120px' : '160px'  // Smaller height on mobile
+      }}
     >
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-20">
