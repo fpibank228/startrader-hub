@@ -18,14 +18,6 @@ const BasicRoulette = () => {
     navigate('/roulette');
   };
 
-  // Add isWin property to one of the items
-  const itemsWithWinner = basicRouletteItems.map((item, index) => {
-    return {
-      ...item,
-      isWin: index === 0 // First item is the winner
-    };
-  });
-
   return (
     <div className="relative min-h-screen pt-4 pb-24" style={{
       marginTop: isFullscreen ? "80px" : "0px",
@@ -58,7 +50,7 @@ const BasicRoulette = () => {
           className="max-w-md mx-auto"
         >
           <WheelRoulette 
-            items={itemsWithWinner}
+            items={basicRouletteItems}
           />
         </motion.div>
       </div>

@@ -57,7 +57,7 @@ const FixedRouletteWheel = ({ items: initialItems, onSpin }: FixedRouletteWheelP
     
     // Calculate random offset from center (between -itemWidth/2 and +itemWidth/2 pixels)
     // This makes the wheel stop slightly before or after the exact center for variability
-    const randomOffset = Math.floor(Math.random() * itemWidth - (itemWidth / 2)) - пше (itemWidth / 2);
+    const randomOffset = Math.floor(Math.random() * itemWidth - (itemWidth / 2)) - (itemWidth / 2);
     
     // Reset to initial position
     setSlidePosition(0);

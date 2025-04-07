@@ -38,18 +38,20 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
   const wheelRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
-  // Initialize with fresh data on mount - shuffle only once
+  // Initialize with fresh data on mount
   useEffect(() => {
-    // Make sure to have at least one win item
-    const preparedItems = [...initialItems];
-    const hasWinItem = preparedItems.some(item => item.isWin);
+    // Make sure we have exactly 6 items, taking first 6 from initialItems
+    const sixItems = initialItems.slice(0, WHEEL_SEGMENTS);
     
-    if (!hasWinItem && preparedItems.length > 0) {
+    // Make sure to have at least one win item
+    const hasWinItem = sixItems.some(item => item.isWin);
+    
+    if (!hasWinItem && sixItems.length > 0) {
       // If no win item is specified, make the first one a winner
-      preparedItems[0] = { ...preparedItems[0], isWin: true };
+      sixItems[0] = { ...sixItems[0], isWin: true };
     }
     
-    setItems(preparedItems);
+    setItems(sixItems);
   }, [initialItems]);
 
   const spinWheel = () => {
@@ -122,8 +124,8 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
         <div className="flex justify-center">
           <div className="relative" style={{ width: wheelSize, height: wheelSize }}>
             {/* Wheel pointer (at the top) */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-10 z-10">
-              <div className="w-0 h-0 border-l-[12px] border-r-[12px] border-b-[20px] border-l-transparent border-r-transparent border-b-white" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-16 z-10">
+              <div className="w-0 h-0 border-l-[16px] border-r-[16px] border-b-[24px] border-l-transparent border-r-transparent border-b-white" />
             </div>
 
             {/* Wheel */}
