@@ -1,21 +1,19 @@
-
 interface RouletteItem {
     chance: string;
     link: string;
     title: string;
     price: number;
-    model?: string;    // New field for model
-    symbol?: string;   // New field for symbol
-    backdrop?: string; // New field for backdrop
-    number?: number;   // New field for item number
+    model?: string;
+    symbol?: string;
+    backdrop?: string;
+    number?: number;
+    isWin?: boolean;
 }
 
-// Generate random number between min and max
 const getRandomNumber = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-// Data for the basic roulette
 export const basicRouletteItems: RouletteItem[] = [
     {
         'chance': 'no',
@@ -109,7 +107,6 @@ export const basicRouletteItems: RouletteItem[] = [
     },
 ];
 
-// Data for the roulette types/options
 export const rouletteOptions = [
     {
         id: 'basic',

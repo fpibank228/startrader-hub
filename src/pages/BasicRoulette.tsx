@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import StarBackground from '../components/StarBackground';
-import RouletteWheel from '../components/roulette/RouletteWheel';
+import WheelRoulette from '../components/roulette/WheelRoulette';
 import { useToast } from '../hooks/use-toast';
 import WebApp from "@twa-dev/sdk";
 import { basicRouletteItems } from '../data/rouletteData';
@@ -17,6 +17,14 @@ const BasicRoulette = () => {
   const handleBack = () => {
     navigate('/roulette');
   };
+
+  // Add isWin property to one of the items
+  const itemsWithWinner = basicRouletteItems.map((item, index) => {
+    return {
+      ...item,
+      isWin: index === 0 // First item is the winner
+    };
+  });
 
   return (
     <div className="relative min-h-screen pt-4 pb-24" style={{
@@ -39,7 +47,7 @@ const BasicRoulette = () => {
             transition={{ duration: 0.5 }}
             className="text-2xl font-bold"
           >
-            Обычная рулетка
+            Колесо Удачи
           </motion.h1>
         </div>
 
@@ -49,8 +57,8 @@ const BasicRoulette = () => {
           transition={{ duration: 0.5 }}
           className="max-w-md mx-auto"
         >
-          <RouletteWheel 
-            items={basicRouletteItems}
+          <WheelRoulette 
+            items={itemsWithWinner}
           />
         </motion.div>
       </div>

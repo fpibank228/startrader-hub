@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
@@ -9,6 +8,10 @@ import { rouletteOptions } from '../data/rouletteData';
 
 const Roulette = () => {
   const isFullscreen = WebApp.isFullscreen;
+
+  // Filter out the basic option only
+  // We're keeping the NFT option for navigation, but it's handled differently now
+  const displayOptions = rouletteOptions;
 
   return (
     <div className="relative min-h-screen pt-4 pb-24" style={{
@@ -38,7 +41,7 @@ const Roulette = () => {
           </p>
           
           <RouletteSelector 
-            options={rouletteOptions} 
+            options={displayOptions} 
           />
         </motion.div>
       </div>
