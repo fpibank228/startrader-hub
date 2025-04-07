@@ -51,7 +51,7 @@ export const basicRouletteItems: RouletteItem[] = [
         'chance': 'no',
         'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5170145012310081615/1x/000.png',
         'title': 'Heart',
-        'price': 0.3,
+        'price': 0.25,
         'model': 'Basic 20%',
         'symbol': 'Copper 20%',
         'backdrop': 'Green 12%',
@@ -61,7 +61,7 @@ export const basicRouletteItems: RouletteItem[] = [
         'chance': 'no',
         'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5170233102089322756/1x/000.png',
         'title': 'Bear',
-        'price': 0.2,
+        'price': 0.25,
         'model': 'Basic 25%',
         'symbol': 'Bronze 25%',
         'backdrop': 'Yellow 15%',
@@ -71,12 +71,22 @@ export const basicRouletteItems: RouletteItem[] = [
         'chance': 'no',
         'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5170250947678437525/1x/000.png',
         'title': 'Gift',
-        'price': 1.0,
+        'price': 0.25,
         'model': 'Premium 5%',
         'symbol': 'Gold 3%',
         'backdrop': 'Purple 5%',
         'number': getRandomNumber(1, 200000)
     },
+    {
+        'chance': 'no',
+        'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5170314324215857265/1x/000.png',
+        'title': 'Flowers',
+        'price': 0.25,
+        'model': 'Standard 8%',
+        'symbol': 'Silver 7%',
+        'backdrop': 'Blue 7%',
+        'number': getRandomNumber(1, 200000)
+    }
 ];
 
 export const rouletteOptions = [
