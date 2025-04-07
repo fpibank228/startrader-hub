@@ -75,7 +75,7 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
     // Set the final rotation value
     setRotation(finalRotation + randomOffset);
     
-    // Process the result after the animation completes
+    // Process the result after the animation fully completes (5 seconds)
     setTimeout(() => {
       setIsSpinning(false);
       
@@ -83,7 +83,11 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
       if (items.length > 0) {
         const winningItem = items[winningIndex];
         setResult(winningItem);
-        setShowResultModal(true);
+        
+        // Wait a short delay after the wheel stops to show the modal
+        setTimeout(() => {
+          setShowResultModal(true);
+        }, 500);
         
         if (onSpin && winningItem) {
           onSpin(winningItem);
