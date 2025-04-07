@@ -238,3 +238,4 @@ const mockUpgradableGifts = [
 ];
 
 export default GiftUpgrade;
+
