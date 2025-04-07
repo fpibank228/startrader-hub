@@ -1,6 +1,6 @@
+
 import React, { useEffect, useState } from 'react';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
-import { TelegramProvider } from '@telegram-apps/sdk-react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner'
 import Navigation from './components/Navigation';
@@ -17,6 +17,7 @@ import NotFound from './pages/NotFound';
 import './App.css';
 import WebApp from '@twa-dev/sdk';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { apiService } from './utils/api';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -29,14 +30,13 @@ const queryClient = new QueryClient({
 const App = () => {
     const isFullscreen = WebApp.isFullscreen;
     useEffect(() => {
-        apiService.checkUser(WebApp.initDataUnsafe.start_param || "",)
-        console.log(WebApp.initDataUnsafe.start_param)
+        apiService.checkUser(WebApp.initDataUnsafe.start_param || "");
+        console.log(WebApp.initDataUnsafe.start_param);
     }, [])
     return (
         <TonConnectUIProvider manifestUrl="https://starsbuy.space/assets/tonconnect-manifest.json">
             <QueryClientProvider client={queryClient}>
-                <Toaster
-                />
+                <Toaster />
                 <BrowserRouter>
                     <div className="pb-16">
                         <Routes>
@@ -48,6 +48,7 @@ const App = () => {
                             <Route path="/roulette/basic" element={<BasicRoulette/>}/>
                             <Route path="/roulette/fixed" element={<FixedRoulette/>}/>
                             <Route path="/profile" element={<Profile/>}/>
+                            <Route path="/upgrade" element={<GiftUpgrade/>}/>
                             <Route path="*" element={<NotFound/>}/>
                         </Routes>
                     </div>
