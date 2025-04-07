@@ -1,3 +1,4 @@
+
 import LottieItem from './LottieItem';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
@@ -18,6 +19,11 @@ interface ItemDetailModalProps {
   onClose: () => void;
   item: RouletteItem;
 }
+
+// Check if a URL is a Lottie animation (ends with .json)
+const isLottieAnimation = (url: string): boolean => {
+  return url.toLowerCase().endsWith('.json');
+};
 
 const ItemDetailModal = ({ isOpen, onClose, item }: ItemDetailModalProps) => {
   return (
@@ -59,12 +65,20 @@ const ItemDetailModal = ({ isOpen, onClose, item }: ItemDetailModalProps) => {
                   
                   <div className="my-4 sm:my-6 mx-auto w-32 h-32 sm:w-40 sm:h-40 relative">
                     <div className="w-full h-full rounded-xl overflow-hidden border-2 border-white/50 shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-                      <LottieItem
-                        animationData={item.link}
-                        className="w-full h-full"
-                        loop={true}
-                        autoplay={true}
-                      />
+                      {isLottieAnimation(item.link) ? (
+                        <LottieItem
+                          animationData={item.link}
+                          className="w-full h-full"
+                          loop={true}
+                          autoplay={true}
+                        />
+                      ) : (
+                        <img 
+                          src={item.link} 
+                          alt={item.title}
+                          className="w-full h-full object-contain"
+                        />
+                      )}
                     </div>
                   </div>
                   
