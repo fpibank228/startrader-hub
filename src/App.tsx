@@ -10,6 +10,7 @@ import CryptoTopup from "./pages/CryptoTopup";
 import RublePayment from "./pages/RublePayment";
 import Roulette from "./pages/Roulette";
 import BasicRoulette from "./pages/BasicRoulette";
+import FixedRoulette from "./pages/FixedRoulette";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import Navigation from "./components/Navigation";
@@ -48,6 +49,7 @@ const App = () => {
                                 <Route path="/topup" element={<CryptoTopup/>}/>
                                 <Route path="/roulette" element={<Roulette/>}/>
                                 <Route path="/roulette/basic" element={<BasicRoulette/>}/>
+                                <Route path="/roulette/fixed" element={<FixedRoulette/>}/>
                                 <Route path="/profile" element={<Profile/>}/>
                                 <Route path="*" element={<NotFound/>}/>
                             </Routes>

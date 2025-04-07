@@ -120,6 +120,14 @@ export const rouletteOptions = [
         path: '/roulette/basic'
     },
     {
+        id: 'fixed',
+        title: 'Улучшенная рулетка',
+        description: 'Рулетка с фиксированным выигрышем',
+        icon: 'Star',
+        imageBg: 'https://cdn.pixabay.com/photo/2017/02/13/01/26/the-question-mark-2061539_1280.png',
+        path: '/roulette/fixed'
+    },
+    {
         id: 'nft',
         title: 'NFT рулетка',
         description: 'Выиграйте уникальные NFT предметы',
@@ -136,4 +144,3 @@ export const rouletteOptions = [
         disabled: true
     }
 ];
-
