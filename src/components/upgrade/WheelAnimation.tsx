@@ -49,44 +49,38 @@ export const WheelRoulette = ({ items, multiplier, forceWin }: WheelRouletteProp
     let wheelItemsArr: RouletteItem[] = [];
     
     if (win) {
-      // If win, include the winning item and fill rest with empty/basic items
+      // If win, include the winning item and fill rest with empty segments
       wheelItemsArr.push({...targetItem, isWin: true});
       
-      // Fill the remaining segments with other items or empty items
-      const otherItems = items.filter(item => !item.isWin).slice(0, totalSegments - 1);
-      wheelItemsArr = [...wheelItemsArr, ...otherItems];
-      
-      // If we don't have enough items, add empty placeholders
-      while (wheelItemsArr.length < totalSegments) {
+      // Fill the remaining segments with empty placeholders
+      for (let i = 1; i < totalSegments; i++) {
         wheelItemsArr.push({
           link: "https://nft.fragment.com/gift/lolpop.lottie.json", // fallback item
-          title: "Placeholder",
+          title: "Empty",
           price: 0.1,
           isWin: false
         });
       }
     } else {
-      // If loss, all segments are non-winning items
-      // Put the "winning" item at a random position for display
-      const winningPosition = Math.floor(Math.random() * totalSegments);
+      // If loss, all segments are empty except one segment shows the "target" item
+      // but it won't actually land on it
+      const emptyPlaceholder = {
+        link: "https://nft.fragment.com/gift/lolpop.lottie.json",
+        title: "Empty",
+        price: 0.1,
+        isWin: false
+      };
+      
+      // Add the target item at a random position that won't be selected
+      const winningPosition = Math.floor(Math.random() * (totalSegments - 1)) + 1;
       
       for (let i = 0; i < totalSegments; i++) {
         if (i === winningPosition) {
-          // This is visually the "winning" item, but the actual win/loss is determined by isWin state
+          // Add the target item but marked as not a win
           wheelItemsArr.push({...targetItem, isWin: false});
         } else {
-          // Add other items or placeholders
-          const otherItem = items.filter(item => !item.isWin)[i % items.length];
-          if (otherItem) {
-            wheelItemsArr.push({...otherItem, isWin: false});
-          } else {
-            wheelItemsArr.push({
-              link: "https://nft.fragment.com/gift/lolpop.lottie.json",
-              title: "Placeholder",
-              price: 0.1,
-              isWin: false
-            });
-          }
+          // Add empty placeholder
+          wheelItemsArr.push({...emptyPlaceholder});
         }
       }
     }
@@ -100,14 +94,28 @@ export const WheelRoulette = ({ items, multiplier, forceWin }: WheelRouletteProp
     
     // Find the winning segment index (marked as isWin)
     const winItemIndex = wheelItems.findIndex(item => item.isWin);
-    // If there's no winning item (all items have isWin=false), use index 0
-    const winningIndex = winItemIndex !== -1 ? winItemIndex : 0;
     
     // Calculate the winning segment angle
     const segmentAngle = 360 / wheelItems.length;
     
-    // Calculate target rotation to position winning segment at the top
-    const targetPosition = 270 - (winningIndex * segmentAngle);
+    // Calculate target rotation to position winning segment at the top (270 degrees)
+    let targetPosition;
+    
+    if (isWin && winItemIndex !== -1) {
+      // If it's a win, stop at the winning segment
+      targetPosition = 270 - (winItemIndex * segmentAngle);
+    } else {
+      // If it's a loss, stop at a random non-winning segment
+      // We'll avoid the segment that has the target item
+      const lossSegments = wheelItems
+        .map((_, index) => index)
+        .filter(index => !wheelItems[index].isWin && 
+                         wheelItems[index].title !== items[0].title);
+                         
+      const randomLossIndex = lossSegments[Math.floor(Math.random() * lossSegments.length)];
+      targetPosition = 270 - (randomLossIndex * segmentAngle);
+    }
+    
     const fullRotations = 4; // Spin 4 full rotations before stopping
     const finalRotation = (fullRotations * 360) + targetPosition;
     
@@ -118,7 +126,7 @@ export const WheelRoulette = ({ items, multiplier, forceWin }: WheelRouletteProp
     setTimeout(() => {
       setRotation(finalRotation + randomOffset);
     }, 300);
-  }, [wheelItems]);
+  }, [wheelItems, items, isWin]);
 
   // Calculate wheel dimensions
   const wheelSize = 280;
@@ -176,6 +184,9 @@ export const WheelRoulette = ({ items, multiplier, forceWin }: WheelRouletteProp
             const itemX = Math.sin(itemAngle) * 30;
             const itemY = -Math.cos(itemAngle) * 30;
             
+            // Determine if this segment should show the reward item or be empty
+            const showRewardItem = item.isWin || item.title === items[0].title;
+            
             return (
               <div
                 key={index}
@@ -192,34 +203,49 @@ export const WheelRoulette = ({ items, multiplier, forceWin }: WheelRouletteProp
                 </svg>
                 
                 {/* Item image - centered in each segment */}
-                <div 
-                  className="absolute rounded-full bg-white/10 flex items-center justify-center border border-white/20 overflow-hidden"
-                  style={{
-                    width: '60px',
-                    height: '60px',
-                    left: `calc(50% + ${itemX * (wheelSize / 100)}px - 30px)`,
-                    top: `calc(50% + ${itemY * (wheelSize / 100)}px - 30px)`,
-                  }}
-                >
-                  {isLottieAnimation(item.link) ? (
-                    <LottieItem 
-                      animationData={item.link} 
-                      className="w-full h-full"
-                    />
-                  ) : (
-                    <img 
-                      src={item.link} 
-                      alt={item.title}
-                      className="w-full h-full object-contain p-1"
-                      onError={(e) => {
-                        // Fallback if image fails to load
-                        const target = e.target as HTMLImageElement;
-                        target.onerror = null;
-                        target.src = 'https://nft.fragment.com/gift/signetring.lottie.json';
-                      }}
-                    />
-                  )}
-                </div>
+                {showRewardItem ? (
+                  <div 
+                    className="absolute rounded-full bg-white/10 flex items-center justify-center border border-white/20 overflow-hidden"
+                    style={{
+                      width: '60px',
+                      height: '60px',
+                      left: `calc(50% + ${itemX * (wheelSize / 100)}px - 30px)`,
+                      top: `calc(50% + ${itemY * (wheelSize / 100)}px - 30px)`,
+                    }}
+                  >
+                    {isLottieAnimation(item.link) ? (
+                      <LottieItem 
+                        animationData={item.link} 
+                        className="w-full h-full"
+                      />
+                    ) : (
+                      <img 
+                        src={item.link} 
+                        alt={item.title}
+                        className="w-full h-full object-contain p-1"
+                        onError={(e) => {
+                          // Fallback if image fails to load
+                          const target = e.target as HTMLImageElement;
+                          target.onerror = null;
+                          target.src = 'https://nft.fragment.com/gift/signetring.lottie.json';
+                        }}
+                      />
+                    )}
+                  </div>
+                ) : (
+                  // Empty segment
+                  <div 
+                    className="absolute rounded-full bg-white/5 flex items-center justify-center"
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      left: `calc(50% + ${itemX * (wheelSize / 100)}px - 20px)`,
+                      top: `calc(50% + ${itemY * (wheelSize / 100)}px - 20px)`,
+                    }}
+                  >
+                    {/* Empty slot indicator */}
+                  </div>
+                )}
               </div>
             );
           })}
