@@ -1,64 +1,53 @@
 
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Home, DollarSign, User, Loader2 } from 'lucide-react';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { Home, DollarSign, Gift, Star, User, ArrowUpCircle } from 'lucide-react';
 
 const Navigation = () => {
-  const location = useLocation();
-  const [isAnimating, setIsAnimating] = useState(false);
+    const activeClass = 'text-white';
+    const inactiveClass = 'text-white/50';
 
-  const handleNavClick = () => {
-    setIsAnimating(true);
-    setTimeout(() => setIsAnimating(false), 500);
-  };
-
-  const navItems = [
-    { path: '/', label: 'Главная', icon: <Home className="w-5 h-5" /> },
-    { path: '/buy', label: 'Купить', icon: <DollarSign className="w-5 h-5" /> },
-    { path: '/roulette', label: 'Рулетка', icon: <Loader2 className="w-5 h-5" /> },
-    { path: '/profile', label: 'Профиль', icon: <User className="w-5 h-5" /> },
-  ];
-
-  return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-customDarkBlue bg-opacity-85 backdrop-blur-xl z-50 border-t border-white/10 shadow-lg">
-      <div className="max-w-screen-lg mx-auto px-2">
-        <ul className="flex justify-around items-center">
-          {navItems.map((item) => {
-            const isActive = location.pathname === item.path;
-            return (
-              <li key={item.path} className="flex-1">
-                <Link
-                  to={item.path}
-                  className={`flex flex-col items-center justify-center py-3 px-1 ${
-                    isActive 
-                      ? 'text-white' 
-                      : 'text-gray-400 hover:text-gray-300'
-                  } transition-all duration-300`}
-                  onClick={handleNavClick}
+    return (
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-t from-customDarkBlue/95 via-customDarkBlue/95 to-customDarkBlue/90 backdrop-blur-sm border-t border-white/10 px-2 pt-2 pb-6">
+            <div className="grid grid-cols-5 gap-1">
+                <NavLink
+                    to="/"
+                    className={({ isActive }) => `flex flex-col items-center py-2 px-1 rounded-lg ${isActive ? activeClass : inactiveClass}`}
                 >
-                  <div 
-                    className={`${
-                      isActive 
-                        ? 'bg-white/20 p-2 rounded-full shadow-inner glow-purple border border-white/30' 
-                        : 'p-2'
-                    } ${isAnimating ? 'animate-star-glow' : ''}`}
-                  >
-                    {item.icon}
-                  </div>
-                  <span className={`text-xs mt-1 ${isActive ? 'font-semibold text-white' : 'font-normal'}`}>
-                    {item.label}
-                  </span>
-                  {isActive && (
-                    <div className="absolute bottom-0 w-1/4 h-1 bg-white rounded-t-full animate-pulse-slow" />
-                  )}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    </nav>
-  );
+                    <Home size={20} className="mb-1" />
+                    <span className="text-[10px]">Главная</span>
+                </NavLink>
+                <NavLink
+                    to="/buy"
+                    className={({ isActive }) => `flex flex-col items-center py-2 px-1 rounded-lg ${isActive ? activeClass : inactiveClass}`}
+                >
+                    <DollarSign size={20} className="mb-1" />
+                    <span className="text-[10px]">Купить</span>
+                </NavLink>
+                <NavLink
+                    to="/roulette"
+                    className={({ isActive }) => `flex flex-col items-center py-2 px-1 rounded-lg ${isActive ? activeClass : inactiveClass}`}
+                >
+                    <Star size={20} className="mb-1" />
+                    <span className="text-[10px]">Рулетка</span>
+                </NavLink>
+                <NavLink
+                    to="/upgrade"
+                    className={({ isActive }) => `flex flex-col items-center py-2 px-1 rounded-lg ${isActive ? activeClass : inactiveClass}`}
+                >
+                    <ArrowUpCircle size={20} className="mb-1" />
+                    <span className="text-[10px]">Апгрейд</span>
+                </NavLink>
+                <NavLink
+                    to="/profile"
+                    className={({ isActive }) => `flex flex-col items-center py-2 px-1 rounded-lg ${isActive ? activeClass : inactiveClass}`}
+                >
+                    <User size={20} className="mb-1" />
+                    <span className="text-[10px]">Профиль</span>
+                </NavLink>
+            </div>
+        </div>
+    );
 };
 
 export default Navigation;

@@ -1,25 +1,30 @@
+import React, { useEffect, useState } from 'react';
+import { TonConnectUIProvider } from '@tonconnect/ui-react';
+import { TelegramProvider } from '@telegram-apps/sdk-react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'sonner'
+import Navigation from './components/Navigation';
+import Index from './pages/Index';
+import Buy from './pages/Buy';
+import Profile from './pages/Profile';
+import RublePayment from './pages/RublePayment';
+import Roulette from './pages/Roulette';
+import CryptoTopup from './pages/CryptoTopup';
+import BasicRoulette from './pages/BasicRoulette';
+import FixedRoulette from './pages/FixedRoulette';
+import GiftUpgrade from './pages/GiftUpgrade';
+import NotFound from './pages/NotFound';
+import './App.css';
+import WebApp from '@twa-dev/sdk';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-import {Toaster} from "@/components/ui/toaster";
-import {Toaster as Sonner} from "@/components/ui/sonner";
-import {TooltipProvider} from "@/components/ui/tooltip";
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
-import Index from "./pages/Index";
-import Buy from "./pages/Buy";
-import CryptoTopup from "./pages/CryptoTopup";
-import RublePayment from "./pages/RublePayment";
-import Roulette from "./pages/Roulette";
-import BasicRoulette from "./pages/BasicRoulette";
-import FixedRoulette from "./pages/FixedRoulette";
-import Profile from "./pages/Profile";
-import NotFound from "./pages/NotFound";
-import Navigation from "./components/Navigation";
-import {TonConnectUIProvider} from "@tonconnect/ui-react";
-import WebApp from "@twa-dev/sdk";
-import {useEffect} from "react";
-import {apiService} from "@/utils/api.ts";
-
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            gcTime: 1000 * 60 * 60 * 24, // 24 hours
+        },
+    },
+})
 
 const App = () => {
     const isFullscreen = WebApp.isFullscreen;
@@ -30,33 +35,24 @@ const App = () => {
     return (
         <TonConnectUIProvider manifestUrl="https://starsbuy.space/assets/tonconnect-manifest.json">
             <QueryClientProvider client={queryClient}>
-                <TooltipProvider>
-                    <Toaster
-                    />
-                    <Sonner
-                        toastOptions={{
-                            style: {
-                                marginTop: isFullscreen ? "80px" : "0px",
-                            },
-                        }}
-                    />
-                    <BrowserRouter>
-                        <div className="pb-16">
-                            <Routes>
-                                <Route path="/" element={<Index/>}/>
-                                <Route path="/buy" element={<Buy/>}/>
-                                <Route path="/buy/rubles" element={<RublePayment/>}/>
-                                <Route path="/topup" element={<CryptoTopup/>}/>
-                                <Route path="/roulette" element={<Roulette/>}/>
-                                <Route path="/roulette/basic" element={<BasicRoulette/>}/>
-                                <Route path="/roulette/fixed" element={<FixedRoulette/>}/>
-                                <Route path="/profile" element={<Profile/>}/>
-                                <Route path="*" element={<NotFound/>}/>
-                            </Routes>
-                        </div>
-                        <Navigation/>
-                    </BrowserRouter>
-                </TooltipProvider>
+                <Toaster
+                />
+                <BrowserRouter>
+                    <div className="pb-16">
+                        <Routes>
+                            <Route path="/" element={<Index/>}/>
+                            <Route path="/buy" element={<Buy/>}/>
+                            <Route path="/buy/rubles" element={<RublePayment/>}/>
+                            <Route path="/topup" element={<CryptoTopup/>}/>
+                            <Route path="/roulette" element={<Roulette/>}/>
+                            <Route path="/roulette/basic" element={<BasicRoulette/>}/>
+                            <Route path="/roulette/fixed" element={<FixedRoulette/>}/>
+                            <Route path="/profile" element={<Profile/>}/>
+                            <Route path="*" element={<NotFound/>}/>
+                        </Routes>
+                    </div>
+                    <Navigation/>
+                </BrowserRouter>
             </QueryClientProvider>
         </TonConnectUIProvider>
     );
