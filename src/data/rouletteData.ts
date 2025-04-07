@@ -66,7 +66,7 @@ export const staticGiftItems: RouletteItem[] = [
 export const basicRouletteItems: RouletteItem[] = [
     {
         'chance': 'no',
-        'link': 'https://nft.fragment.com/gift/homemadecake.lottie.json',
+        'link': 'https://nft.fragment.com/gift/homemadecake-10230.lottie.json',
         'title': 'Homemade Cake',
         'price': 0.25,
         'model': 'Basic 15%',
@@ -76,7 +76,7 @@ export const basicRouletteItems: RouletteItem[] = [
     },
     {
         'chance': 'no',
-        'link': 'https://nft.fragment.com/gift/diamondring.lottie.json',
+        'link': 'https://nft.fragment.com/gift/diamondring-18822.lottie.json',
         'title': 'Diamond Ring',
         'price': 1.5,
         'model': 'Premium 5%',
@@ -86,7 +86,7 @@ export const basicRouletteItems: RouletteItem[] = [
     },
     {
         'chance': 'no',
-        'link': 'https://nft.fragment.com/gift/eternalrose.lottie.json',
+        'link': 'https://nft.fragment.com/gift/eternalrose-1385.lottie.json',
         'title': 'Eternal Rose',
         'price': 0.7,
         'model': 'Standard 10%',
@@ -96,7 +96,7 @@ export const basicRouletteItems: RouletteItem[] = [
     },
     {
         'chance': 'no',
-        'link': 'https://nft.fragment.com/gift/cookieheart.lottie.json',
+        'link': 'https://nft.fragment.com/gift/cookieheart-87873.lottie.json',
         'title': 'Cooke Heart',
         'price': 0.3,
         'model': 'Basic 20%',
@@ -106,7 +106,7 @@ export const basicRouletteItems: RouletteItem[] = [
     },
     {
         'chance': 'no',
-        'link': 'https://nft.fragment.com/gift/partysparkler.lottie.json',
+        'link': 'https://nft.fragment.com/gift/partysparkler-42951.lottie.json',
         'title': 'Party sparkler',
         'price': 0.2,
         'model': 'Basic 25%',
@@ -116,7 +116,7 @@ export const basicRouletteItems: RouletteItem[] = [
     },
     {
         'chance': 'yes',
-        'link': 'https://nft.fragment.com/gift/signetring.lottie.json',
+        'link': 'https://nft.fragment.com/gift/signetring-7628.lottie.json',
         'title': 'Signet ring',
         'price': 1.0,
         'model': 'Premium 5%',

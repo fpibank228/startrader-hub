@@ -38,7 +38,7 @@ const App = () => {
             <QueryClientProvider client={queryClient}>
                 <Toaster />
                 <BrowserRouter>
-                    <div className="pb-16">
+                    <div className="">
                         <Routes>
                             <Route path="/" element={<Index/>}/>
                             <Route path="/buy" element={<Buy/>}/>

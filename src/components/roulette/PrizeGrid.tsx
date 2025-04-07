@@ -54,8 +54,8 @@ const PrizeGrid = memo(({ items, onItemClick }: PrizeGridProps) => {
           >
             <div className="w-20 h-20 rounded-lg overflow-hidden border border-white/30 shadow-[0_0_5px_rgba(255,255,255,0.2)]">
               {isLottieAnimation(item.link) ? (
-                <LottieItem 
-                  animationData={item.link} 
+                <LottieItem
+                  animationData={item.link}
                   className="w-full h-full"
                   loop={false}
                   autoplay={false}
