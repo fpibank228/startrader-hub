@@ -130,9 +130,6 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
               <div className="w-0 h-0 border-l-[15px] border-r-[15px] border-t-0 border-b-[20px] border-l-transparent border-r-transparent border-b-white drop-shadow-lg" />
             </div>
             
-            {/* Outer glow effect */}
-            <div className="absolute inset-0 rounded-full blur-md bg-gradient-to-t from-purple-500/30 to-blue-500/30"></div>
-            
             {/* The wheel */}
             <motion.div 
               ref={wheelRef}
@@ -143,67 +140,70 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
               initial={{ rotate: 0 }}
               transition={{ 
                 duration: 5,
-                ease: [0.32, 0.72, 0.35, 0.94], // Custom cubic bezier for natural spin deceleration
+                ease: [0.32, 0.72, 0.35, 0.94],
                 type: "tween",
               }}
             >
-              {/* Wheel segments */}
+              {/* Wheel segments - structured as a pie chart with 6 equal segments */}
               {items.map((item, index) => {
-                // Calculate segment angle and position
                 const segmentAngle = 360 / items.length;
-                const startAngle = index * segmentAngle;
+                const angle = index * segmentAngle;
                 
-                // Alternate segment colors and highlight winning segment
+                // Alternate background colors
                 const isEven = index % 2 === 0;
                 const segmentColor = item.isWin 
-                  ? 'rgba(255, 215, 0, 0.25)' // Gold for winning segment
+                  ? 'rgba(255, 215, 0, 0.25)' // Gold for winning
                   : isEven 
                     ? 'rgba(128, 90, 213, 0.4)' // Purple
                     : 'rgba(99, 102, 241, 0.4)'; // Blue
                 
-                const borderColor = item.isWin 
-                  ? 'rgba(255, 215, 0, 0.6)' // Gold border for winning segment
-                  : 'rgba(255, 255, 255, 0.2)';
+                // Calculate segment clip path using SVG path
+                const startX = Math.sin(angle * Math.PI / 180) * 50 + 50;
+                const startY = -Math.cos(angle * Math.PI / 180) * 50 + 50;
+                const endAngle = (angle + segmentAngle) * Math.PI / 180;
+                const endX = Math.sin(endAngle) * 50 + 50;
+                const endY = -Math.cos(endAngle) * 50 + 50;
+                const largeArcFlag = segmentAngle <= 180 ? "0" : "1";
+
+                // SVG path for the segment
+                const path = `M50,50 L${startX},${startY} A50,50 0 ${largeArcFlag},1 ${endX},${endY} Z`;
+                
+                // Position for the item image
+                // Calculate position at 60% of the radius from center, in the middle of the segment
+                const itemAngle = (angle + segmentAngle/2) * Math.PI / 180;
+                const itemX = Math.sin(itemAngle) * 30;
+                const itemY = -Math.cos(itemAngle) * 30;
                 
                 return (
-                  <div 
+                  <div
                     key={index}
-                    className="absolute w-1/2 origin-left"
-                    style={{
-                      height: '50%',
-                      top: '50%',
-                      left: '50%',
-                      transform: `rotate(${startAngle}deg)`,
-                    }}
+                    className="absolute inset-0"
                   >
-                    {/* Segment shape */}
+                    {/* Segment with border */}
+                    <svg width="100%" height="100%" viewBox="0 0 100 100" className="absolute inset-0">
+                      <path 
+                        d={path} 
+                        fill={segmentColor}
+                        stroke="rgba(255,255,255,0.3)"
+                        strokeWidth="0.5"
+                      />
+                    </svg>
+                    
+                    {/* Item image - centered in each segment */}
                     <div 
-                      className="absolute"
+                      className="absolute rounded-full bg-white/10 flex items-center justify-center border border-white/20 overflow-hidden"
                       style={{
-                        width: `${wheelSize / 2}px`,
-                        height: `${wheelSize / 2}px`,
-                        clipPath: `polygon(0 0, 100% 0, 100% 100%)`,
-                        backgroundColor: segmentColor,
-                        borderLeft: `1px solid ${borderColor}`,
+                        width: isMobile ? '60px' : '75px',
+                        height: isMobile ? '60px' : '75px',
+                        left: `calc(50% + ${itemX * (wheelSize / 100)}px - ${isMobile ? 30 : 37.5}px)`,
+                        top: `calc(50% + ${itemY * (wheelSize / 100)}px - ${isMobile ? 30 : 37.5}px)`,
                       }}
                     >
-                      {/* Item image */}
-                      <div 
-                        className="absolute"
-                        style={{
-                          width: isMobile ? '50px' : '65px',
-                          height: isMobile ? '50px' : '65px',
-                          top: isMobile ? '20px' : '30px',
-                          right: isMobile ? '15px' : '25px',
-                          transform: `rotate(${90 - startAngle}deg)`,
-                        }}
-                      >
-                        <img 
-                          src={item.link} 
-                          alt={item.title}
-                          className="w-full h-full object-contain rounded-lg"
-                        />
-                      </div>
+                      <img 
+                        src={item.link} 
+                        alt={item.title}
+                        className="w-full h-full object-contain p-1"
+                      />
                     </div>
                   </div>
                 );
@@ -211,7 +211,7 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
               
               {/* Center circle */}
               <div 
-                className="absolute rounded-full bg-gradient-to-br from-purple-700 to-purple-900 border-2 border-white/30 flex items-center justify-center shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]"
+                className="absolute rounded-full bg-gradient-to-br from-purple-700 to-purple-900 border-2 border-white/30 flex items-center justify-center shadow-[inset_0_0_15px_rgba(0,0,0,0.5)] z-10"
                 style={{
                   width: centerSize,
                   height: centerSize,
