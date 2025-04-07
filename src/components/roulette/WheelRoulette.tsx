@@ -25,8 +25,6 @@ interface WheelRouletteProps {
   onSpin?: (result: RouletteItem) => void;
 }
 
-const WHEEL_SEGMENTS = 6; // Number of segments in the wheel
-
 const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
@@ -38,20 +36,18 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
   const wheelRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
-  // Initialize with fresh data on mount
+  // Initialize with provided items
   useEffect(() => {
-    // Make sure we have exactly 6 items, taking first 6 from initialItems if there are more
-    const sixItems = initialItems.slice(0, WHEEL_SEGMENTS);
+    // Make sure we have exactly 6 items for the wheel
+    const wheelItems = initialItems.slice(0, 6);
     
-    // Make sure to have at least one win item
-    const hasWinItem = sixItems.some(item => item.isWin);
-    
-    if (!hasWinItem && sixItems.length > 0) {
-      // If no win item is specified, make the first one a winner
-      sixItems[0] = { ...sixItems[0], isWin: true };
+    // Make sure at least one item is marked as the winner
+    const hasWinItem = wheelItems.some(item => item.isWin);
+    if (!hasWinItem && wheelItems.length > 0) {
+      wheelItems[0] = { ...wheelItems[0], isWin: true };
     }
     
-    setItems(sixItems);
+    setItems(wheelItems);
   }, [initialItems]);
 
   const spinWheel = () => {
@@ -63,23 +59,28 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
     const winItemIndex = items.findIndex(item => item.isWin);
     const winningIndex = winItemIndex !== -1 ? winItemIndex : 0;
     
-    // Calculate angle for the winning segment
-    // Each segment is 360/WHEEL_SEGMENTS degrees, and we want to position it at the top
-    const segmentAngle = 360 / WHEEL_SEGMENTS;
-    const winningAngle = 360 - (winningIndex * segmentAngle); // Reverse direction to match visual expectation
+    // Calculate the winning segment angle
+    const segmentAngle = 360 / items.length;
     
-    // Add multiple full rotations (e.g., 5 * 360 degrees) plus the winning position
-    const spinRotation = 1800 + winningAngle + (Math.random() * 30 - 15); // 5 full rotations + winning position + small random offset
+    // Calculate target rotation to position winning segment at the top
+    // We add multiple full rotations plus the angle needed to position the winning segment at the top
+    // The winning position is at the top (270 degrees) to align with the pointer
+    const targetPosition = 270 - (winningIndex * segmentAngle);
+    const fullRotations = 4; // Spin 4 full rotations before stopping
+    const finalRotation = (fullRotations * 360) + targetPosition;
     
-    // Animate the rotation
-    setRotation(spinRotation);
+    // Small random offset for variety (-10 to +10 degrees)
+    const randomOffset = Math.random() * 20 - 10;
     
-    // Set a timeout for when the animation completes
+    // Set the final rotation value
+    setRotation(finalRotation + randomOffset);
+    
+    // Process the result after the animation completes
     setTimeout(() => {
       setIsSpinning(false);
       
-      // Prepare result data and show modal
-      if (items && items.length > winningIndex) {
+      // Get the winning item and show the result modal
+      if (items.length > 0) {
         const winningItem = items[winningIndex];
         setResult(winningItem);
         setShowResultModal(true);
@@ -88,7 +89,7 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
           onSpin(winningItem);
         }
       }
-    }, 5000); // Animation duration
+    }, 5000); // Match duration to the wheel animation
   };
 
   const handleCloseModal = () => {
@@ -112,46 +113,57 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
     }, 200);
   };
 
-  // Calculate wheel size based on device
-  const wheelSize = isMobile ? 300 : 400;
-  const centerSize = isMobile ? 60 : 80;
+  // Calculate wheel dimensions based on device size
+  const wheelSize = isMobile ? 280 : 380; 
+  const centerSize = isMobile ? 70 : 90;
 
   return (
     <div className="flex flex-col items-center">
       <StarCard className="relative w-full max-w-md mb-6 p-6">
-        <h3 className="text-center text-lg font-medium mb-4">Крутите колесо и выигрывайте приз!</h3>
+        <h3 className="text-center text-lg font-medium mb-6">Крутите колесо и выигрывайте приз!</h3>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center mb-6">
+          {/* Wheel container */}
           <div className="relative" style={{ width: wheelSize, height: wheelSize }}>
-            {/* Wheel pointer (at the top) */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-16 z-10">
-              <div className="w-0 h-0 border-l-[16px] border-r-[16px] border-b-[24px] border-l-transparent border-r-transparent border-b-white" />
+            {/* Wheel pointer (triangle at the top) */}
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+              <div className="w-0 h-0 border-l-[15px] border-r-[15px] border-t-0 border-b-[20px] border-l-transparent border-r-transparent border-b-white drop-shadow-lg" />
             </div>
-
-            {/* Wheel */}
+            
+            {/* Outer glow effect */}
+            <div className="absolute inset-0 rounded-full blur-md bg-gradient-to-t from-purple-500/30 to-blue-500/30"></div>
+            
+            {/* The wheel */}
             <motion.div 
               ref={wheelRef}
-              className="absolute inset-0 rounded-full overflow-hidden border-4 border-white/30 shadow-lg"
-              style={{ 
-                backgroundImage: 'radial-gradient(circle, rgba(82,37,109,1) 0%, rgba(40,18,54,1) 100%)',
-              }}
+              className="absolute inset-0 rounded-full overflow-hidden bg-gradient-to-b from-purple-900 to-blue-900 border-4 border-white/20 shadow-lg"
               animate={{ 
                 rotate: rotation,
               }}
+              initial={{ rotate: 0 }}
               transition={{ 
                 duration: 5,
-                ease: "easeOut",
+                ease: [0.32, 0.72, 0.35, 0.94], // Custom cubic bezier for natural spin deceleration
                 type: "tween",
               }}
             >
+              {/* Wheel segments */}
               {items.map((item, index) => {
-                const segmentAngle = 360 / WHEEL_SEGMENTS;
+                // Calculate segment angle and position
+                const segmentAngle = 360 / items.length;
                 const startAngle = index * segmentAngle;
                 
-                // Create alternating colors for the segments
+                // Alternate segment colors and highlight winning segment
                 const isEven = index % 2 === 0;
-                const segmentColor = isEven ? 'rgba(96, 44, 128, 0.6)' : 'rgba(128, 58, 171, 0.6)';
-                const borderColor = item.isWin ? 'rgba(255, 215, 0, 0.6)' : 'rgba(255, 255, 255, 0.2)';
+                const segmentColor = item.isWin 
+                  ? 'rgba(255, 215, 0, 0.25)' // Gold for winning segment
+                  : isEven 
+                    ? 'rgba(128, 90, 213, 0.4)' // Purple
+                    : 'rgba(99, 102, 241, 0.4)'; // Blue
+                
+                const borderColor = item.isWin 
+                  ? 'rgba(255, 215, 0, 0.6)' // Gold border for winning segment
+                  : 'rgba(255, 255, 255, 0.2)';
                 
                 return (
                   <div 
@@ -164,7 +176,7 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
                       transform: `rotate(${startAngle}deg)`,
                     }}
                   >
-                    {/* Segment */}
+                    {/* Segment shape */}
                     <div 
                       className="absolute"
                       style={{
@@ -172,24 +184,24 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
                         height: `${wheelSize / 2}px`,
                         clipPath: `polygon(0 0, 100% 0, 100% 100%)`,
                         backgroundColor: segmentColor,
-                        border: `1px solid ${borderColor}`,
+                        borderLeft: `1px solid ${borderColor}`,
                       }}
                     >
-                      {/* Item image - using img for static images */}
+                      {/* Item image */}
                       <div 
                         className="absolute"
                         style={{
-                          width: isMobile ? '50px' : '70px',
-                          height: isMobile ? '50px' : '70px',
+                          width: isMobile ? '50px' : '65px',
+                          height: isMobile ? '50px' : '65px',
                           top: isMobile ? '20px' : '30px',
-                          right: isMobile ? '20px' : '30px',
+                          right: isMobile ? '15px' : '25px',
                           transform: `rotate(${90 - startAngle}deg)`,
                         }}
                       >
                         <img 
                           src={item.link} 
                           alt={item.title}
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-contain rounded-lg"
                         />
                       </div>
                     </div>
@@ -199,7 +211,7 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
               
               {/* Center circle */}
               <div 
-                className="absolute rounded-full bg-gradient-to-r from-purple-900 to-purple-700 border-2 border-white/30 flex items-center justify-center"
+                className="absolute rounded-full bg-gradient-to-br from-purple-700 to-purple-900 border-2 border-white/30 flex items-center justify-center shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]"
                 style={{
                   width: centerSize,
                   height: centerSize,
@@ -207,21 +219,24 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
                   left: `calc(50% - ${centerSize/2}px)`,
                 }}
               >
-                <span className="text-white font-bold text-xl">SPIN</span>
+                <div className="text-white font-bold text-center">
+                  <span className="text-xs block opacity-80">НАЖМИ</span>
+                  <span className="text-xl block -mt-1">SPIN</span>
+                </div>
               </div>
             </motion.div>
           </div>
         </div>
 
-        <div className="mt-6">
+        <div className="mt-2">
           <SpinButton isSpinning={isSpinning} onSpin={spinWheel} />
         </div>
       </StarCard>
 
-      {/* Показываем все возможные выигрыши под рулеткой */}
+      {/* Prize grid showing all possible items */}
       <PrizeGrid items={items} onItemClick={handleItemClick} />
 
-      {/* Модальное окно с результатом */}
+      {/* Result modal shown after spin */}
       <RouletteResultModal
         isOpen={showResultModal}
         onClose={handleCloseModal}
@@ -229,7 +244,7 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
         onPlayAgain={handlePlayAgain}
       />
 
-      {/* Модальное окно с деталями предмета */}
+      {/* Item detail modal */}
       {selectedItem && (
         <ItemDetailModal
           isOpen={showItemDetail}
