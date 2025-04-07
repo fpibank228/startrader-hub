@@ -31,11 +31,16 @@ const FixedRouletteDisplay = memo(({ items, slidePosition, isSpinning, selectedI
       className="relative h-40 w-full mx-auto bg-gradient-to-r from-purple-900/50 via-blue-900/50 to-purple-900/50 rounded-xl overflow-hidden"
       style={{ width: '420px' }} // Fixed width for consistency
     >
+      {/* Background pattern */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle,_rgba(255,255,255,0.1)_1px,_transparent_1px)] bg-[length:20px_20px]"></div>
+      </div>
+      
       {/* Center indicator */}
       <div className="absolute left-1/2 top-0 bottom-0 -ml-[2px] w-1 bg-white shadow-[0_0_10px_2px_rgba(255,255,255,0.6)] z-20"></div>
       
       {/* Highlight glow around the center */}
-      <div className="absolute left-1/2 top-0 bottom-0 -ml-6 w-12 bg-white/5 blur-md z-10"></div>
+      <div className="absolute left-1/2 top-0 bottom-0 -ml-6 w-12 bg-white/10 blur-md z-10"></div>
       
       <FixedRouletteStrip 
         items={safeItems}

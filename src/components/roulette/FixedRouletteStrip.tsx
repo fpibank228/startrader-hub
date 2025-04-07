@@ -30,7 +30,7 @@ const FixedRouletteStrip = memo(({ items, slidePosition, isSpinning, selectedInd
   return (
     <motion.div 
       ref={stripRef}
-      className="absolute top-0 bottom-0 flex items-center gap-0 px-0"
+      className="absolute top-0 bottom-0 flex items-center gap-4 px-4" // Added gap-4 for spacing between items
       animate={{ 
         x: slidePosition 
       }}
@@ -51,14 +51,14 @@ const FixedRouletteStrip = memo(({ items, slidePosition, isSpinning, selectedInd
             className={`flex-shrink-0 transition-transform ${
               isSelected ? 'scale-110 z-10' : ''
             }`}
-            style={{ width: '140px', height: '140px' }} // Fixed dimensions as requested
+            style={{ width: '120px', height: '120px' }} // Reduced from 140px to 120px
           >
             <div className={`w-full h-full rounded-lg overflow-hidden border-2 ${
               isSelected ? 'border-white shadow-[0_0_15px_rgba(255,255,255,0.7)]' : 'border-white/30'
-            } bg-white/10 flex items-center justify-center`}>
+            } bg-gradient-to-br from-purple-900/60 to-blue-900/60 flex items-center justify-center`}>
               <LottieItem 
                 animationData={item.link} 
-                className="w-full h-full"
+                className="w-5/6 h-5/6" // Using 5/6 of the container for the animation
                 loop={isSelected}
                 autoplay={isSelected || isSpinning}
               />

@@ -33,31 +33,29 @@ const FixedRouletteWheel = ({ items: initialItems, onSpin }: FixedRouletteWheelP
   const [result, setResult] = useState<RouletteItem | null>(null);
   const [showItemDetail, setShowItemDetail] = useState(false);
   const [selectedItem, setSelectedItem] = useState<RouletteItem | null>(null);
-  const [items, setItems] = useState<RouletteItem[]>(initialItems || []);
+  const [items, setItems] = useState<RouletteItem[]>([]);
   const isMobile = useIsMobile();
 
   // Always use index 4 (5th item) as the winning item
   const winningIndex = 4;
 
-  // Refresh items data for each spin
-  const refreshItems = () => {
-    // This will get fresh data from basicRouletteItems
+  // Initialize with fresh data on mount - shuffle only once
+  useEffect(() => {
     setItems([...basicRouletteItems]);
-  };
+  }, []);
 
   const spinWheel = () => {
     if (isSpinning) return;
-
-    // Refresh items before spinning
-    refreshItems();
     
     setIsSpinning(true);
     setSelectedIndex(null);
 
-    // Fixed item width - exactly 140px as requested
-    const itemWidth = 140;
+    // Fixed item width - using smaller 120px items with 16px gaps (gap-4)
+    const itemWidth = 120;
+    const itemGap = 16;
+    const totalItemSpace = itemWidth + itemGap;
     
-    // Calculate random offset from center (between -70 and +70 pixels)
+    // Calculate random offset from center (between -60 and +60 pixels)
     // This makes the wheel stop slightly before or after the exact center for variability
     const randomOffset = Math.floor(Math.random() * itemWidth) - (itemWidth / 2);
     
@@ -71,7 +69,7 @@ const FixedRouletteWheel = ({ items: initialItems, onSpin }: FixedRouletteWheelP
     // Calculate final position to center on the winning item
     // We use the middle set of items plus the random offset
     const middleSetIndex = 2; // Use the middle (3rd) set of items
-    const targetPosition = -((middleSetIndex * totalItems + winningIndex) * itemWidth + (itemWidth / 2) + randomOffset);
+    const targetPosition = -((middleSetIndex * totalItems + winningIndex) * totalItemSpace + (itemWidth / 2) + randomOffset);
     
     // Start the animation after a short delay
     setTimeout(() => {
@@ -94,11 +92,6 @@ const FixedRouletteWheel = ({ items: initialItems, onSpin }: FixedRouletteWheelP
       }, 4500); // Match duration to the animation in FixedRouletteStrip
     }, 10);
   };
-
-  // Initialize with fresh data on mount
-  useEffect(() => {
-    refreshItems();
-  }, []);
 
   const handleCloseModal = () => {
     setShowResultModal(false);
