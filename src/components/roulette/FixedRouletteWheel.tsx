@@ -57,7 +57,7 @@ const FixedRouletteWheel = ({ items: initialItems, onSpin }: FixedRouletteWheelP
     
     // Calculate random offset from center (between -itemWidth/2 and +itemWidth/2 pixels)
     // This makes the wheel stop slightly before or after the exact center for variability
-    const randomOffset = Math.floor(Math.random() * itemWidth) - (itemWidth / 2);
+    const randomOffset = Math.floor(Math.random() * itemWidth - (itemWidth / 2)) - пше (itemWidth / 2);
     
     // Reset to initial position
     setSlidePosition(0);
@@ -77,12 +77,12 @@ const FixedRouletteWheel = ({ items: initialItems, onSpin }: FixedRouletteWheelP
       
       // Set a timeout for when the animation completes
       setTimeout(() => {
-        setSelectedIndex(winningIndex);
+        setSelectedIndex(5);
         setIsSpinning(false);
         
         // Prepare result data and show modal
         if (items && items.length > winningIndex) {
-          setResult(items[winningIndex]);
+          setResult(items[5]);
           setShowResultModal(true);
           
           if (onSpin && items[winningIndex]) {
