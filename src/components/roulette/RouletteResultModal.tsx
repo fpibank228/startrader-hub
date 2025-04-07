@@ -3,7 +3,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { Confetti } from "lucide-react";
+import { Gift } from "lucide-react"; // Replacing Confetti with Gift which exists in lucide-react
 import LottieItem from './LottieItem';
 
 interface RouletteItem {
@@ -113,7 +113,7 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
                 ) : (
                   // Fallback display if no proper image source
                   <div className="text-center text-white/80">
-                    <Confetti size={48} className="mx-auto mb-2" />
+                    <Gift size={48} className="mx-auto mb-2" /> {/* Changed from Confetti to Gift */}
                     <p>Приз</p>
                   </div>
                 )}
