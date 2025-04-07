@@ -48,7 +48,7 @@ const App = () => {
                             <Route path="/roulette/basic" element={<BasicRoulette/>}/>
                             <Route path="/roulette/fixed" element={<FixedRoulette/>}/>
                             <Route path="/profile" element={<Profile/>}/>
-                            <Route path="/upgrade" element={<GiftUpgrade/>}/>
+                            <Route path="/roulette/upgrade" element={<GiftUpgrade/>}/>
                             <Route path="*" element={<NotFound/>}/>
                         </Routes>
                     </div>

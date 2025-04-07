@@ -80,7 +80,7 @@ export const basicRouletteItems: RouletteItem[] = [
         'title': 'Diamond Ring',
         'price': 1.5,
         'model': 'Premium 5%',
-        'symbol': 'Silver 10%', 
+        'symbol': 'Silver 10%',
         'backdrop': 'Purple 5%',
         'number': getRandomNumber(1, 200000)
     },
@@ -147,6 +147,6 @@ export const rouletteOptions = [
         title: 'Апгрейд',
         description: 'Улучшите свои существующие предметы',
         image: 'https://cdn.pixabay.com/photo/2017/02/13/01/26/the-question-mark-2061539_1280.png',
-        disabled: true
+        path: '/roulette/upgrade'
     }
 ];
