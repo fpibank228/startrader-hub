@@ -78,6 +78,16 @@ export const apiService = {
         }
     },
 
+    async sellGift(gift_id: number) {
+        console.log(gift_id);
+        try {
+            return await mainApi.post('/sell_gift', {"gift_id": gift_id});
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
+
     async sendTransaction(
         {
             walletAddress,
@@ -104,5 +114,24 @@ export const apiService = {
             console.error('Send transaction API Error:', error);
             throw error;
         }
+    },
+
+    async sendTopUpTransaction(
+        {
+            currency,
+            hash,
+        }
+    ) {
+        try {
+            const response = await mainApi.post('/top_up', {
+                currency: currency,
+                hash: hash,
+            },);
+            return response.data;
+        } catch (error) {
+            console.error('Send transaction API Error:', error);
+            throw error;
+        }
     }
+
 };

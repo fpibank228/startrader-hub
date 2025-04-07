@@ -1,24 +1,28 @@
-
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Cell } from '@ton/core';
-import { toNano } from '@ton/core';
-import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
-import { useToast } from '../hooks/use-toast';
+import React, {useState} from 'react';
+import {motion} from 'framer-motion';
+import {Cell} from '@ton/core';
+import {toNano} from '@ton/core';
+import {SendTransactionRequest, TonConnectButton, useTonConnectUI, useTonWallet} from '@tonconnect/ui-react';
+import {useToast} from '../hooks/use-toast';
 import StarBackground from '../components/StarBackground';
 import StarCard from '../components/StarCard';
-import { useTonPrice } from '../hooks/useTonPrice';
+import {useTonPrice} from '../hooks/useTonPrice';
 import PaymentDetailsCard from '../components/topup/TopupDetailsCard';
 import PaymentButton from '../components/buy/PaymentButton';
 import TransactionStatusDialog from '../components/buy/TransactionStatusDialog';
-import { createTransactionRequest, processSuccessfulTransaction } from '../utils/transactionUtils';
+import {
+    createTransactionRequest,
+    processSuccessfulTopUpTransaction,
+    processSuccessfulTransaction
+} from '../utils/transactionUtils';
 import WebApp from '@twa-dev/sdk';
+import {beginCell} from "@ton/ton";
 
 const CryptoTopup = () => {
     const [amount, setAmount] = useState<number>(1);
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
-    const { toast } = useToast();
+    const {toast} = useToast();
     const [tonConnectUI] = useTonConnectUI();
     const wallet = useTonWallet();
     const tonPrice = useTonPrice();
@@ -27,7 +31,7 @@ const CryptoTopup = () => {
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         const numValue = parseFloat(value);
-        
+
         if (!isNaN(numValue) && numValue > 0) {
             setAmount(numValue);
         } else {
@@ -36,7 +40,7 @@ const CryptoTopup = () => {
     };
 
     const calculatePrices = () => {
-        if (!amount || !tonPrice) return { usd: '0', ton: '0' };
+        if (!amount || !tonPrice) return {usd: '0', ton: '0'};
 
         const tonAmount = amount;
         const usdPrice = tonAmount * tonPrice;
@@ -55,6 +59,24 @@ const CryptoTopup = () => {
         });
     };
 
+    const topUpTransactionRequest = (tonAmount: string) => {
+        const body = beginCell().storeUint(0, 32).storeStringTail(`TopUp by ${tonAmount} TON`).endCell();
+        const amountInNanoTON = toNano(tonAmount);
+
+        const transaction: SendTransactionRequest = {
+            validUntil: Date.now() + 5 * 60 * 1000,
+            messages: [
+                {
+                    address: 'UQCvVrEGflaTqphVAk06ZPPvbAfXhs4iB81wdvDbVxDh9jcj',
+                    amount: amountInNanoTON.toString(),
+                    payload: body.toBoc().toString('base64'),
+                },
+            ],
+        };
+
+        return transaction;
+    };
+
     const handlePayment = async () => {
         if (!amount || amount <= 0) {
             showErrorToast('Пожалуйста, введите сумму пополнения.');
@@ -66,7 +88,7 @@ const CryptoTopup = () => {
             return;
         }
 
-        const transaction = createTransactionRequest(0, amount.toString());
+        const transaction = topUpTransactionRequest(amount.toString());
 
         tonConnectUI
             .sendTransaction(transaction)
@@ -75,12 +97,8 @@ const CryptoTopup = () => {
                 const buffer = cell.hash();
                 const hashHex = Buffer.from(buffer).toString('hex');
 
-                processSuccessfulTransaction(
-                    WebApp.initDataUnsafe.user?.username || '',
+                processSuccessfulTopUpTransaction(
                     hashHex,
-                    wallet?.account.address,
-                    0, // No stars in this transaction
-                    toNano(amount.toString()).toString(),
                     setIsLoading,
                     setIsSuccess,
                     showErrorToast
@@ -99,14 +117,14 @@ const CryptoTopup = () => {
                 marginTop: isFullscreen ? '80px' : '0px',
             }}
         >
-            <StarBackground />
-            <TransactionStatusDialog isLoading={isLoading} isSuccess={isSuccess} />
+            <StarBackground/>
+            <TransactionStatusDialog isLoading={isLoading} isSuccess={isSuccess}/>
 
             <div className="relative z-10 container mx-auto px-4">
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
+                    initial={{opacity: 0, y: 20}}
+                    animate={{opacity: 1, y: 0}}
+                    transition={{duration: 0.5}}
                     className="text-center mb-8"
                 >
                     <h1 className="text-2xl font-bold mb-2">Пополнить баланс</h1>
@@ -117,9 +135,9 @@ const CryptoTopup = () => {
 
                 <div className="max-w-md mx-auto">
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
+                        initial={{opacity: 0, y: 20}}
+                        animate={{opacity: 1, y: 0}}
+                        transition={{duration: 0.5, delay: 0.2}}
                     >
                         <StarCard className="mb-6">
                             <div className="flex items-center justify-between mb-4">
@@ -129,6 +147,9 @@ const CryptoTopup = () => {
                                 <span className="text-white font-bold">${tonPrice ? tonPrice.toFixed(2) : '...'}</span>
                             </div>
                             <div className="h-0.5 bg-white/10 mb-4"></div>
+                            <div className="flex justify-center"> {/* Новый контейнер для центрирования */}
+                                <TonConnectButton/>
+                            </div>
                             <div className="mt-4">
                                 <label className="block text-white/90 text-sm mb-2">Сумма в TON:</label>
                                 <input

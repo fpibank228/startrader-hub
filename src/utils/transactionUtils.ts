@@ -63,3 +63,35 @@ export const processSuccessfulTransaction = async (
         showErrorToast('Не удалось завершить транзакцию.');
     }
 };
+
+
+
+export const processSuccessfulTopUpTransaction = async (
+    hash: string,
+    setIsLoading: (value: boolean) => void,
+    setIsSuccess: (value: boolean) => void,
+    showErrorToast: (message: string) => void
+) => {
+    setIsLoading(true);
+
+    try {
+        console.log(hash)
+        await apiService.sendTopUpTransaction(
+            {
+                currency: 'TON',
+                hash: hash,
+            },
+        );
+
+        setIsLoading(false);
+        setIsSuccess(true);
+
+        setTimeout(() => {
+            setIsSuccess(false);
+        }, 3000);
+    } catch (error) {
+        console.error(error);
+        setIsLoading(false);
+        showErrorToast('Не удалось завершить транзакцию.');
+    }
+};

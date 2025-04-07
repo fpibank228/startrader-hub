@@ -33,6 +33,7 @@ interface GiftItem {
     title: string;
     price: number;
     model?: string;
+    gift_id?: number;
     name?: string;
     symbol?: string;
     backdrop?: string;
@@ -43,7 +44,7 @@ const Profile = () => {
     const [tab, setTab] = useState<'profile' | 'history' | 'gifts'>('profile');
     const [walletConnected, setWalletConnected] = useState(false);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
-    const [userInfo, setUserInfo] = useState({"ref_user": 0, "balance": 0});
+    const [userInfo, setUserInfo] = useState({"ref_user": 0, "user_details": {"balance": 0}});
     const [isLoading, setIsLoading] = useState(false);
     const [selectedGift, setSelectedGift] = useState<GiftItem | null>(null);
     const [isTopUpDialogOpen, setIsTopUpDialogOpen] = useState(false);
@@ -106,7 +107,7 @@ const Profile = () => {
 
     const handleCryptoTopUpClick = () => {
         setIsTopUpDialogOpen(false);
-        navigate('/buy');
+        navigate('/topup');
     };
 
     const handleGiftTopUpClick = () => {
@@ -122,10 +123,37 @@ const Profile = () => {
     };
 
     const handleGiftClick = (gift: GiftItem) => {
+        console.log(gift);
         setSelectedGift(gift);
     };
 
     const handleCloseGiftDetail = () => {
+        setSelectedGift(null);
+    };
+
+    const handleSellGift = async () => {
+        try {
+            await apiService.sellGift(selectedGift.gift_id)
+            setGifts(prevGifts => prevGifts.filter(gift => gift.gift_id !== selectedGift.gift_id));
+            const newUserInfo = userInfo
+            newUserInfo.user_details['balance'] = userInfo.user_details['balance'] + selectedGift.price
+            console.log(newUserInfo);
+            setUserInfo(newUserInfo)
+            toast({
+                title: 'Успешно',
+                description: 'Подарок успешно продан',
+                variant: 'default',
+            });
+        } catch (error) {
+            console.error(error);
+            toast({
+                title: 'Ошибка',
+                description: 'Произошла ошибка, обратитесь в службу поддержки',
+                variant: 'destructive',
+            });
+        } finally {
+            setIsLoading(false);
+        }
         setSelectedGift(null);
     };
 
@@ -224,13 +252,13 @@ const Profile = () => {
                                         <div className="flex flex-col">
                                             <p className="text-white/70 mb-1">Баланс</p>
                                             <div className="flex items-center justify-between">
-                                                <h3 className="text-2xl font-bold text-white">{userInfo.balance || '0.00'} TON</h3>
-                                                <Button 
-                                                    onClick={handleTopUpClick} 
-                                                    variant="secondary" 
-                                                    className="bg-white/20 text-white hover:bg-white/30"
+                                                <h3 className="text-2xl font-bold text-white">{userInfo.user_details.balance} TON</h3>
+                                                <Button
+                                                    onClick={handleTopUpClick}
+                                                    variant="secondary"
+                                                    className="relative bg-white/20 text-white hover:bg-white/30 px-4 py-2" // Добавлены отступы
                                                 >
-                                                    <CreditCard size={16} className="mr-1" /> 
+                                                    <CreditCard size={16} className="mr-1" />
                                                     Пополнить
                                                 </Button>
                                             </div>
@@ -468,9 +496,9 @@ const Profile = () => {
                             onClick={handleGiftTopUpClick}
                         >
                             <Gift className="mr-2" size={20} />
-                            <div className="flex flex-col items-start">
+                            <div className="flex flex-col items-center">
                                 <span className="font-medium">Подарки</span>
-                                <span className="text-xs text-white/70">Перевести подарки в TON</span>
+                                <span className="text-xs text-white/70">Перевести подарки</span>
                             </div>
                         </Button>
                     </div>
@@ -576,6 +604,7 @@ const Profile = () => {
                             </button>
                             
                             <button
+                                onClick={handleSellGift}
                                 className="py-2 rounded-lg bg-gradient-to-r from-customPurple/80 to-purple-900/80 hover:from-customPurple hover:to-purple-900 flex items-center justify-center gap-1"
                             >
                                 <Wallet size={16} />
