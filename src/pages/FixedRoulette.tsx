@@ -39,7 +39,7 @@ const FixedRoulette = () => {
             transition={{ duration: 0.5 }}
             className="text-2xl font-bold"
           >
-            Улучшенная рулетка
+            NFT рулетка
           </motion.h1>
         </div>
 

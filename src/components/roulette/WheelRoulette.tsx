@@ -40,7 +40,7 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
 
   // Initialize with fresh data on mount
   useEffect(() => {
-    // Make sure we have exactly 6 items, taking first 6 from initialItems
+    // Make sure we have exactly 6 items, taking first 6 from initialItems if there are more
     const sixItems = initialItems.slice(0, WHEEL_SEGMENTS);
     
     // Make sure to have at least one win item
@@ -175,7 +175,7 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
                         border: `1px solid ${borderColor}`,
                       }}
                     >
-                      {/* Item icon */}
+                      {/* Item image - using img for static images */}
                       <div 
                         className="absolute"
                         style={{

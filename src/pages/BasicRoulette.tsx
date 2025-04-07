@@ -7,7 +7,7 @@ import StarBackground from '../components/StarBackground';
 import WheelRoulette from '../components/roulette/WheelRoulette';
 import { useToast } from '../hooks/use-toast';
 import WebApp from "@twa-dev/sdk";
-import { basicRouletteItems } from '../data/rouletteData';
+import { staticGiftItems } from '../data/rouletteData';
 
 const BasicRoulette = () => {
   const { toast } = useToast();
@@ -50,7 +50,7 @@ const BasicRoulette = () => {
           className="max-w-md mx-auto"
         >
           <WheelRoulette 
-            items={basicRouletteItems}
+            items={staticGiftItems}
           />
         </motion.div>
       </div>

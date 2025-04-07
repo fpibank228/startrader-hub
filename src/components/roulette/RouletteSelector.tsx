@@ -27,11 +27,16 @@ const RouletteSelector = ({ options, onSelect }: RouletteSelectorProps) => {
   const handleSelect = (option: RouletteOption) => {
     if (option.disabled) return;
 
-    if (option.id === 'basic') {
+    if (option.path) {
+      navigate(option.path);
+    } else if (option.id === 'basic') {
       navigate('/roulette/basic');
     } else if (option.id === 'nft') {
-      // Redirect directly to fixed roulette for NFT option
       navigate('/roulette/fixed');
+    }
+    
+    if (onSelect) {
+      onSelect(option.id);
     }
   };
 
