@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import LottieItem from '../roulette/LottieItem';
@@ -201,6 +200,17 @@ export const WheelRoulette = ({ items, multiplier, forceWin, onSpinComplete }: W
             // Determine if this segment should show the reward item or be empty
             const showRewardItem = item.isWin || item.title === items[0].title;
             
+            // Determine the proper animation source based on item properties
+            let animationSource = '';
+            
+            if (item.name && item.name.length > 0) {
+              // If we have a name, construct the Fragment URL
+              animationSource = `https://nft.fragment.com/gift/${item.name.toLowerCase()}.lottie.json`;
+            } else if (item.link && isLottieAnimation(item.link)) {
+              // Otherwise use the provided link if it's a Lottie animation
+              animationSource = item.link;
+            }
+            
             return (
               <div
                 key={index}
@@ -227,18 +237,16 @@ export const WheelRoulette = ({ items, multiplier, forceWin, onSpinComplete }: W
                       top: `calc(50% + ${itemY * (wheelSize / 100)}px - 30px)`,
                     }}
                   >
-                    {/* Conditionally render Lottie or Image based on file type */}
-                    {item.link && isLottieAnimation(item.link) ? (
+                    {/* Using LottieItem for both cases */}
+                    {animationSource ? (
                       <LottieItem 
-                        animationData={item.link} 
+                        animationData={animationSource} 
                         className="w-full h-full"
-                      />
-                    ) : item.name && item.name.length > 0 ? (
-                      <LottieItem 
-                        animationData={`https://nft.fragment.com/gift/${item.name.toLowerCase()}.lottie.json`} 
-                        className="w-full h-full"
+                        loop={item.isWin}
+                        autoplay={true}
                       />
                     ) : (
+                      // Fallback to image if no animation source is available
                       <img 
                         src={item.link} 
                         alt={item.title}

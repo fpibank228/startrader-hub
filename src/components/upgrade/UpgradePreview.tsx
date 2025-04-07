@@ -32,6 +32,11 @@ interface UpgradePreviewProps {
     onComplete: (success: boolean, resultGift?: GiftItem) => void;
 }
 
+// Helper function to check if a URL is for a Lottie animation
+const isLottieAnimation = (url: string): boolean => {
+  return url?.toLowerCase().endsWith('.json');
+};
+
 const UpgradePreview = ({
                             isOpen,
                             onClose,
@@ -85,6 +90,18 @@ const UpgradePreview = ({
         ...selectedGifts.slice(0, multiplier - 1).map(gift => ({...gift, isWin: false}))
     ];
     
+    // Determine animation source for the potential reward
+    const getAnimationSource = (item: GiftItem) => {
+        if (item.name && item.name.length > 0) {
+            return `https://nft.fragment.com/gift/${item.name.toLowerCase()}.lottie.json`;
+        } else if (item.link && isLottieAnimation(item.link)) {
+            return item.link;
+        }
+        return null;
+    };
+    
+    const rewardAnimationSource = getAnimationSource(potentialReward);
+    
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
             <DialogContent
@@ -133,10 +150,12 @@ const UpgradePreview = ({
 
                                     <div
                                         className="w-32 h-32 mx-auto bg-white/10 rounded-lg p-2 border border-white/20">
-                                        {potentialReward.name ? (
+                                        {rewardAnimationSource ? (
                                             <LottieItem
-                                                animationData={`https://nft.fragment.com/gift/${potentialReward.name.toLowerCase()}.lottie.json`}
+                                                animationData={rewardAnimationSource}
                                                 className="w-full h-full"
+                                                loop={true}
+                                                autoplay={true}
                                             />
                                         ) : (
                                             <img 
@@ -202,10 +221,12 @@ const UpgradePreview = ({
 
                                     <div
                                         className="w-40 h-40 mx-auto bg-white/10 rounded-lg p-2 border border-white/20 mb-4">
-                                        {potentialReward.name ? (
+                                        {rewardAnimationSource ? (
                                             <LottieItem
-                                                animationData={`https://nft.fragment.com/gift/${potentialReward.name.toLowerCase()}.lottie.json`}
+                                                animationData={rewardAnimationSource}
                                                 className="w-full h-full"
+                                                loop={true}
+                                                autoplay={true}
                                             />
                                         ) : (
                                             <img 
