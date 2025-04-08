@@ -130,8 +130,8 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
           {/* Wheel container */}
           <div className="relative" style={{ width: wheelSize, height: wheelSize }}>
             {/* Wheel pointer (triangle at the top) */}
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
-              <div className="w-0 h-0 border-l-[15px] border-r-[15px] border-t-0 border-b-[20px] border-l-transparent border-r-transparent border-b-white drop-shadow-lg" />
+            <div className="absolute top-1 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+              <div className="w-0 h-0 border-l-[15px] border-r-[15px] border-t-0 border-b-[20px] border-l-transparent border-r-transparent border-b-white drop-shadow-lg rotate-180" />
             </div>
             
             {/* The wheel */}
