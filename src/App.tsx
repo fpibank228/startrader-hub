@@ -46,7 +46,7 @@ const App = () => {
                             <Route path="/topup" element={<CryptoTopup/>}/>
                             <Route path="/roulette" element={<Roulette/>}/>
                             <Route path="/roulette/basic" element={<BasicRoulette/>}/>
-                            <Route path="/roulette/fixed" element={<FixedRoulette/>}/>
+                            <Route path="/roulette/nft" element={<FixedRoulette/>}/>
                             <Route path="/profile" element={<Profile/>}/>
                             <Route path="/roulette/upgrade" element={<GiftUpgrade/>}/>
                             <Route path="*" element={<NotFound/>}/>

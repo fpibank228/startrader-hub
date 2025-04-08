@@ -32,7 +32,7 @@ const RouletteSelector = ({ options, onSelect }: RouletteSelectorProps) => {
     } else if (option.id === 'basic') {
       navigate('/roulette/basic');
     } else if (option.id === 'nft') {
-      navigate('/roulette/fixed');
+      navigate('/roulette/nft');
     }
     
     if (onSelect) {

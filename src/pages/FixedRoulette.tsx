@@ -7,7 +7,6 @@ import StarBackground from '../components/StarBackground';
 import FixedRouletteWheel from '../components/roulette/FixedRouletteWheel';
 import { useToast } from '../hooks/use-toast';
 import WebApp from "@twa-dev/sdk";
-import { basicRouletteItems } from '../data/rouletteData';
 
 const FixedRoulette = () => {
   const { toast } = useToast();
@@ -49,9 +48,7 @@ const FixedRoulette = () => {
           transition={{ duration: 0.5 }}
           className="max-w-md mx-auto"
         >
-          <FixedRouletteWheel 
-            items={basicRouletteItems}
-          />
+          <FixedRouletteWheel/>
         </motion.div>
       </div>
     </div>

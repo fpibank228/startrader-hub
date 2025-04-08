@@ -38,11 +38,8 @@ const isLottieAnimation = (url: string): boolean => {
 const PrizeGrid = memo(({ items, onItemClick }: PrizeGridProps) => {
   // Make sure items is never undefined
   const safeItems = items || [];
-  
-  // Перемешиваем элементы с помощью useMemo, чтобы порядок не менялся при каждом рендере
   const shuffledItems = useMemo(() => shuffleArray(safeItems), [safeItems]);
-  
-  return (
+    return (
     <div className="w-full max-w-md mt-4">
       <h3 className="text-center text-lg font-medium mb-4">Возможные выигрыши</h3>
       <div className="grid grid-cols-3 gap-4">

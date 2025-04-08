@@ -7,7 +7,6 @@ import PrizeGrid from './PrizeGrid';
 import { useIsMobile } from '../../hooks/use-mobile';
 import RouletteResultModal from './RouletteResultModal';
 import ItemDetailModal from './ItemDetailModal';
-import { basicRouletteItems } from '../../data/rouletteData';
 
 interface RouletteItem {
   chance: string;
@@ -18,14 +17,17 @@ interface RouletteItem {
   symbol?: string;
   backdrop?: string;
   number?: number;
+  gift_id?: string;
 }
 
 interface FixedRouletteWheelProps {
-  items: RouletteItem[];
   onSpin?: (result: RouletteItem) => void;
 }
+import {apiService} from "@/utils/api.ts";
+import NftResultModal from "@/components/roulette/NftResultModal.tsx";
+import {useToast} from '../../hooks/use-toast';
 
-const FixedRouletteWheel = ({ items: initialItems, onSpin }: FixedRouletteWheelProps) => {
+const FixedRouletteWheel = ({ onSpin }: FixedRouletteWheelProps) => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [slidePosition, setSlidePosition] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -35,16 +37,39 @@ const FixedRouletteWheel = ({ items: initialItems, onSpin }: FixedRouletteWheelP
   const [selectedItem, setSelectedItem] = useState<RouletteItem | null>(null);
   const [items, setItems] = useState<RouletteItem[]>([]);
   const isMobile = useIsMobile();
+  const {toast} = useToast();
 
   // Always use index 4 (5th item) as the winning item
   const winningIndex = 4;
 
   // Initialize with fresh data on mount - shuffle only once
   useEffect(() => {
-    setItems([...basicRouletteItems]);
+    const fetchData = async () => {
+      try {
+        const itms = await apiService.createNftSpinInvoice();
+        setItems([...itms.data]); // Объединяем базовые и полученные элементы
+      } catch (error) {
+        console.error("Failed to fetch items:", error);
+        setItems([]); // Используем только базовые в случае ошибки
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const spinWheel = () => {
+  const spinWheel = async () => {
+    try {
+      const itms = await apiService.createNftSpin();
+    } catch (e){
+
+      toast({
+        title: 'Ошибка',
+        description: 'Недостаточно средств, пополните ваш баланс',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     if (isSpinning) return;
     
     setIsSpinning(true);
@@ -104,6 +129,7 @@ const FixedRouletteWheel = ({ items: initialItems, onSpin }: FixedRouletteWheelP
   };
 
   const handlePlayAgain = () => {
+    apiService.sellGift(result.gift_id)
     setShowResultModal(false);
     setResult(null);
 
@@ -145,7 +171,7 @@ const FixedRouletteWheel = ({ items: initialItems, onSpin }: FixedRouletteWheelP
       <PrizeGrid items={items} onItemClick={handleItemClick} />
 
       {/* Модальное окно с результатом */}
-      <RouletteResultModal
+      <NftResultModal
         isOpen={showResultModal}
         onClose={handleCloseModal}
         result={result}

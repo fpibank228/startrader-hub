@@ -78,7 +78,7 @@ export const apiService = {
         }
     },
 
-    async sellGift(gift_id: number) {
+    async sellGift(gift_id: string) {
         console.log(gift_id);
         try {
             return await mainApi.post('/sell_gift', {"gift_id": gift_id});
@@ -132,6 +132,23 @@ export const apiService = {
             console.error('Send transaction API Error:', error);
             throw error;
         }
-    }
+    },
 
+    async createNftSpinInvoice() {
+        try {
+            return await mainApi.post('/create_nft_spin_invoice');
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
+
+    async createNftSpin() {
+        try {
+            return await mainApi.post('/create_nft_spin');
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
 };
