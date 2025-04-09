@@ -10,7 +10,7 @@ import ItemDetailModal from './ItemDetailModal';
 import { useToast } from '../../hooks/use-toast';
 import {apiService} from "@/utils/api.ts";
 import NftResultModal from "@/components/roulette/NftResultModal.tsx";
-import { Coins } from 'lucide-react';
+import TONBalanceDisplay from './TONBalanceDisplay';
 
 interface RouletteItem {
   chance: string;
@@ -193,16 +193,11 @@ const FixedRouletteWheel = ({ onSpin }: FixedRouletteWheelProps) => {
 
   return (
     <div className="flex flex-col items-center">
+      {/* Display TON balance at the top */}
+      <TONBalanceDisplay balance={userData ? userData.balance : 0} />
+      
       <StarCard className="relative w-full max-w-md mb-6 p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-medium">Вращайте рулетку и выигрывайте приз!</h3>
-          
-          {/* Improved TON balance display */}
-          <div className="flex items-center gap-2 bg-gradient-to-r from-blue-900/40 to-purple-900/40 px-4 py-2 rounded-full border border-white/10 shadow-lg">
-            <Coins size={18} className="text-yellow-400" />
-            <span className="text-yellow-400 font-semibold">{userData ? userData.balance.toFixed(1) : '0'} TON</span>
-          </div>
-        </div>
+        <h3 className="text-lg font-medium mb-4">Вращайте рулетку и выигрывайте приз!</h3>
 
         <FixedRouletteDisplay
           items={items}
