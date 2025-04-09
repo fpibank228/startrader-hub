@@ -33,7 +33,7 @@ interface GiftItem {
     title: string;
     price: number;
     model?: string;
-    gift_id?: number;
+    gift_id?: string;
     name?: string;
     symbol?: string;
     backdrop?: string;

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import StarCard from '../StarCard';
 import FixedRouletteDisplay from './FixedRouletteDisplay';
@@ -7,6 +6,9 @@ import PrizeGrid from './PrizeGrid';
 import { useIsMobile } from '../../hooks/use-mobile';
 import RouletteResultModal from './RouletteResultModal';
 import ItemDetailModal from './ItemDetailModal';
+import { useToast } from '../../hooks/use-toast';
+import {apiService} from "@/utils/api.ts";
+import NftResultModal from "@/components/roulette/NftResultModal.tsx";
 
 interface RouletteItem {
   chance: string;
@@ -23,9 +25,6 @@ interface RouletteItem {
 interface FixedRouletteWheelProps {
   onSpin?: (result: RouletteItem) => void;
 }
-import {apiService} from "@/utils/api.ts";
-import NftResultModal from "@/components/roulette/NftResultModal.tsx";
-import {useToast} from '../../hooks/use-toast';
 
 const FixedRouletteWheel = ({ onSpin }: FixedRouletteWheelProps) => {
   const [isSpinning, setIsSpinning] = useState(false);
@@ -37,88 +36,90 @@ const FixedRouletteWheel = ({ onSpin }: FixedRouletteWheelProps) => {
   const [selectedItem, setSelectedItem] = useState<RouletteItem | null>(null);
   const [items, setItems] = useState<RouletteItem[]>([]);
   const isMobile = useIsMobile();
-  const {toast} = useToast();
+  const { toast } = useToast();
 
   // Always use index 4 (5th item) as the winning item
   const winningIndex = 4;
 
+  const fetchData = async () => {
+    try {
+      const itms = await apiService.createNftSpinInvoice();
+      setItems([...itms.data['gifts']]); // Объединяем базовые и полученные элементы
+    } catch (error) {
+      console.error("Failed to fetch items:", error);
+      setItems([]); // Используем только базовые в случае ошибки
+    }
+  };
   // Initialize with fresh data on mount - shuffle only once
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const itms = await apiService.createNftSpinInvoice();
-        setItems([...itms.data]); // Объединяем базовые и полученные элементы
-      } catch (error) {
-        console.error("Failed to fetch items:", error);
-        setItems([]); // Используем только базовые в случае ошибки
-      }
-    };
-
     fetchData();
   }, []);
 
   const spinWheel = async () => {
+    if (isSpinning) return;
+    
     try {
-      const itms = await apiService.createNftSpin();
-    } catch (e){
+      const response = await apiService.createNftSpin();
+      if (!response || !response.data) {
+        throw new Error('Invalid response from server');
+      }
+      
+      setIsSpinning(true);
+      setSelectedIndex(null);
 
+      // Dynamic item dimensions based on mobile or desktop view
+      const itemWidth = isMobile ? 80 : 120; // Smaller on mobile
+      const itemGap = isMobile ? 12 : 16;    // Smaller gap on mobile
+      const totalItemSpace = itemWidth + itemGap;
+      
+      // Calculate random offset from center (between -itemWidth/2 and +itemWidth/2 pixels)
+      // This makes the wheel stop slightly before or after the exact center for variability
+      const randomOffset = Math.floor(Math.random() * itemWidth - (itemWidth / 2)) - (itemWidth / 2);
+      
+      // Reset to initial position
+      setSlidePosition(0);
+      
+      // Calculate the number of complete rotations (4 as requested) plus the target position
+      const totalItems = items.length;
+      const completeRotations = 4; // 4 complete rotations before stopping
+      
+      // Calculate final position to center on the winning item
+      // We use the middle set of items plus the random offset
+      const middleSetIndex = 2; // Use the middle (3rd) set of items
+      const targetPosition = -((middleSetIndex * totalItems + winningIndex) * totalItemSpace + (itemWidth / 2) + randomOffset);
+      
+      // Start the animation after a short delay
+      setTimeout(() => {
+        setSlidePosition(targetPosition);
+        
+        // Set a timeout for when the animation completes
+        setTimeout(() => {
+          setSelectedIndex(5);
+          setIsSpinning(false);
+          
+          // Prepare result data and show modal
+          if (items && items.length > winningIndex) {
+            setResult(items[5]);
+            setShowResultModal(true);
+            
+            if (onSpin && items[winningIndex]) {
+              onSpin(items[winningIndex]);
+            }
+          }
+        }, 4500); // Match duration to the animation in FixedRouletteStrip
+      }, 10);
+    } catch (error) {
+      console.error('Spin error:', error);
       toast({
         title: 'Ошибка',
         description: 'Недостаточно средств, пополните ваш баланс',
         variant: 'destructive',
       });
-      return;
     }
-
-    if (isSpinning) return;
-    
-    setIsSpinning(true);
-    setSelectedIndex(null);
-
-    // Dynamic item dimensions based on mobile or desktop view
-    const itemWidth = isMobile ? 80 : 120; // Smaller on mobile
-    const itemGap = isMobile ? 12 : 16;    // Smaller gap on mobile
-    const totalItemSpace = itemWidth + itemGap;
-    
-    // Calculate random offset from center (between -itemWidth/2 and +itemWidth/2 pixels)
-    // This makes the wheel stop slightly before or after the exact center for variability
-    const randomOffset = Math.floor(Math.random() * itemWidth - (itemWidth / 2)) - (itemWidth / 2);
-    
-    // Reset to initial position
-    setSlidePosition(0);
-    
-    // Calculate the number of complete rotations (4 as requested) plus the target position
-    const totalItems = items.length;
-    const completeRotations = 4; // 4 complete rotations before stopping
-    
-    // Calculate final position to center on the winning item
-    // We use the middle set of items plus the random offset
-    const middleSetIndex = 2; // Use the middle (3rd) set of items
-    const targetPosition = -((middleSetIndex * totalItems + winningIndex) * totalItemSpace + (itemWidth / 2) + randomOffset);
-    
-    // Start the animation after a short delay
-    setTimeout(() => {
-      setSlidePosition(targetPosition);
-      
-      // Set a timeout for when the animation completes
-      setTimeout(() => {
-        setSelectedIndex(5);
-        setIsSpinning(false);
-        
-        // Prepare result data and show modal
-        if (items && items.length > winningIndex) {
-          setResult(items[5]);
-          setShowResultModal(true);
-          
-          if (onSpin && items[winningIndex]) {
-            onSpin(items[winningIndex]);
-          }
-        }
-      }, 4500); // Match duration to the animation in FixedRouletteStrip
-    }, 10);
   };
 
   const handleCloseModal = () => {
+    fetchData();
     setShowResultModal(false);
 
     // Reset wheel position after modal is closed
@@ -129,7 +130,13 @@ const FixedRouletteWheel = ({ onSpin }: FixedRouletteWheelProps) => {
   };
 
   const handlePlayAgain = () => {
+    fetchData();
     apiService.sellGift(result.gift_id)
+    toast({
+      title: 'Успешно',
+      description: 'Подарок успешно продан',
+      variant: 'default',
+    });
     setShowResultModal(false);
     setResult(null);
 

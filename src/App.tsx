@@ -1,8 +1,7 @@
-
 import React, { useEffect, useState } from 'react';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Toaster } from 'sonner'
+import { Toaster } from '@/components/ui/toaster';
 import Navigation from './components/Navigation';
 import Index from './pages/Index';
 import Buy from './pages/Buy';

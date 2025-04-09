@@ -1,5 +1,5 @@
 
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import StarCard from '../StarCard';
 import LottieItem from './LottieItem';
 
@@ -19,51 +19,28 @@ interface PrizeGridProps {
   onItemClick?: (item: RouletteItem) => void;
 }
 
-// Функция для перемешивания массива
-const shuffleArray = <T,>(array: T[]): T[] => {
-  const newArray = [...array];
-  for (let i = newArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-  }
-  return newArray;
-};
-
-// Check if a URL is a Lottie animation (ends with .json)
-const isLottieAnimation = (url: string): boolean => {
-  return url.toLowerCase().endsWith('.json');
-};
-
 // Мемоизируем компонент чтобы предотвратить лишние ререндеры
 const PrizeGrid = memo(({ items, onItemClick }: PrizeGridProps) => {
   // Make sure items is never undefined
   const safeItems = items || [];
-  const shuffledItems = useMemo(() => shuffleArray(safeItems), [safeItems]);
-    return (
+  
+  return (
     <div className="w-full max-w-md mt-4">
       <h3 className="text-center text-lg font-medium mb-4">Возможные выигрыши</h3>
       <div className="grid grid-cols-3 gap-4">
-        {shuffledItems.map((item, index) => (
+        {safeItems.map((item, index) => (
           <StarCard 
             key={index} 
             className="p-3 flex flex-col items-center cursor-pointer hover:bg-white/10 transition-colors"
             onClick={() => onItemClick && onItemClick(item)}
           >
             <div className="w-20 h-20 rounded-lg overflow-hidden border border-white/30 shadow-[0_0_5px_rgba(255,255,255,0.2)]">
-              {isLottieAnimation(item.link) ? (
-                <LottieItem
-                  animationData={item.link}
-                  className="w-full h-full"
-                  loop={false}
-                  autoplay={false}
-                />
-              ) : (
-                <img 
-                  src={item.link} 
-                  alt={item.title}
-                  className="w-full h-full object-contain"
-                />
-              )}
+              <LottieItem 
+                animationData={item.link} 
+                className="w-full h-full"
+                loop={false}
+                autoplay={false}
+              />
             </div>
             <div className="text-sm mt-2 text-center font-medium">
               {item.title}
