@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import StarCard from '../StarCard';
 import FixedRouletteDisplay from './FixedRouletteDisplay';
@@ -9,6 +10,7 @@ import ItemDetailModal from './ItemDetailModal';
 import { useToast } from '../../hooks/use-toast';
 import {apiService} from "@/utils/api.ts";
 import NftResultModal from "@/components/roulette/NftResultModal.tsx";
+import { Coins } from 'lucide-react';
 
 interface RouletteItem {
   chance: string;
@@ -20,6 +22,14 @@ interface RouletteItem {
   backdrop?: string;
   number?: number;
   gift_id?: string;
+}
+
+interface UserData {
+  user_id: string;
+  username: string;
+  full_name: string;
+  ref_id: string;
+  balance: number;
 }
 
 interface FixedRouletteWheelProps {
@@ -35,6 +45,7 @@ const FixedRouletteWheel = ({ onSpin }: FixedRouletteWheelProps) => {
   const [showItemDetail, setShowItemDetail] = useState(false);
   const [selectedItem, setSelectedItem] = useState<RouletteItem | null>(null);
   const [items, setItems] = useState<RouletteItem[]>([]);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const isMobile = useIsMobile();
   const { toast } = useToast();
 
@@ -45,6 +56,11 @@ const FixedRouletteWheel = ({ onSpin }: FixedRouletteWheelProps) => {
     try {
       const itms = await apiService.createNftSpinInvoice();
       setItems([...itms.data['gifts']]); // Объединяем базовые и полученные элементы
+      
+      // Set user data including balance
+      if (itms.data['user_data']) {
+        setUserData(itms.data['user_data']);
+      }
     } catch (error) {
       console.error("Failed to fetch items:", error);
       setItems([]); // Используем только базовые в случае ошибки
@@ -58,10 +74,28 @@ const FixedRouletteWheel = ({ onSpin }: FixedRouletteWheelProps) => {
   const spinWheel = async () => {
     if (isSpinning) return;
     
+    // Check if user has enough balance
+    if (userData && userData.balance < 2) {
+      toast({
+        title: 'Недостаточно средств',
+        description: 'На вашем балансе недостаточно средств для вращения',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
     try {
       const response = await apiService.createNftSpin();
       if (!response || !response.data) {
         throw new Error('Invalid response from server');
+      }
+      
+      // Update balance locally (deduct 2 TON)
+      if (userData) {
+        setUserData({
+          ...userData,
+          balance: userData.balance - 2
+        });
       }
       
       setIsSpinning(true);
@@ -160,7 +194,13 @@ const FixedRouletteWheel = ({ onSpin }: FixedRouletteWheelProps) => {
   return (
     <div className="flex flex-col items-center">
       <StarCard className="relative w-full max-w-md mb-6 p-6">
-        <h3 className="text-center text-lg font-medium mb-4">Вращайте рулетку и выигрывайте приз!</h3>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-medium">Вращайте рулетку и выигрывайте приз!</h3>
+          <div className="flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full">
+            <Coins size={16} className="text-yellow-400" />
+            <span className="text-yellow-400 font-medium">{userData ? userData.balance.toFixed(1) : '0'} TON</span>
+          </div>
+        </div>
 
         <FixedRouletteDisplay
           items={items}
