@@ -163,9 +163,7 @@ const FixedRouletteWheel = ({ onSpin }: FixedRouletteWheelProps) => {
     }, 100);
   };
 
-  const handlePlayAgain = () => {
-    fetchData();
-    apiService.sellGift(result.gift_id)
+  const handlePlayAgain = async () => {
     toast({
       title: 'Успешно',
       description: 'Подарок успешно продан',
@@ -177,6 +175,8 @@ const FixedRouletteWheel = ({ onSpin }: FixedRouletteWheelProps) => {
     // Reset wheel position for next spin
     setSlidePosition(0);
     setSelectedIndex(null);
+    await apiService.sellGift(result.gift_id)
+    fetchData();
   };
 
   const handleItemClick = (item: RouletteItem) => {

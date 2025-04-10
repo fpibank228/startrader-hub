@@ -22,14 +22,13 @@ const TONBalanceDisplay = ({ balance }: TONBalanceDisplayProps) => {
           <div>
             <p className="text-white/70 text-xs">Ваш баланс</p>
             <p className="text-lg font-semibold">
-              {balance.toFixed(1)} <span className="text-yellow-400">TON</span>
+              {balance.toFixed(1)} <span className="text-white">TON</span>
             </p>
           </div>
         </div>
         
         <div className="flex items-center gap-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 px-3 py-1.5 rounded-lg border border-white/10">
-          <Coins size={16} className="text-yellow-400" />
-          <span className="text-yellow-300 text-sm font-medium">1 спин = 2 TON</span>
+          <span className="text-white text-sm font-medium">1 спин = 2 TON</span>
         </div>
       </div>
     </motion.div>
