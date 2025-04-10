@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
@@ -21,6 +20,7 @@ interface RouletteItem {
   backdrop?: string;
   number?: number;
   gift_id?: string;
+  isWin?: boolean;
 }
 
 interface UserData {
@@ -39,24 +39,62 @@ const BasicRoulette = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [items, setItems] = useState<RouletteItem[]>([]);
 
+  const shuffleItems = () => {
+    const winItem = staticGiftItems.find(item => item.isWin);
+    if (!winItem) return staticGiftItems;
+    
+    const otherItems = staticGiftItems.filter(item => !item.isWin);
+    
+    for (let i = otherItems.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [otherItems[i], otherItems[j]] = [otherItems[j], otherItems[i]];
+    }
+    
+    while (otherItems.length < 4) {
+      otherItems.push({
+        chance: 'no',
+        link: 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5168103777563050263/1x/000.png',
+        title: 'Placeholder',
+        price: 0.25,
+      });
+    }
+    
+    const winIndex = 4;
+    const result = [...otherItems];
+    if (result.length <= winIndex) {
+      result.push(winItem);
+    } else {
+      result.splice(winIndex, 0, winItem);
+      if (result.length > 6) {
+        result.splice(6);
+      }
+    }
+    
+    return result;
+  };
+
   const fetchData = async () => {
     try {
       const itms = await apiService.createNftSpinInvoice();
-      setItems([...itms.data['gifts']]); // Объединяем базовые и полученные элементы
-
-      // Set user data including balance
+      
       if (itms.data['user_data']) {
         setUserData(itms.data['user_data']);
       }
+      
+      setItems(shuffleItems());
     } catch (error) {
       console.error("Failed to fetch items:", error);
-      setItems([]); // Используем только базовые в случае ошибки
+      setItems(shuffleItems());
     }
   };
-  // Initialize with fresh data on mount - shuffle only once
+  
   useEffect(() => {
     fetchData();
   }, []);
+
+  const refreshItems = () => {
+    setItems(shuffleItems());
+  };
 
   const handleBack = () => {
     navigate('/roulette');
@@ -101,8 +139,9 @@ const BasicRoulette = () => {
           <TONBalanceDisplay balance={userData ? userData.balance : 0} />
 
           <RouletteWheel 
-            items={staticGiftItems}
+            items={items}
             onSpin={handleSpin}
+            onPlayAgain={refreshItems}
           />
         </motion.div>
       </div>

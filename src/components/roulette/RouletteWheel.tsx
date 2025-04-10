@@ -23,9 +23,10 @@ interface RouletteItem {
 interface RouletteWheelProps {
   items: RouletteItem[];
   onSpin?: (result: RouletteItem) => void;
+  onPlayAgain?: () => void; // New prop for reshuffling items
 }
 
-const RouletteWheel = ({ items: initialItems, onSpin }: RouletteWheelProps) => {
+const RouletteWheel = ({ items: initialItems, onSpin, onPlayAgain }: RouletteWheelProps) => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [slidePosition, setSlidePosition] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -36,8 +37,8 @@ const RouletteWheel = ({ items: initialItems, onSpin }: RouletteWheelProps) => {
   const [items, setItems] = useState<RouletteItem[]>(initialItems || []);
   const isMobile = useIsMobile();
 
-  // Always use the 6th item (index 5) as the winning item for consistency
-  const winningIndex = 5;
+  // Always use the 5th item (index 4) as the winning item for consistency
+  const winningIndex = 4;
 
   // Update items when initialItems change
   useEffect(() => {
@@ -56,7 +57,7 @@ const RouletteWheel = ({ items: initialItems, onSpin }: RouletteWheelProps) => {
     // Start with an initial position of 0
     setSlidePosition(0);
 
-    // Calculate the final position to ensure the winning item (index 5) is centered
+    // Calculate the final position to ensure the winning item (index 4) is centered
     // We're using the third repetition of items (since we have 5 repetitions in RouletteStrip)
     const totalItems = items.length;
     const targetSetIndex = 2; // Use the middle (third) set for stability
@@ -99,6 +100,11 @@ const RouletteWheel = ({ items: initialItems, onSpin }: RouletteWheelProps) => {
   };
 
   const handlePlayAgain = () => {
+    // Call the onPlayAgain callback if provided
+    if (onPlayAgain) {
+      onPlayAgain();
+    }
+    
     setShowResultModal(false);
     setResult(null);
 
