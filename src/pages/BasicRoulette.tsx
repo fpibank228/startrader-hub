@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,6 @@ import WheelRoulette from '../components/roulette/WheelRoulette';
 import { useToast } from '../hooks/use-toast';
 import WebApp from "@twa-dev/sdk";
 import { staticGiftItems } from '../data/rouletteData';
-import StarCard from '../components/StarCard';
 
 const BasicRoulette = () => {
   const { toast } = useToast();
@@ -18,6 +17,11 @@ const BasicRoulette = () => {
   // Random position between 0-5 where the wheel will stop
   const [stopPosition, setStopPosition] = useState(Math.floor(Math.random() * 6));
 
+  // Generate a new random stop position when the component mounts
+  useEffect(() => {
+    setStopPosition(Math.floor(Math.random() * 6));
+  }, []);
+
   const handleBack = () => {
     navigate('/roulette');
   };
@@ -25,7 +29,10 @@ const BasicRoulette = () => {
   const handleSpin = (result: any) => {
     setWinningItem(result);
     // Generate a new random stop position for next spin
-    setStopPosition(Math.floor(Math.random() * 6));
+    // Using setTimeout to ensure the position changes after the current spin
+    setTimeout(() => {
+      setStopPosition(Math.floor(Math.random() * 6));
+    }, 100);
   };
 
   return (

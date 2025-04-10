@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import StarCard from '../StarCard';
@@ -34,6 +33,7 @@ const WheelRoulette = ({ items: initialItems, onSpin, stopPosition = 0 }: WheelR
   const [showItemDetail, setShowItemDetail] = useState(false);
   const [selectedItem, setSelectedItem] = useState<RouletteItem | null>(null);
   const [items, setItems] = useState<RouletteItem[]>([]);
+  const [spinCount, setSpinCount] = useState(0); // Track number of spins to reset properly
   const wheelRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
@@ -43,7 +43,17 @@ const WheelRoulette = ({ items: initialItems, onSpin, stopPosition = 0 }: WheelR
   // Initialize with provided items
   useEffect(() => {
     // Make sure we have exactly 6 items for the wheel
-    const wheelItems = initialItems.slice(0, 6);
+    const wheelItems = [...initialItems].slice(0, 6);
+    
+    // Pad array if fewer than 6 items
+    while (wheelItems.length < 6) {
+      wheelItems.push({
+        chance: "0",
+        link: "https://placehold.co/100x100/purple/white?text=Prize",
+        title: "Prize",
+        price: 0,
+      });
+    }
     
     // Make sure at least one item is marked as the winner
     const hasWinItem = wheelItems.some(item => item.isWin);
@@ -58,6 +68,7 @@ const WheelRoulette = ({ items: initialItems, onSpin, stopPosition = 0 }: WheelR
     if (isSpinning) return;
     
     setIsSpinning(true);
+    setShowResultModal(false); // Ensure modal is closed
     
     // Use the provided stop position
     const winningIndex = validStopPosition;
@@ -70,13 +81,18 @@ const WheelRoulette = ({ items: initialItems, onSpin, stopPosition = 0 }: WheelR
     // The winning position is at the top (270 degrees) to align with the pointer
     const targetPosition = 270 - (winningIndex * segmentAngle);
     const fullRotations = 4; // Spin 4 full rotations before stopping
-    const finalRotation = (fullRotations * 360) + targetPosition;
     
-    // Small random offset for variety (-10 to +10 degrees)
-    const randomOffset = Math.random() * 20 - 10;
+    // Add current rotation to ensure continuous rotation for subsequent spins
+    const finalRotation = (fullRotations * 360) + targetPosition + (spinCount * 360);
+    
+    // Small random offset for variety (-5 to +5 degrees)
+    const randomOffset = Math.random() * 10 - 5;
     
     // Set the final rotation value
     setRotation(finalRotation + randomOffset);
+    
+    // Increment spin count for next spin
+    setSpinCount(prev => prev + 1);
     
     // Process the result after the animation fully completes (5 seconds)
     setTimeout(() => {
@@ -106,6 +122,7 @@ const WheelRoulette = ({ items: initialItems, onSpin, stopPosition = 0 }: WheelR
   const handlePlayAgain = () => {
     setShowResultModal(false);
     setResult(null);
+    // Don't reset rotation here - keep the wheel in its current position for the next spin
   };
 
   const handleItemClick = (item: RouletteItem) => {
@@ -210,6 +227,12 @@ const WheelRoulette = ({ items: initialItems, onSpin, stopPosition = 0 }: WheelR
                         src={item.link} 
                         alt={item.title}
                         className="w-full h-full object-contain p-1"
+                        onError={(e) => {
+                          // Fallback if image fails to load
+                          const target = e.target as HTMLImageElement;
+                          target.onerror = null;
+                          target.src = 'https://placehold.co/100x100/purple/white?text=Prize';
+                        }}
                       />
                     </div>
                   </div>
