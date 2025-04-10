@@ -23,9 +23,10 @@ interface RouletteItem {
 interface WheelRouletteProps {
   items: RouletteItem[];
   onSpin?: (result: RouletteItem) => void;
+  stopPosition?: number; // Position where the wheel should stop (0-5)
 }
 
-const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
+const WheelRoulette = ({ items: initialItems, onSpin, stopPosition = 0 }: WheelRouletteProps) => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [showResultModal, setShowResultModal] = useState(false);
@@ -36,6 +37,9 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
   const wheelRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
+  // Ensure stopPosition is within valid range
+  const validStopPosition = Math.min(Math.max(0, stopPosition), 5);
+
   // Initialize with provided items
   useEffect(() => {
     // Make sure we have exactly 6 items for the wheel
@@ -44,20 +48,19 @@ const WheelRoulette = ({ items: initialItems, onSpin }: WheelRouletteProps) => {
     // Make sure at least one item is marked as the winner
     const hasWinItem = wheelItems.some(item => item.isWin);
     if (!hasWinItem && wheelItems.length > 0) {
-      wheelItems[0] = { ...wheelItems[0], isWin: true };
+      wheelItems[validStopPosition] = { ...wheelItems[validStopPosition], isWin: true };
     }
     
     setItems(wheelItems);
-  }, [initialItems]);
+  }, [initialItems, validStopPosition]);
 
   const spinWheel = () => {
     if (isSpinning) return;
     
     setIsSpinning(true);
     
-    // Find the winning item
-    const winItemIndex = items.findIndex(item => item.isWin);
-    const winningIndex = winItemIndex !== -1 ? winItemIndex : 0;
+    // Use the provided stop position
+    const winningIndex = validStopPosition;
     
     // Calculate the winning segment angle
     const segmentAngle = 360 / items.length;

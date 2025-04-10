@@ -2,6 +2,7 @@
 import { memo } from 'react';
 import StarCard from '../StarCard';
 import LottieItem from './LottieItem';
+import { useIsMobile } from '../../hooks/use-mobile';
 
 interface RouletteItem {
   chance: string;
@@ -23,6 +24,12 @@ interface PrizeGridProps {
 const PrizeGrid = memo(({ items, onItemClick }: PrizeGridProps) => {
   // Make sure items is never undefined
   const safeItems = items || [];
+  const isMobile = useIsMobile();
+  
+  // Helper function to determine if URL is a Lottie animation
+  const isLottieAnimation = (url: string): boolean => {
+    return url?.toLowerCase().endsWith('.json');
+  };
   
   return (
     <div className="w-full max-w-md mt-4">
@@ -34,13 +41,27 @@ const PrizeGrid = memo(({ items, onItemClick }: PrizeGridProps) => {
             className="p-3 flex flex-col items-center cursor-pointer hover:bg-white/10 transition-colors"
             onClick={() => onItemClick && onItemClick(item)}
           >
-            <div className="w-20 h-20 rounded-lg overflow-hidden border border-white/30 shadow-[0_0_5px_rgba(255,255,255,0.2)]">
-              <LottieItem 
-                animationData={item.link} 
-                className="w-full h-full"
-                loop={false}
-                autoplay={false}
-              />
+            <div className="w-20 h-20 rounded-lg overflow-hidden border border-white/30 shadow-[0_0_5px_rgba(255,255,255,0.2)] flex items-center justify-center">
+              {isLottieAnimation(item.link) ? (
+                <LottieItem 
+                  animationData={item.link} 
+                  className="w-full h-full"
+                  loop={false}
+                  autoplay={true}
+                />
+              ) : (
+                <img 
+                  src={item.link} 
+                  alt={item.title}
+                  className="w-full h-full object-contain p-1"
+                  onError={(e) => {
+                    // Fallback if image fails to load
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = 'https://placehold.co/100x100/purple/white?text=Prize';
+                  }}
+                />
+              )}
             </div>
             <div className="text-sm mt-2 text-center font-medium">
               {item.title}
