@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import StarBackground from '../components/StarBackground';
-import WheelRoulette from '../components/roulette/WheelRoulette';
+import RouletteWheel from '../components/roulette/RouletteWheel';
 import { useToast } from '../hooks/use-toast';
 import WebApp from "@twa-dev/sdk";
 import { staticGiftItems } from '../data/rouletteData';
@@ -15,9 +15,6 @@ const BasicRoulette = () => {
   const isFullscreen = WebApp.isFullscreen;
   const [winningItem, setWinningItem] = useState(staticGiftItems.find(item => item.isWin) || staticGiftItems[0]);
   
-  // Fixed position (index 4 - the 5th element) where the wheel will always stop
-  const fixedStopPosition = 4;
-
   const handleBack = () => {
     navigate('/roulette');
   };
@@ -57,10 +54,9 @@ const BasicRoulette = () => {
           transition={{ duration: 0.5 }}
           className="max-w-md mx-auto"
         >
-          <WheelRoulette 
+          <RouletteWheel 
             items={staticGiftItems}
             onSpin={handleSpin}
-            stopPosition={fixedStopPosition}
           />
         </motion.div>
       </div>

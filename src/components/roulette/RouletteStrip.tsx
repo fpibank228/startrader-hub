@@ -20,6 +20,11 @@ interface RouletteStripProps {
   selectedIndex: number | null;
 }
 
+// Helper function to determine if URL is a Lottie animation
+const isLottieAnimation = (url: string): boolean => {
+  return url?.toLowerCase?.().endsWith('.json') || false;
+};
+
 // Мемоизируем компонент чтобы предотвратить лишние ререндеры
 const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }: RouletteStripProps) => {
   const stripRef = useRef<HTMLDivElement>(null);
@@ -56,12 +61,26 @@ const RouletteStrip = memo(({ items, slidePosition, isSpinning, selectedIndex }:
             <div className={`w-full h-full rounded-lg overflow-hidden border-2 ${
               isSelected ? 'border-white shadow-[0_0_15px_rgba(255,255,255,0.7)]' : 'border-white/30'
             } bg-white/10 flex items-center justify-center`}>
-              <LottieItem 
-                animationData={item.link} 
-                className="w-full h-full"
-                loop={isSelected}
-                autoplay={isSelected || isSpinning}
-              />
+              {isLottieAnimation(item.link) ? (
+                <LottieItem 
+                  animationData={item.link} 
+                  className="w-full h-full"
+                  loop={isSelected}
+                  autoplay={isSelected || isSpinning}
+                />
+              ) : (
+                <img 
+                  src={item.link} 
+                  alt={item.title}
+                  className="w-full h-full object-contain p-1"
+                  onError={(e) => {
+                    // Fallback if image fails to load
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = 'https://placehold.co/100x100/purple/white?text=Prize';
+                  }}
+                />
+              )}
             </div>
           </div>
         );

@@ -28,7 +28,7 @@ const PrizeGrid = memo(({ items, onItemClick }: PrizeGridProps) => {
   
   // Helper function to determine if URL is a Lottie animation
   const isLottieAnimation = (url: string): boolean => {
-    return url?.toLowerCase().endsWith('.json');
+    return url?.toLowerCase?.().endsWith('.json') || false;
   };
   
   return (

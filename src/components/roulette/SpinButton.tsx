@@ -24,7 +24,7 @@ const SpinButton = memo(({ isSpinning, onSpin }: SpinButtonProps) => {
       ) : (
         <>
           <Play size={20} />
-          Крутить за 2 TON
+          Крутить рулетку
         </>
       )}
     </Button>

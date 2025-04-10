@@ -1,4 +1,3 @@
-
 interface RouletteItem {
     chance: string;
     link: string;
@@ -24,11 +23,10 @@ export const staticGiftItems: RouletteItem[] = [
         'price': 0.25,
     },
     {
-        'chance': 'yes',
+        'chance': 'no',
         'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5168043875654172773/1x/000.png',
         'title': 'Champ',
         'price': 0.25,
-        'isWin': true
     },
     {
         'chance': 'no',
@@ -49,10 +47,11 @@ export const staticGiftItems: RouletteItem[] = [
         'price': 0.25,
     },
     {
-        'chance': 'no',
+        'chance': 'yes',
         'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5170250947678437525/1x/000.png',
         'title': 'Gift',
         'price': 0.25,
+        'isWin': true
     },
     {
         'chance': 'no',
