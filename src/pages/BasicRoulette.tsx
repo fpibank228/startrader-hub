@@ -14,13 +14,9 @@ const BasicRoulette = () => {
   const navigate = useNavigate();
   const isFullscreen = WebApp.isFullscreen;
   const [winningItem, setWinningItem] = useState(staticGiftItems.find(item => item.isWin) || staticGiftItems[0]);
-  // Random position between 0-5 where the wheel will stop
-  const [stopPosition, setStopPosition] = useState(Math.floor(Math.random() * 6));
-
-  // Generate a new random stop position when the component mounts
-  useEffect(() => {
-    setStopPosition(Math.floor(Math.random() * 6));
-  }, []);
+  
+  // Fixed position (index 4 - the 5th element) where the wheel will always stop
+  const fixedStopPosition = 4;
 
   const handleBack = () => {
     navigate('/roulette');
@@ -28,11 +24,6 @@ const BasicRoulette = () => {
 
   const handleSpin = (result: any) => {
     setWinningItem(result);
-    // Generate a new random stop position for next spin
-    // Using setTimeout to ensure the position changes after the current spin
-    setTimeout(() => {
-      setStopPosition(Math.floor(Math.random() * 6));
-    }, 100);
   };
 
   return (
@@ -69,7 +60,7 @@ const BasicRoulette = () => {
           <WheelRoulette 
             items={staticGiftItems}
             onSpin={handleSpin}
-            stopPosition={stopPosition}
+            stopPosition={fixedStopPosition}
           />
         </motion.div>
       </div>

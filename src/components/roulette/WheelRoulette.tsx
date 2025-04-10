@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import StarCard from '../StarCard';
@@ -25,7 +26,7 @@ interface WheelRouletteProps {
   stopPosition?: number; // Position where the wheel should stop (0-5)
 }
 
-const WheelRoulette = ({ items: initialItems, onSpin, stopPosition = 0 }: WheelRouletteProps) => {
+const WheelRoulette = ({ items: initialItems, onSpin, stopPosition = 4 }: WheelRouletteProps) => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [showResultModal, setShowResultModal] = useState(false);
@@ -33,12 +34,12 @@ const WheelRoulette = ({ items: initialItems, onSpin, stopPosition = 0 }: WheelR
   const [showItemDetail, setShowItemDetail] = useState(false);
   const [selectedItem, setSelectedItem] = useState<RouletteItem | null>(null);
   const [items, setItems] = useState<RouletteItem[]>([]);
-  const [spinCount, setSpinCount] = useState(0); // Track number of spins to reset properly
+  const [currentRotationCount, setCurrentRotationCount] = useState(0);
   const wheelRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
-  // Ensure stopPosition is within valid range
-  const validStopPosition = Math.min(Math.max(0, stopPosition), 5);
+  // Always use index 4 (5th item) as the winning position
+  const fixedWinPosition = 4;
 
   // Initialize with provided items
   useEffect(() => {
@@ -55,14 +56,17 @@ const WheelRoulette = ({ items: initialItems, onSpin, stopPosition = 0 }: WheelR
       });
     }
     
-    // Make sure at least one item is marked as the winner
-    const hasWinItem = wheelItems.some(item => item.isWin);
-    if (!hasWinItem && wheelItems.length > 0) {
-      wheelItems[validStopPosition] = { ...wheelItems[validStopPosition], isWin: true };
-    }
+    // Ensure the 5th item (index 4) is marked as the winner
+    wheelItems.forEach((item, index) => {
+      if (index === fixedWinPosition) {
+        wheelItems[index] = { ...wheelItems[index], isWin: true };
+      } else {
+        wheelItems[index] = { ...wheelItems[index], isWin: false };
+      }
+    });
     
     setItems(wheelItems);
-  }, [initialItems, validStopPosition]);
+  }, [initialItems]);
 
   const spinWheel = () => {
     if (isSpinning) return;
@@ -70,20 +74,19 @@ const WheelRoulette = ({ items: initialItems, onSpin, stopPosition = 0 }: WheelR
     setIsSpinning(true);
     setShowResultModal(false); // Ensure modal is closed
     
-    // Use the provided stop position
-    const winningIndex = validStopPosition;
-    
     // Calculate the winning segment angle
     const segmentAngle = 360 / items.length;
     
     // Calculate target rotation to position winning segment at the top
-    // We add multiple full rotations plus the angle needed to position the winning segment at the top
     // The winning position is at the top (270 degrees) to align with the pointer
-    const targetPosition = 270 - (winningIndex * segmentAngle);
-    const fullRotations = 4; // Spin 4 full rotations before stopping
+    const targetPosition = 270 - (fixedWinPosition * segmentAngle);
     
-    // Add current rotation to ensure continuous rotation for subsequent spins
-    const finalRotation = (fullRotations * 360) + targetPosition + (spinCount * 360);
+    // Always do 4 full rotations
+    const fullRotations = 4;
+    
+    // Set the absolute final rotation value - always starting fresh from the current position
+    // This ensures the wheel always does exactly 4 rotations plus the target
+    const finalRotation = currentRotationCount + (fullRotations * 360) + targetPosition;
     
     // Small random offset for variety (-5 to +5 degrees)
     const randomOffset = Math.random() * 10 - 5;
@@ -91,8 +94,8 @@ const WheelRoulette = ({ items: initialItems, onSpin, stopPosition = 0 }: WheelR
     // Set the final rotation value
     setRotation(finalRotation + randomOffset);
     
-    // Increment spin count for next spin
-    setSpinCount(prev => prev + 1);
+    // Update the current rotation count for the next spin
+    setCurrentRotationCount(finalRotation + randomOffset);
     
     // Process the result after the animation fully completes (5 seconds)
     setTimeout(() => {
@@ -100,7 +103,7 @@ const WheelRoulette = ({ items: initialItems, onSpin, stopPosition = 0 }: WheelR
       
       // Get the winning item and show the result modal
       if (items.length > 0) {
-        const winningItem = items[winningIndex];
+        const winningItem = items[fixedWinPosition];
         setResult(winningItem);
         
         // Wait a short delay after the wheel stops to show the modal
