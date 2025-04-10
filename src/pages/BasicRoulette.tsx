@@ -8,13 +8,56 @@ import RouletteWheel from '../components/roulette/RouletteWheel';
 import { useToast } from '../hooks/use-toast';
 import WebApp from "@twa-dev/sdk";
 import { staticGiftItems } from '../data/rouletteData';
+import TONBalanceDisplay from "@/components/roulette/TONBalanceDisplay.tsx";
+import {apiService} from "@/utils/api.ts";
+
+interface RouletteItem {
+  chance: string;
+  link: string;
+  title: string;
+  price: number;
+  model?: string;
+  symbol?: string;
+  backdrop?: string;
+  number?: number;
+  gift_id?: string;
+}
+
+interface UserData {
+  user_id: string;
+  username: string;
+  full_name: string;
+  ref_id: string;
+  balance: number;
+}
 
 const BasicRoulette = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const isFullscreen = WebApp.isFullscreen;
   const [winningItem, setWinningItem] = useState(staticGiftItems.find(item => item.isWin) || staticGiftItems[0]);
-  
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [items, setItems] = useState<RouletteItem[]>([]);
+
+  const fetchData = async () => {
+    try {
+      const itms = await apiService.createNftSpinInvoice();
+      setItems([...itms.data['gifts']]); // Объединяем базовые и полученные элементы
+
+      // Set user data including balance
+      if (itms.data['user_data']) {
+        setUserData(itms.data['user_data']);
+      }
+    } catch (error) {
+      console.error("Failed to fetch items:", error);
+      setItems([]); // Используем только базовые в случае ошибки
+    }
+  };
+  // Initialize with fresh data on mount - shuffle only once
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const handleBack = () => {
     navigate('/roulette');
   };
@@ -54,6 +97,9 @@ const BasicRoulette = () => {
           transition={{ duration: 0.5 }}
           className="max-w-md mx-auto"
         >
+
+          <TONBalanceDisplay balance={userData ? userData.balance : 0} />
+
           <RouletteWheel 
             items={staticGiftItems}
             onSpin={handleSpin}

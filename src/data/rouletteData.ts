@@ -33,12 +33,6 @@ export const staticGiftItems: RouletteItem[] = [
         'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5170144170496491616/1x/000.png',
         'title': 'Cake',
         'price': 0.25,
-    }, 
-    {
-        'chance': 'no',
-        'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5170145012310081615/1x/000.png',
-        'title': 'Heart',
-        'price': 0.25,
     },
     {
         'chance': 'no',
