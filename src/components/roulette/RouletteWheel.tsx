@@ -7,7 +7,6 @@ import PrizeGrid from './PrizeGrid';
 import { useIsMobile } from '../../hooks/use-mobile';
 import RouletteResultModal from './RouletteResultModal';
 import ItemDetailModal from './ItemDetailModal';
-import { basicRouletteItems } from '../../data/rouletteData';
 
 interface RouletteItem {
   chance: string;
@@ -18,6 +17,7 @@ interface RouletteItem {
   symbol?: string;
   backdrop?: string;
   number?: number;
+  isWin?: boolean;
 }
 
 interface RouletteWheelProps {
@@ -36,35 +36,29 @@ const RouletteWheel = ({ items: initialItems, onSpin }: RouletteWheelProps) => {
   const [items, setItems] = useState<RouletteItem[]>(initialItems || []);
   const isMobile = useIsMobile();
 
-  // Always use index 6 (7th item) as the winning item for consistency
-  const winningIndex = 6;
+  // Always use the 6th item (index 5) as the winning item for consistency
+  const winningIndex = 5;
 
-  // Refresh items data for each spin
-  const refreshItems = () => {
-    // This will get fresh data from basicRouletteItems
-    setItems([...basicRouletteItems]);
-  };
+  // Update items when initialItems change
+  useEffect(() => {
+    setItems(initialItems || []);
+  }, [initialItems]);
 
   const spinWheel = () => {
     if (isSpinning) return;
-
-    // Refresh items before spinning
-    refreshItems();
     
     setIsSpinning(true);
     setSelectedIndex(null);
 
     // Fixed item width plus gap for more precise calculations
-    const itemWidth = 88 + 16; // Each item is 96px wide (24*4) plus 16px gap
-
-    // Calculate the winning position more precisely
-    const totalItems = items.length;
+    const itemWidth = 88 + 16; // Each item is 96px wide plus 16px gap
 
     // Start with an initial position of 0
     setSlidePosition(0);
 
-    // Calculate the final position to ensure the 7th item (index 6) is centered
+    // Calculate the final position to ensure the winning item (index 5) is centered
     // We're using the third repetition of items (since we have 5 repetitions in RouletteStrip)
+    const totalItems = items.length;
     const targetSetIndex = 2; // Use the middle (third) set for stability
     const targetItemPosition = targetSetIndex * totalItems + winningIndex;
 
@@ -72,7 +66,7 @@ const RouletteWheel = ({ items: initialItems, onSpin }: RouletteWheelProps) => {
     // We add 0.5 to center the item precisely in the indicator
     const finalPosition = -((targetItemPosition + 0.5) * itemWidth);
 
-    // Start the animation to the final position immediately
+    // Start the animation to the final position
     setTimeout(() => {
       setSlidePosition(finalPosition);
 
@@ -81,7 +75,7 @@ const RouletteWheel = ({ items: initialItems, onSpin }: RouletteWheelProps) => {
         setSelectedIndex(winningIndex);
         setIsSpinning(false);
 
-        // Prepare result data and show modal immediately
+        // Prepare result data and show modal
         if (items && items.length > winningIndex) {
           setResult(items[winningIndex]);
           setShowResultModal(true);
@@ -94,11 +88,6 @@ const RouletteWheel = ({ items: initialItems, onSpin }: RouletteWheelProps) => {
     }, 10);
   };
 
-  // Initialize with fresh data on mount
-  useEffect(() => {
-    refreshItems();
-  }, []);
-
   const handleCloseModal = () => {
     setShowResultModal(false);
 
@@ -106,7 +95,7 @@ const RouletteWheel = ({ items: initialItems, onSpin }: RouletteWheelProps) => {
     setTimeout(() => {
       setSlidePosition(0);
       setSelectedIndex(null);
-    }, 100); // Faster reset
+    }, 100);
   };
 
   const handlePlayAgain = () => {
@@ -127,49 +116,46 @@ const RouletteWheel = ({ items: initialItems, onSpin }: RouletteWheelProps) => {
     setShowItemDetail(false);
     setTimeout(() => {
       setSelectedItem(null);
-    }, 200); // Short delay to ensure smooth transition
+    }, 200);
   };
 
-  // Make sure items is never undefined to prevent rendering issues
-  const safeItems = items || [];
-
   return (
-      <div className="flex flex-col items-center">
-        <StarCard className="relative w-full max-w-md mb-6 p-6">
-          <h3 className="text-center text-lg font-medium mb-4">Вращайте рулетку и выигрывайте приз!</h3>
+    <div className="flex flex-col items-center">
+      <StarCard className="relative w-full max-w-md mb-6 p-6">
+        <h3 className="text-center text-lg font-medium mb-4">Вращайте рулетку и выигрывайте приз!</h3>
 
-          <RouletteDisplay
-              items={safeItems}
-              slidePosition={slidePosition}
-              isSpinning={isSpinning}
-              selectedIndex={selectedIndex}
-          />
-
-          <div className="mt-6">
-            <SpinButton isSpinning={isSpinning} onSpin={spinWheel} />
-          </div>
-        </StarCard>
-
-        {/* Показываем все возможные выигрыши под рулеткой */}
-        <PrizeGrid items={safeItems} onItemClick={handleItemClick} />
-
-        {/* Модальное окно с результатом */}
-        <RouletteResultModal
-            isOpen={showResultModal}
-            onClose={handleCloseModal}
-            result={result}
-            onPlayAgain={handlePlayAgain}
+        <RouletteDisplay
+          items={items}
+          slidePosition={slidePosition}
+          isSpinning={isSpinning}
+          selectedIndex={selectedIndex}
         />
 
-        {/* Модальное окно с деталями предмета */}
-        {selectedItem && (
-            <ItemDetailModal
-                isOpen={showItemDetail}
-                onClose={handleCloseItemDetail}
-                item={selectedItem}
-            />
-        )}
-      </div>
+        <div className="mt-6">
+          <SpinButton isSpinning={isSpinning} onSpin={spinWheel} />
+        </div>
+      </StarCard>
+
+      {/* Показываем все возможные выигрыши под рулеткой */}
+      <PrizeGrid items={items} onItemClick={handleItemClick} />
+
+      {/* Модальное окно с результатом */}
+      <RouletteResultModal
+        isOpen={showResultModal}
+        onClose={handleCloseModal}
+        result={result}
+        onPlayAgain={handlePlayAgain}
+      />
+
+      {/* Модальное окно с деталями предмета */}
+      {selectedItem && (
+        <ItemDetailModal
+          isOpen={showItemDetail}
+          onClose={handleCloseItemDetail}
+          item={selectedItem}
+        />
+      )}
+    </div>
   );
 };
 
