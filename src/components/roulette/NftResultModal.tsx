@@ -54,31 +54,6 @@ const NftResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteResult
             }}
             className="relative w-52 h-52 mb-4"
           >
-            {/* Animated stars in the background */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="absolute w-full h-full">
-                {[...Array(8)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute w-4 h-4 bg-yellow-300 rounded-full"
-                    style={{
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
-                    }}
-                    animate={{
-                      scale: [1, 1.5, 1],
-                      opacity: [0.7, 1, 0.7],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      delay: Math.random() * 2,
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-
             {/* The prize item - support both Lottie and images */}
             <div className="relative z-10 w-full h-full flex items-center justify-center">
               <div className="w-40 h-40 rounded-lg bg-white/10 p-4 border border-white/20 flex items-center justify-center overflow-hidden">

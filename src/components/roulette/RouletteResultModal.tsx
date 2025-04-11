@@ -34,7 +34,7 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
   if (!result) {
     return null;
   }
-
+  console.log(result);
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="bg-gradient-to-b from-customMidBlue to-customPurple/90 border-none max-w-md p-0 overflow-hidden">
@@ -54,30 +54,6 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
             }}
             className="relative w-52 h-52 mb-4"
           >
-            {/* Animated stars in the background */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="absolute w-full h-full">
-                {[...Array(8)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute w-4 h-4 bg-yellow-300 rounded-full"
-                    style={{
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
-                    }}
-                    animate={{
-                      scale: [1, 1.5, 1],
-                      opacity: [0.7, 1, 0.7],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      delay: Math.random() * 2,
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
 
             {/* The prize item - support both Lottie and images */}
             <div className="relative z-10 w-full h-full flex items-center justify-center">
@@ -133,13 +109,13 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
             )}
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+          <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 w-full">
             <Button
               variant="outline"
               onClick={onClose}
               className="w-full bg-white/10 border-white/20 hover:bg-white/20"
             >
-              Закрыть
+              Забрать
             </Button>
             
             {onPlayAgain && (
@@ -147,7 +123,7 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
                 onClick={onPlayAgain}
                 className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
               >
-                Играть снова
+                продать за {result.price} TON
               </Button>
             )}
           </div>

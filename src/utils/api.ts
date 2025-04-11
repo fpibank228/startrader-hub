@@ -78,16 +78,6 @@ export const apiService = {
         }
     },
 
-    async sellGift(gift_id: string) {
-        console.log(gift_id);
-        try {
-            return await mainApi.post('/sell_gift', {"gift_id": gift_id});
-        } catch (error) {
-            console.error('Generate link check API Error:', error);
-            throw error;
-        }
-    },
-
     async sendTransaction(
         {
             walletAddress,
@@ -134,6 +124,16 @@ export const apiService = {
         }
     },
 
+    async sellGift(gift_id: string) {
+        console.log(gift_id);
+        try {
+            return await mainApi.post('/sell_gift', {"gift_id": gift_id});
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
+
     async createNftSpinInvoice() {
         try {
             return await mainApi.post('/create_nft_spin_invoice');
@@ -146,6 +146,34 @@ export const apiService = {
     async createNftSpin() {
         try {
             return await mainApi.post('/create_nft_spin');
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
+
+    async sellDefaultGift(gift_id: string) {
+        console.log(gift_id);
+        try {
+            return await mainApi.post('/sell_default_gift', {"gift_id": gift_id});
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
+
+    async createDefaultGiftSpinInvoice() {
+        try {
+            return await mainApi.post('/create_default_gift_spin_invoice');
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
+
+    async createDefaultGiftSpin() {
+        try {
+            return await mainApi.post('/create_default_gift_spin');
         } catch (error) {
             console.error('Generate link check API Error:', error);
             throw error;

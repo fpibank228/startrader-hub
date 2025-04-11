@@ -40,11 +40,11 @@ const BasicRoulette = () => {
   const [items, setItems] = useState<RouletteItem[]>([]);
 
   const shuffleItems = () => {
-    const winItem = staticGiftItems.find(item => item.isWin);
-    if (!winItem) return staticGiftItems;
-    
-    const otherItems = staticGiftItems.filter(item => !item.isWin);
-    
+    const winItem = items[-1]
+    if (!winItem) return items;
+
+    const otherItems = items.slice(0, -1);
+
     for (let i = otherItems.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [otherItems[i], otherItems[j]] = [otherItems[j], otherItems[i]];
@@ -58,7 +58,7 @@ const BasicRoulette = () => {
         price: 0.25,
       });
     }
-    
+    console.log(otherItems);
     const winIndex = 4;
     const result = [...otherItems];
     if (result.length <= winIndex) {
@@ -75,13 +75,13 @@ const BasicRoulette = () => {
 
   const fetchData = async () => {
     try {
-      const itms = await apiService.createNftSpinInvoice();
+      const itms = await apiService.createDefaultGiftSpinInvoice();
       
       if (itms.data['user_data']) {
         setUserData(itms.data['user_data']);
       }
-      
-      setItems(shuffleItems());
+      console.log(itms);
+      setItems(itms.data['gifts']);
     } catch (error) {
       console.error("Failed to fetch items:", error);
       setItems(shuffleItems());
@@ -94,6 +94,7 @@ const BasicRoulette = () => {
 
   const refreshItems = () => {
     setItems(shuffleItems());
+    fetchData();
   };
 
   const handleBack = () => {
@@ -102,6 +103,7 @@ const BasicRoulette = () => {
 
   const handleSpin = (result: any) => {
     setWinningItem(result);
+    fetchData();
   };
 
   return (
@@ -109,7 +111,7 @@ const BasicRoulette = () => {
       marginTop: isFullscreen ? "80px" : "0px",
     }}>
       <StarBackground />
-      
+
       <div className="relative z-10 container mx-auto px-4">
         <div className="flex items-center mb-6">
           <button 
@@ -135,13 +137,13 @@ const BasicRoulette = () => {
           transition={{ duration: 0.5 }}
           className="max-w-md mx-auto"
         >
-
           <TONBalanceDisplay balance={userData ? userData.balance : 0} />
 
-          <RouletteWheel 
+          <RouletteWheel
             items={items}
             onSpin={handleSpin}
             onPlayAgain={refreshItems}
+            userData={userData}
           />
         </motion.div>
       </div>
