@@ -7,6 +7,7 @@ import Logo from '../components/Logo';
 import StarCard from '../components/StarCard';
 import WebApp from "@twa-dev/sdk";
 import {Home, DollarSign, User, Loader2} from 'lucide-react';
+import LottieItem from "@/components/roulette/LottieItem.tsx";
 
 const Index = () => {
     const [scrollY, setScrollY] = useState(0);

@@ -79,7 +79,6 @@ const Profile = () => {
             const data = await response.data;
             setTransactions(data["transactions"]);
             setUserInfo(data["user_info"]);
-            console.log("Data gifts:", data["gifts"]);
             setGifts(data["gifts"]);
             setDefaultGifts(data["default_gifts"]);
         } catch (error) {

@@ -11,7 +11,6 @@ const GiftUpgrade = () => {
     const isFullscreen = WebApp.isFullscreen;
     const {toast} = useToast();
     const [userGifts, setUserGifts] = useState([]);
-    const [upgradableGifts, setUpgradableGifts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -19,10 +18,9 @@ const GiftUpgrade = () => {
         const fetchGifts = async () => {
             setIsLoading(true);
             try {
-                // This would normally come from your API
-                // For now we'll use mock data
-                setUserGifts(mockUserGifts);
-                setUpgradableGifts(mockUpgradableGifts);
+                const response = await apiService.getUserInfo();
+                const data = await response.data;
+                setUserGifts(data["gifts"]);
             } catch (error) {
                 console.error('Error fetching gifts:', error);
                 toast({
@@ -68,7 +66,6 @@ const GiftUpgrade = () => {
 
                     <GiftUpgradeSelector
                         userGifts={userGifts}
-                        upgradableGifts={upgradableGifts}
                         isLoading={isLoading}
                     />
                 </motion.div>
@@ -76,166 +73,6 @@ const GiftUpgrade = () => {
         </div>
     );
 };
-
-// Mock data for user's existing gifts (inventory)
-const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-
-const mockUserGifts = [
-    {
-        'chance': 'no',
-        'link': 'https://nft.fragment.com/gift/homemadecake-10230.lottie.json',
-        'title': 'Homemade Cake',
-        'price': 0.25,
-        'model': 'Basic 15%',
-        'symbol': 'Gold 5%',
-        'backdrop': 'Blue 10%',
-        'number': getRandomNumber(1, 200000),
-        'gift_id': String(getRandomNumber(1000000000, 9999999999)),
-
-    },
-    {
-        'chance': 'no',
-        'link': 'https://nft.fragment.com/gift/diamondring-18822.lottie.json',
-        'title': 'Diamond Ring',
-        'price': 1.5,
-        'model': 'Premium 5%',
-        'symbol': 'Silver 10%',
-        'backdrop': 'Purple 5%',
-        'number': getRandomNumber(1, 200000),
-        'gift_id': String(getRandomNumber(1000000000, 9999999999)),
-    },
-    {
-        'chance': 'no',
-        'link': 'https://nft.fragment.com/gift/eternalrose-1385.lottie.json',
-        'title': 'Eternal Rose',
-        'price': 5.7,
-        'model': 'Standard 10%',
-        'symbol': 'Bronze 15%',
-        'backdrop': 'Red 8%',
-        'number': getRandomNumber(1, 200000),
-        'gift_id': String(getRandomNumber(1000000000, 9999999999)),
-
-    },
-    {
-        'chance': 'no',
-        'link': 'https://nft.fragment.com/gift/cookieheart-87873.lottie.json',
-        'title': 'Cooke Heart',
-        'price': 1.3,
-        'model': 'Basic 20%',
-        'symbol': 'Copper 20%',
-        'backdrop': 'Green 12%',
-        'number': getRandomNumber(1, 200000),
-        'gift_id': String(getRandomNumber(1000000000, 9999999999)),
-
-    },
-    {
-        'chance': 'no',
-        'link': 'https://nft.fragment.com/gift/partysparkler-42951.lottie.json',
-        'title': 'Party sparkler',
-        'price': 0.2,
-        'model': 'Basic 25%',
-        'symbol': 'Bronze 25%',
-        'backdrop': 'Yellow 15%',
-        'number': getRandomNumber(1, 200000),
-        'gift_id': String(getRandomNumber(1000000000, 9999999999)),
-
-    },
-    {
-        'chance': 'yes',
-        'link': 'https://nft.fragment.com/gift/signetring-7628.lottie.json',
-        'title': 'Signet ring',
-        'price': 3.0,
-        'model': 'Premium 5%',
-        'symbol': 'Gold 3%',
-        'backdrop': 'Purple 5%',
-        'number': getRandomNumber(1, 200000),
-        'isWin': true,
-        'gift_id': String(getRandomNumber(1000000000, 9999999999)),
-
-    },
-];
-
-// Mock data for upgradable gifts
-const mockUpgradableGifts = [
-    {
-        "title": "Desk Calendar",
-        "gift_id": "5976582472832385923",
-        "user_id": 7853490326,
-        "model": "Purple Front (1.5%)",
-        "symbol": "Shark Knife (0.5%)",
-        "backdrop": "Pure Gold (2.0%)",
-        "name": "DeskCalendar-299547",
-        "collectible_id": 299547,
-        "url": "https://t.me/nft/DeskCalendar-299547",
-        "price": 30,
-        "link": "https://nft.fragment.com/gift/deskcalendar.lottie.json"
-    },
-    {
-        "title": "Lol Pop",
-        "gift_id": "5965518100206979498",
-        "user_id": 7853490326,
-        "model": "Magic Wand (1.0%)",
-        "symbol": "Gem (0.4%)",
-        "backdrop": "Moonstone (2.0%)",
-        "name": "LolPop-206473",
-        "collectible_id": 206473,
-        "url": "https://t.me/nft/LolPop-206473",
-        "price": 5.0,
-        "link": "https://nft.fragment.com/gift/lolpop.lottie.json"
-    },
-    {
-        "title": "Lunar Snake",
-        "gift_id": "5821442464484950994",
-        "user_id": 1044392516,
-        "model": "Stone Python (1.3%)",
-        "symbol": "Bunny (0.5%)",
-        "backdrop": "Electric Purple (1.5%)",
-        "name": "LunarSnake-13435",
-        "collectible_id": 13435,
-        "url": "https://t.me/nft/LunarSnake-13435",
-        "price": 100,
-        "link": "https://nft.fragment.com/gift/lunarsnake.lottie.json"
-    },
-    {
-        "title": "Signet Ring",
-        "gift_id": "5821442464484950991",
-        "user_id": 1044392516,
-        "model": "Premium (5%)",
-        "symbol": "Gold (3%)",
-        "backdrop": "Purple (5%)",
-        "name": "SignetRing-7628",
-        "collectible_id": 7628,
-        "url": "https://t.me/nft/SignetRing-7628",
-        "price": 65,
-        "link": "https://nft.fragment.com/gift/signetring.lottie.json"
-    },
-    {
-        "title": "Tama Gadget",
-        "gift_id": "5821442464484150911",
-        "user_id": 1044392516,
-        "model": "Underdog (0.3%)",
-        "symbol": "Underdog (0.3%)",
-        "backdrop": "Midnight Blue (1%)",
-        "name": "TamaGadget-19732",
-        "collectible_id": 19732,
-        "url": "https://t.me/nft/TamaGadget-19732",
-        "price": 32,
-        "link": "https://nft.fragment.com/gift/tamagadget.lottie.json"
-    },
-    {
-        "title": "Plush Pepe",
-        "gift_id": "5721442464484150991",
-        "user_id": 1044392516,
-        "model": "Frozen (2%)",
-        "symbol": "Rook (0.5%)",
-        "backdrop": "Black (2%)",
-        "name": "plushpepe-2010",
-        "collectible_id": 2010,
-        "url": "https://t.me/nft/PlushPepe-2010",
-        "price": 1600,
-        "link": "https://nft.fragment.com/gift/plushpepe.lottie.json"
-    }
-];
 
 export default GiftUpgrade;
 

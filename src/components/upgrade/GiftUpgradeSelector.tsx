@@ -26,11 +26,10 @@ interface GiftItem {
 
 interface GiftUpgradeSelectorProps {
     userGifts: GiftItem[];
-    upgradableGifts: GiftItem[];
     isLoading: boolean;
 }
 
-const GiftUpgradeSelector = ({userGifts, upgradableGifts, isLoading}: GiftUpgradeSelectorProps) => {
+const GiftUpgradeSelector = ({userGifts, isLoading}: GiftUpgradeSelectorProps) => {
     const [selectedGifts, setSelectedGifts] = useState<GiftItem[]>([]);
     const [selectedMultiplier, setSelectedMultiplier] = useState<number>(2);
     const [showPreview, setShowPreview] = useState(false);
@@ -231,3 +230,86 @@ const GiftUpgradeSelector = ({userGifts, upgradableGifts, isLoading}: GiftUpgrad
 };
 
 export default GiftUpgradeSelector;
+
+
+// Mock data for upgradable gifts
+const upgradableGifts = [
+    {
+        "title": "Desk Calendar",
+        "gift_id": "5976582472832385923",
+        "user_id": 7853490326,
+        "model": "Purple Front (1.5%)",
+        "symbol": "Shark Knife (0.5%)",
+        "backdrop": "Pure Gold (2.0%)",
+        "name": "DeskCalendar-299547",
+        "collectible_id": 299547,
+        "url": "https://t.me/nft/DeskCalendar-299547",
+        "price": 30,
+        "link": "https://nft.fragment.com/gift/deskcalendar.lottie.json"
+    },
+    {
+        "title": "Lol Pop",
+        "gift_id": "5965518100206979498",
+        "user_id": 7853490326,
+        "model": "Magic Wand (1.0%)",
+        "symbol": "Gem (0.4%)",
+        "backdrop": "Moonstone (2.0%)",
+        "name": "LolPop-206473",
+        "collectible_id": 206473,
+        "url": "https://t.me/nft/LolPop-206473",
+        "price": 5.0,
+        "link": "https://nft.fragment.com/gift/lolpop.lottie.json"
+    },
+    {
+        "title": "Lunar Snake",
+        "gift_id": "5821442464484950994",
+        "user_id": 1044392516,
+        "model": "Stone Python (1.3%)",
+        "symbol": "Bunny (0.5%)",
+        "backdrop": "Electric Purple (1.5%)",
+        "name": "LunarSnake-13435",
+        "collectible_id": 13435,
+        "url": "https://t.me/nft/LunarSnake-13435",
+        "price": 100,
+        "link": "https://nft.fragment.com/gift/lunarsnake.lottie.json"
+    },
+    {
+        "title": "Signet Ring",
+        "gift_id": "5821442464484950991",
+        "user_id": 1044392516,
+        "model": "Premium (5%)",
+        "symbol": "Gold (3%)",
+        "backdrop": "Purple (5%)",
+        "name": "SignetRing-7628",
+        "collectible_id": 7628,
+        "url": "https://t.me/nft/SignetRing-7628",
+        "price": 65,
+        "link": "https://nft.fragment.com/gift/signetring.lottie.json"
+    },
+    {
+        "title": "Tama Gadget",
+        "gift_id": "5821442464484150911",
+        "user_id": 1044392516,
+        "model": "Underdog (0.3%)",
+        "symbol": "Underdog (0.3%)",
+        "backdrop": "Midnight Blue (1%)",
+        "name": "TamaGadget-19732",
+        "collectible_id": 19732,
+        "url": "https://t.me/nft/TamaGadget-19732",
+        "price": 32,
+        "link": "https://nft.fragment.com/gift/tamagadget.lottie.json"
+    },
+    {
+        "title": "Plush Pepe",
+        "gift_id": "5721442464484150991",
+        "user_id": 1044392516,
+        "model": "Frozen (2%)",
+        "symbol": "Rook (0.5%)",
+        "backdrop": "Black (2%)",
+        "name": "plushpepe-2010",
+        "collectible_id": 2010,
+        "url": "https://t.me/nft/PlushPepe-2010",
+        "price": 1600,
+        "link": "https://nft.fragment.com/gift/plushpepe.lottie.json"
+    }
+];
