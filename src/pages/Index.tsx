@@ -1,13 +1,13 @@
+
 import React, {useState, useEffect} from 'react';
 import {motion} from 'framer-motion';
-import {Star, ArrowRight} from 'lucide-react';
+import {Star, ArrowRight, Gift} from 'lucide-react';
 import {Link, useNavigate} from 'react-router-dom';
 import StarBackground from '../components/StarBackground';
 import Logo from '../components/Logo';
 import StarCard from '../components/StarCard';
 import WebApp from "@twa-dev/sdk";
 import {Home, DollarSign, User, Loader2} from 'lucide-react';
-import LottieItem from "@/components/roulette/LottieItem.tsx";
 
 const Index = () => {
     const [scrollY, setScrollY] = useState(0);
@@ -30,6 +30,9 @@ const Index = () => {
     };
     const handleProfileStarsClick = () => {
         navigate('/profile');
+    };
+    const handleUpgradeGiftsClick = () => {
+        navigate('/gift-upgrade');
     };
 
     return (
@@ -77,7 +80,7 @@ const Index = () => {
                     <motion.div
                         initial={{opacity: 0, x: -20}}
                         animate={{opacity: 1, x: 0}}
-                        transition={{duration: 0.5, delay: 0.2}}
+                        transition={{duration: 0.5, delay: 0.3}}
                         onClick={handleRouletteStarsClick}
                         className="cursor-pointer hover:scale-105 transition-all duration-300"
                     >
@@ -99,7 +102,29 @@ const Index = () => {
                     <motion.div
                         initial={{opacity: 0, x: -20}}
                         animate={{opacity: 1, x: 0}}
-                        transition={{duration: 0.5, delay: 0.2}}
+                        transition={{duration: 0.5, delay: 0.4}}
+                        onClick={handleUpgradeGiftsClick}
+                        className="cursor-pointer hover:scale-105 transition-all duration-300"
+                    >
+                        <StarCard glowEffect className="flex items-center p-6">
+                            <div className="mr-4">
+                                <div
+                                    className="w-12 h-12 rounded-full bg-customPurple flex items-center justify-center">
+                                    <Gift className="w-6 h-6 text-white"/>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-bold mb-1">Апгрейд подарков</h3>
+                                <p className="text-white/70 text-sm">
+                                    Улучшайте ваши подарки и получайте более ценные
+                                </p>
+                            </div>
+                        </StarCard>
+                    </motion.div>
+                    <motion.div
+                        initial={{opacity: 0, x: -20}}
+                        animate={{opacity: 1, x: 0}}
+                        transition={{duration: 0.5, delay: 0.5}}
                         onClick={handleProfileStarsClick}
                         className="cursor-pointer hover:scale-105 transition-all duration-300"
                     >
