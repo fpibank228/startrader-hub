@@ -262,7 +262,7 @@ const WheelRoulette = ({ items: initialItems, onSpin, stopPosition = 4 }: WheelR
         </div>
 
         <div className="mt-2">
-          <SpinButton isSpinning={isSpinning} onSpin={spinWheel} />
+          <SpinButton isSpinning={isSpinning} onSpin={spinWheel} price=""/>
         </div>
       </StarCard>
 

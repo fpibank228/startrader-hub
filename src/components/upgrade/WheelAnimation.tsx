@@ -8,8 +8,6 @@ interface RouletteItem {
     price: number;
     isWin?: boolean;
     name?: string;
-
-    [key: string]: any;
 }
 
 interface WheelRouletteProps {
@@ -51,41 +49,17 @@ export const WheelRoulette = ({items, multiplier, forceWin, onSpinComplete}: Whe
         // Create the wheel items array
         const wheelItemsArr: RouletteItem[] = [];
 
-        if (win) {
-            // If win, include the winning item and fill rest with empty segments
-            wheelItemsArr.push({...targetItem, isWin: true});
+        // Always put the winning item first
+        wheelItemsArr.push({...targetItem, isWin: true});
 
-            // Fill the remaining segments with empty placeholders
-            for (let i = 1; i < totalSegments; i++) {
-                wheelItemsArr.push({
-                    link: "https://nft.fragment.com/gift/lolpop.lottie.json", // fallback item
-                    title: "Empty",
-                    price: 0.1,
-                    isWin: false
-                });
-            }
-        } else {
-            // If loss, all segments are empty except one segment shows the "target" item
-            // but it won't actually land on it
-            const emptyPlaceholder = {
-                link: "https://nft.fragment.com/gift/lolpop.lottie.json",
+        // Fill the remaining segments with empty placeholders
+        for (let i = 1; i < totalSegments; i++) {
+            wheelItemsArr.push({
+                link: "https://nft.fragment.com/gift/lolpop.lottie.json", // fallback item
                 title: "Empty",
                 price: 0.1,
                 isWin: false
-            };
-
-            // Add the target item at a random position that won't be selected
-            const winningPosition = Math.floor(Math.random() * (totalSegments - 1)) + 1;
-
-            for (let i = 0; i < totalSegments; i++) {
-                if (i === winningPosition) {
-                    // Add the target item but marked as not a win
-                    wheelItemsArr.push({...targetItem, isWin: false});
-                } else {
-                    // Add empty placeholder
-                    wheelItemsArr.push({...emptyPlaceholder});
-                }
-            }
+            });
         }
 
         setWheelItems(wheelItemsArr);
@@ -98,35 +72,15 @@ export const WheelRoulette = ({items, multiplier, forceWin, onSpinComplete}: Whe
         // Set spinning state to true when wheel starts spinning
         setIsSpinning(true);
 
-        // Find the winning segment index (marked as isWin)
-        const winItemIndex = wheelItems.findIndex(item => item.isWin);
+        const fullRotations = 3; // Spin 4 full rotations before stopping
+        const finalRotation = fullRotations * 360;
 
-        // Calculate the winning segment angle
-        const segmentAngle = 360 / wheelItems.length;
-
-        // Calculate target rotation to position winning segment at the top (270 degrees)
-        let targetPosition;
-
-        if (isWin && winItemIndex !== -1) {
-            // If it's a win, stop at the winning segment
-            targetPosition = 270 - (winItemIndex * segmentAngle);
+        let randomOffset: number;
+        if (forceWin) {
+            randomOffset = Math.floor(Math.random() * 37) + 162;
         } else {
-            // If it's a loss, stop at a random non-winning segment
-            // We'll avoid the segment that has the target item
-            const lossSegments = wheelItems
-                .map((_, index) => index)
-                .filter(index => !wheelItems[index].isWin &&
-                    wheelItems[index].title !== items[0].title);
-
-            const randomLossIndex = lossSegments[Math.floor(Math.random() * lossSegments.length)];
-            targetPosition = 270 - (randomLossIndex * segmentAngle);
+            randomOffset = Math.floor(Math.random() * (450 - 270 + 1)) + 270;
         }
-
-        const fullRotations = 4; // Spin 4 full rotations before stopping
-        const finalRotation = (fullRotations * 360) + targetPosition;
-
-        // Small random offset for variety (-10 to +10 degrees)
-        const randomOffset = Math.random() * 20 - 10;
 
         // Set the final rotation value after a short delay
         setTimeout(() => {
@@ -136,15 +90,15 @@ export const WheelRoulette = ({items, multiplier, forceWin, onSpinComplete}: Whe
             setTimeout(() => {
                 setIsSpinning(false);
                 if (onSpinComplete) {
-                    onSpinComplete(isWin);
+                    onSpinComplete(forceWin);
                 }
-            }, 5000); // Wait for the animation to complete (5 seconds)
+            }, 5500);
         }, 300);
-    }, [wheelItems, items, isWin, onSpinComplete]);
+    }, [wheelItems, onSpinComplete]);
 
     // Calculate wheel dimensions
     const wheelSize = 280;
-    const centerSize = 70;
+    const centerSize = 220;
 
     return (
         <div className="flex justify-center items-center">
@@ -153,20 +107,20 @@ export const WheelRoulette = ({items, multiplier, forceWin, onSpinComplete}: Whe
                 {/* Wheel pointer (triangle at the top) */}
                 <motion.div
                     ref={wheelRef}
-                    className="absolute inset-0 rounded-full overflow-hidden bg-gradient-to-b from-purple-900 to-blue-900 border-4 border-white/20 shadow-lg"
+                    className="absolute inset-0 rounded-full overflow-hidden bg-gradient-to-b from-purple-900 to-blue-900 border-4 border-white/20"
                     animate={{
                         rotate: rotation,
                     }}
                     initial={{rotate: 0}}
                     transition={{
                         duration: 5,
-                        ease: [0.32, 0.72, 0.35, 0.94],
+                        ease: [0.22, 0.62, 0.5, 1],
                         type: "tween",
                     }}
                 >
                     <div className="absolute top-2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
                         <div
-                            className="w-0 h-0 border-l-[15px] border-r-[15px] border-t-0 border-b-[20px] border-l-transparent border-r-transparent border-b-white drop-shadow-lg rotate-180"/>
+                            className="w-0 h-0 border-l-[15px] border-r-[15px] border-t-0 border-b-[20px] border-l-transparent border-r-transparent border-b-white rotate-180"/>
                     </div>
                 </motion.div>
                 {/* The wheel */}
@@ -179,12 +133,9 @@ export const WheelRoulette = ({items, multiplier, forceWin, onSpinComplete}: Whe
                         const angle = index * segmentAngle;
 
                         // Alternate background colors
-                        const isEven = index % 2 === 0;
                         const segmentColor = item.isWin
-                            ? 'rgba(255, 215, 0, 0.25)' // Gold for winning
-                            : isEven
-                                ? 'rgba(128, 90, 213, 0.4)' // Purple
-                                : 'rgba(99, 102, 241, 0.4)'; // Blue
+                            ? 'rgba(99,211,27,0.6)' // Gold for winning
+                            : 'rgba(128, 90, 213, 0.6)'; // Blue
 
                         // Calculate segment clip path using SVG path
                         const startX = Math.sin(angle * Math.PI / 180) * 50 + 50;
@@ -215,19 +166,21 @@ export const WheelRoulette = ({items, multiplier, forceWin, onSpinComplete}: Whe
                             // Otherwise use the provided link if it's a Lottie animation
                             animationSource = item.link;
                         }
-
+                        const rotationMap = {
+                            2: 'rotate-90',
+                            5: '[transform:rotate(144deg)]',
+                            10: '[transform:rotate(162deg)]'
+                        };
                         return (
                             <div
                                 key={index}
-                                className="absolute inset-0"
+                                className={`absolute inset-0 ${rotationMap[multiplier]}`}
                             >
                                 {/* Segment with border */}
                                 <svg width="100%" height="100%" viewBox="0 0 100 100" className="absolute inset-0">
                                     <path
                                         d={path}
                                         fill={segmentColor}
-                                        stroke="rgba(255,255,255,0.3)"
-                                        strokeWidth="0.5"
                                     />
                                 </svg>
 

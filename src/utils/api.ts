@@ -179,4 +179,13 @@ export const apiService = {
             throw error;
         }
     },
+
+    async createUpgrade(gift_ids: string[], multiplier: number) {
+        try {
+            return await mainApi.post('/upgrade', {"gifts_for_upgrade": gift_ids, "multiplier": multiplier});
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
 };

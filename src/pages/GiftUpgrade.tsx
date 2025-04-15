@@ -13,27 +13,14 @@ const GiftUpgrade = () => {
     const [userGifts, setUserGifts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    const resetUserInfo = async () =>{
+        const response = await apiService.getUserInfo();
+        const data = await response.data;
+        setUserGifts(data["gifts"]);
+    }
     useEffect(() => {
-        // Fetch user's gifts and upgradable gifts
-        const fetchGifts = async () => {
-            setIsLoading(true);
-            try {
-                const response = await apiService.getUserInfo();
-                const data = await response.data;
-                setUserGifts(data["gifts"]);
-            } catch (error) {
-                console.error('Error fetching gifts:', error);
-                toast({
-                    title: 'Ошибка',
-                    description: 'Не удалось загрузить подарки',
-                    variant: 'destructive',
-                });
-            } finally {
-                setIsLoading(false);
-            }
-        };
+        setIsLoading(false);
 
-        fetchGifts();
     }, [toast]);
 
     return (
@@ -65,7 +52,6 @@ const GiftUpgrade = () => {
                     </p>
 
                     <GiftUpgradeSelector
-                        userGifts={userGifts}
                         isLoading={isLoading}
                     />
                 </motion.div>

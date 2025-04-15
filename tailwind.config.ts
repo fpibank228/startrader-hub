@@ -71,6 +71,7 @@ export default {
 				customPurple: '#3500D3',
 				customBlue: '#704ef8',
 				customDarkGray: '#282828',
+				custmDarkGray: '#546cf3',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
