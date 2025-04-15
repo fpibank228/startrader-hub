@@ -7,6 +7,7 @@ import {Check, Gift, ArrowUpCircle} from 'lucide-react';
 import GiftUpgradeMultiplier from './GiftUpgradeMultiplier';
 import UpgradePreview from './UpgradePreview';
 import {useToast} from '../../hooks/use-toast';
+import {apiService} from "@/utils/api.ts";
 
 interface GiftItem {
     gift_id: string;
@@ -25,18 +26,35 @@ interface GiftItem {
 }
 
 interface GiftUpgradeSelectorProps {
-    userGifts: GiftItem[];
     isLoading: boolean;
 }
 
-const GiftUpgradeSelector = ({userGifts, isLoading}: GiftUpgradeSelectorProps) => {
+const GiftUpgradeSelector = ({isLoading}: GiftUpgradeSelectorProps) => {
     const [selectedGifts, setSelectedGifts] = useState<GiftItem[]>([]);
     const [selectedMultiplier, setSelectedMultiplier] = useState<number>(2);
     const [showPreview, setShowPreview] = useState(false);
     const [totalValue, setTotalValue] = useState(0);
     const [potentialReward, setPotentialReward] = useState<GiftItem | null>(null);
     const {toast} = useToast();
+    const [userGifts, setUserGifts] = useState([]);
 
+    const resetUserInfo = async () =>{
+
+        console.log("reset user info");
+        try {
+            const response = await apiService.getUserInfo();
+            const data = await response.data;
+            setUserGifts(data["gifts"]);
+        } catch (error) {
+            console.error('Error fetching gifts:', error);
+            toast({
+                title: 'Ошибка',
+                description: 'апгрейнд на слишком большую сумму.',
+                variant: 'destructive',
+            });
+        }
+        setSelectedGifts([])
+    }
     // Calculate total value whenever selected gifts change
     useEffect(() => {
         const newTotal = selectedGifts.reduce((sum, gift) => sum + (gift.price || 0), 0);
@@ -46,6 +64,11 @@ const GiftUpgradeSelector = ({userGifts, isLoading}: GiftUpgradeSelectorProps) =
         const targetValue = newTotal * selectedMultiplier;
         findPotentialReward(targetValue);
     }, [selectedGifts, selectedMultiplier]);
+
+    useEffect(() => {
+        resetUserInfo()
+
+    }, []);
 
     const findPotentialReward = (targetValue: number) => {
         if (targetValue <= 0 || upgradableGifts.length === 0) {
@@ -126,6 +149,8 @@ const GiftUpgradeSelector = ({userGifts, isLoading}: GiftUpgradeSelectorProps) =
                 variant: "destructive",
             });
         }
+        resetUserInfo()
+
     };
 
     if (isLoading) {
@@ -221,7 +246,6 @@ const GiftUpgradeSelector = ({userGifts, isLoading}: GiftUpgradeSelectorProps) =
                     onClose={handleClosePreview}
                     selectedGifts={selectedGifts}
                     multiplier={selectedMultiplier}
-                    potentialReward={potentialReward}
                     onComplete={handleUpgradeComplete}
                 />
             )}

@@ -270,15 +270,6 @@ const Profile = () => {
                             <span>Профиль</span>
                         </button>
                         <button
-                            onClick={() => setTab('history')}
-                            className={`flex-1 py-3 px-2 flex items-center justify-center gap-2 transition-all duration-300 ${
-                                tab === 'history' ? 'bg-customPurple text-white' : 'text-white/70'
-                            }`}
-                        >
-                            <History size={18}/>
-                            <span>История</span>
-                        </button>
-                        <button
                             onClick={() => setTab('gifts')}
                             className={`flex-1 py-3 px-2 flex items-center justify-center gap-2 transition-all duration-300 ${
                                 tab === 'gifts' ? 'bg-customPurple text-white' : 'text-white/70'
@@ -286,6 +277,15 @@ const Profile = () => {
                         >
                             <Gift size={18}/>
                             <span>Подарки</span>
+                        </button>
+                        <button
+                            onClick={() => setTab('history')}
+                            className={`flex-1 py-3 px-2 flex items-center justify-center gap-2 transition-all duration-300 ${
+                                tab === 'history' ? 'bg-customPurple text-white' : 'text-white/70'
+                            }`}
+                        >
+                            <History size={18}/>
+                            <span>История</span>
                         </button>
                     </div>
 
@@ -333,7 +333,7 @@ const Profile = () => {
                                             </svg>
                                         </div>
                                         <div className="flex flex-col">
-                                            <p className="text-white/70 mb-1">Баланс</p>
+                                            <h1 className="text-white/70 mb-1 font-bold text-xl">Баланс</h1>
                                             <div className="flex items-center justify-between">
                                                 <h3 className="text-2xl font-bold text-white">{userInfo.user_details.balance} TON</h3>
                                                 <Button

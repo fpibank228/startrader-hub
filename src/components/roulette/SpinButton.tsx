@@ -6,10 +6,11 @@ import { Button } from '@/components/ui/button';
 interface SpinButtonProps {
   isSpinning: boolean;
   onSpin: () => void;
+  price: string;
 }
 
 // Мемоизируем кнопку, чтобы предотвратить лишние ререндеры
-const SpinButton = memo(({ isSpinning, onSpin }: SpinButtonProps) => {
+const SpinButton = memo(({ isSpinning, onSpin, price }: SpinButtonProps) => {
   return (
     <Button
       onClick={onSpin}
@@ -24,7 +25,7 @@ const SpinButton = memo(({ isSpinning, onSpin }: SpinButtonProps) => {
       ) : (
         <>
           <Play size={20} />
-          Крутить рулетку за 2 TON
+          Крутить рулетку {price}
         </>
       )}
     </Button>

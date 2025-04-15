@@ -209,7 +209,7 @@ const FixedRouletteWheel = ({onSpin}: FixedRouletteWheelProps) => {
                 />
 
                 <div className="mt-6">
-                    <SpinButton isSpinning={isSpinning} onSpin={spinWheel}/>
+                    <SpinButton isSpinning={isSpinning} onSpin={spinWheel} price="за 2 TON"/>
                 </div>
             </StarCard>
 

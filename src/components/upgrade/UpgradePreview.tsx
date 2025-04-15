@@ -1,4 +1,3 @@
-
 import React, {useState, useEffect} from 'react';
 import {motion, AnimatePresence} from 'framer-motion';
 import {Dialog, DialogContent, DialogHeader, DialogTitle} from "@/components/ui/dialog";
@@ -6,6 +5,8 @@ import LottieItem from '../roulette/LottieItem';
 import {Button} from "@/components/ui/button";
 import {ArrowUp, Gift, Check, X} from 'lucide-react';
 import {WheelRoulette} from './WheelAnimation';
+import {apiService} from "@/utils/api.ts";
+import {useNavigate} from "react-router-dom";
 
 interface GiftItem {
     gift_id: string;
@@ -28,13 +29,12 @@ interface UpgradePreviewProps {
     onClose: () => void;
     selectedGifts: GiftItem[];
     multiplier: number;
-    potentialReward: GiftItem;
     onComplete: (success: boolean, resultGift?: GiftItem) => void;
 }
 
 // Helper function to check if a URL is for a Lottie animation
 const isLottieAnimation = (url: string): boolean => {
-  return url?.toLowerCase().endsWith('.json');
+    return url?.toLowerCase().endsWith('.json');
 };
 
 const UpgradePreview = ({
@@ -42,27 +42,36 @@ const UpgradePreview = ({
                             onClose,
                             selectedGifts,
                             multiplier,
-                            potentialReward,
                             onComplete
                         }: UpgradePreviewProps) => {
     const [stage, setStage] = useState<'initial' | 'spinning' | 'result'>('initial');
     const [isSuccess, setIsSuccess] = useState(false);
-
+    const [wheelItems, setWheelItems] = useState([]);
+    const [potentialReward, setPotentialReward] = useState<GiftItem | null>(null);
     // Calculate total value
     const totalValue = selectedGifts.reduce((sum, gift) => sum + (gift.price || 0), 0);
     const upgradedValue = totalValue * multiplier;
+    const navigate = useNavigate();
 
     // Set up success probability based on multiplier
     const successProbability = multiplier === 2 ? 0.7 : (multiplier === 5 ? 0.4 : 0.2);
 
     // When the animation starts, determine success
-    const startAnimation = () => {
+    const startAnimation = async () => {
+        const res = await apiService.createUpgrade(selectedGifts.map(gift => gift.gift_id), multiplier);
+        setPotentialReward(res.data['closest_gift'])
+        console.log(selectedGifts);
+        const wheelItems1 = [
+            {...res.data['closest_gift'], isWin: true},
+            ...selectedGifts.slice(0, multiplier - 1).map(gift => ({...gift, isWin: false}))
+        ];
+        setIsSuccess(res.data['is_win']);
+        setWheelItems(wheelItems1);
         setStage('spinning');
 
         // Randomly determine if the upgrade is successful based on the probability
         const randomSuccess = Math.random() < successProbability;
         setIsSuccess(randomSuccess);
-
         // We'll use the onSpinComplete callback to transition to result stage
         // instead of using a setTimeout here
     };
@@ -84,24 +93,6 @@ const UpgradePreview = ({
         }
     }, [isOpen]);
 
-    // Set up the wheel items with the potential reward and selected gifts
-    const wheelItems = [
-        {...potentialReward, isWin: true},
-        ...selectedGifts.slice(0, multiplier - 1).map(gift => ({...gift, isWin: false}))
-    ];
-    
-    // Determine animation source for the potential reward
-    const getAnimationSource = (item: GiftItem) => {
-        if (item.name && item.name.length > 0) {
-            return `https://nft.fragment.com/gift/${item.name.toLowerCase()}.lottie.json`;
-        } else if (item.link && isLottieAnimation(item.link)) {
-            return item.link;
-        }
-        return null;
-    };
-    
-    const rewardAnimationSource = getAnimationSource(potentialReward);
-    
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
             <DialogContent
@@ -133,14 +124,6 @@ const UpgradePreview = ({
                             </div>
 
                             <div className="flex flex-col items-center mb-4">
-                                <div className="w-20 h-20 mb-4">
-                                    <motion.div
-                                        animate={{y: [0, -10, 0]}}
-                                        transition={{repeat: Infinity, duration: 1.5}}
-                                    >
-                                        <ArrowUp size={80} className="text-green-400"/>
-                                    </motion.div>
-                                </div>
 
                                 <div className="text-center">
                                     <p className="text-lg font-bold mb-1">Возможный выигрыш</p>
@@ -150,30 +133,20 @@ const UpgradePreview = ({
 
                                     <div
                                         className="w-32 h-32 mx-auto bg-white/10 rounded-lg p-2 border border-white/20">
-                                        {rewardAnimationSource ? (
-                                            <LottieItem
-                                                animationData={rewardAnimationSource}
-                                                className="w-full h-full"
-                                                loop={true}
-                                                autoplay={true}
-                                            />
-                                        ) : (
-                                            <img 
-                                                src={potentialReward.link} 
-                                                alt={potentialReward.title}
-                                                className="w-full h-full object-contain"
-                                                onError={(e) => {
-                                                    // Fallback if image fails to load
-                                                    const target = e.target as HTMLImageElement;
-                                                    target.onerror = null;
-                                                    target.src = 'https://placehold.co/100x100/purple/white?text=Item';
-                                                }}
-                                            />
-                                        )}
+                                        <img
+                                            src='https://dettext.com/wp-content/uploads/2024/04/kartinka-znak-voprosa-dlia-detei/83992-dettext_com-kartinka-znak-voprosa-dlia-detei.jpg'
+                                            className="w-full h-full object-cover"
+                                            onError={(e) => {
+                                                // Fallback if image fails to load
+                                                const target = e.target as HTMLImageElement;
+                                                target.onerror = null;
+                                                target.src = 'https://dettext.com/wp-content/uploads/2024/04/kartinka-znak-voprosa-dlia-detei/83992-dettext_com-kartinka-znak-voprosa-dlia-detei.jpg';
+                                            }}
+                                        />
                                     </div>
 
-                                    <p className="mt-2 font-bold">{potentialReward.title}</p>
-                                    <p className="text-green-400 font-bold">{potentialReward.price.toFixed(2)} TON</p>
+                                    <p className="text-green-400 font-bold">Потенциальная
+                                        стоимость: {(multiplier * totalValue).toFixed(2)} TON</p>
                                 </div>
                             </div>
 
@@ -189,8 +162,8 @@ const UpgradePreview = ({
 
                     {stage === 'spinning' && (
                         <div className="py-4">
-                            <WheelRoulette 
-                                items={wheelItems} 
+                            <WheelRoulette
+                                items={wheelItems}
                                 multiplier={multiplier}
                                 forceWin={isSuccess} // Pass the predetermined success value
                                 onSpinComplete={handleSpinComplete} // Add the callback
@@ -221,16 +194,16 @@ const UpgradePreview = ({
 
                                     <div
                                         className="w-40 h-40 mx-auto bg-white/10 rounded-lg p-2 border border-white/20 mb-4">
-                                        {rewardAnimationSource ? (
+                                        {potentialReward.link ? (
                                             <LottieItem
-                                                animationData={rewardAnimationSource}
+                                                animationData={potentialReward.link}
                                                 className="w-full h-full"
                                                 loop={true}
                                                 autoplay={true}
                                             />
                                         ) : (
-                                            <img 
-                                                src={potentialReward.link} 
+                                            <img
+                                                src={potentialReward.link}
                                                 alt={potentialReward.title}
                                                 className="w-full h-full object-contain"
                                                 onError={(e) => {

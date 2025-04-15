@@ -59,7 +59,7 @@ const RouletteWheel = ({items: initialItems, onSpin, onPlayAgain, userData}: Rou
     }, [initialItems]);
 
     const spinWheel = async () => {
-        if (userData && userData.balance < 2) {
+        if (userData && userData.balance < 0.25) {
             toast({
                 title: 'Недостаточно средств',
                 description: 'На вашем балансе недостаточно средств для вращения',
@@ -175,7 +175,7 @@ const RouletteWheel = ({items: initialItems, onSpin, onPlayAgain, userData}: Rou
                 />
 
                 <div className="mt-6">
-                    <SpinButton isSpinning={isSpinning} onSpin={spinWheel}/>
+                    <SpinButton isSpinning={isSpinning} onSpin={spinWheel} price=" за 0.25 TON"/>
                 </div>
             </StarCard>
 
