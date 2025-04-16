@@ -57,6 +57,7 @@ const Profile = () => {
     const [selectedDefaultGift, setSelectedDefaultGift] = useState<DefaultGiftItem | null>(null);
     const [isTopUpDialogOpen, setIsTopUpDialogOpen] = useState(false);
     const [isGiftDialogOpen, setIsGiftDialogOpen] = useState(false);
+    const [earnedAmount, setEarnedAmount] = useState(0);
     const {toast} = useToast();
     const isFullscreen = WebApp.isFullscreen;
     const navigate = useNavigate();
@@ -81,6 +82,8 @@ const Profile = () => {
             setUserInfo(data["user_info"]);
             setGifts(data["gifts"]);
             setDefaultGifts(data["default_gifts"]);
+            setEarnedAmount(data["ref_balance"]);
+            console.log(userInfo);
         } catch (error) {
             console.error(error);
             toast({
@@ -125,7 +128,6 @@ const Profile = () => {
         }
     ]
 
-    const earnedAmount = 0.00;
     const totalBought = transactions
         .filter(t => t.type === 'buy')
         .reduce((sum, t) => sum + parseInt(String(t.amount), 10), 0);
@@ -150,6 +152,40 @@ const Profile = () => {
         setIsTopUpDialogOpen(false);
         navigate('/topup');
     };
+
+    const withdrawClick = async () => {
+        if (selectedGift != null) {
+            await apiService.withdrawGift(selectedGift.gift_id)
+        } else {
+            await apiService.withdrawDefaultGift(selectedDefaultGift.gift_title)
+        }
+        setSelectedDefaultGift(null);
+        setSelectedGift(null);
+        toast({
+            title: 'Успешно',
+            description: 'Подарок добавлен в очередь для вывода.',
+            variant: 'default',
+        });
+        try {
+            const response = await apiService.getUserInfo();
+            const data = await response.data;
+            setTransactions(data["transactions"]);
+            setUserInfo(data["user_info"]);
+            setGifts(data["gifts"]);
+            setDefaultGifts(data["default_gifts"]);
+            setEarnedAmount(data["ref_balance"]);
+            console.log(userInfo);
+        } catch (error) {
+            console.error(error);
+            toast({
+                title: 'Ошибка',
+                description: 'Не удалось загрузить историю транзакций',
+                variant: 'destructive',
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
     const handleGiftTopUpClick = () => {
         setIsTopUpDialogOpen(false);
@@ -372,28 +408,12 @@ const Profile = () => {
                                                 </div>
 
                                                 <div
-                                                    className="bg-white/5 rounded-lg p-4 relative group border border-dashed border-white/20">
+                                                    className="bg-white/5 rounded-lg p-4 relative group border-white/20">
                                                     <div
                                                         className="flex flex-col items-center justify-center gap-1 text-blue-50/50">
                                                         <span
-                                                            className="font-bold text-center">{earnedAmount} TON</span>
-                                                        <span className="text-sm text-white/30">заработано</span>
-
-                                                        <div
-                                                            className="absolute top-2 right-2 text-white/40 hover:text-white/60 transition-colors">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                                                 height="16" viewBox="0 0 24 24" fill="none"
-                                                                 stroke="currentColor">
-                                                                <circle cx="12" cy="12" r="10" strokeWidth="1.5"/>
-                                                                <path d="M12 16v-4m0-4h.01" strokeWidth="2"
-                                                                      strokeLinecap="round"/>
-                                                            </svg>
-
-                                                            <div
-                                                                className="absolute hidden group-hover:block top-full right-0 mt-1 w-48 bg-black/90 text-white text-xs p-2 rounded-md shadow-lg z-10">
-                                                                Эта функция находится в разработке!
-                                                            </div>
-                                                        </div>
+                                                            className="font-bold text-center text-white/80">{userInfo['user_details']['ref_balance']} TON</span>
+                                                        <span className="text-sm text-white/80">заработано</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -714,6 +734,7 @@ const Profile = () => {
 
                         <div className="grid grid-cols-2 gap-3">
                             <button
+                                onClick={withdrawClick}
                                 className="py-2 rounded-lg bg-gradient-to-r from-customPurple/80 to-purple-900/80 hover:from-customPurple hover:to-purple-900 flex items-center justify-center gap-1"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -785,6 +806,7 @@ const Profile = () => {
 
                         <div className="grid grid-cols-2 gap-3">
                             <button
+                                onClick={withdrawClick}
                                 className="py-2 rounded-lg bg-gradient-to-r from-customPurple/80 to-purple-900/80 hover:from-customPurple hover:to-purple-900 flex items-center justify-center gap-1"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"

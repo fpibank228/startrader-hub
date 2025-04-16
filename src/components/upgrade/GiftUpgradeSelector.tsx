@@ -6,7 +6,6 @@ import LottieItem from '../roulette/LottieItem';
 import {Check, Gift, ArrowUpCircle} from 'lucide-react';
 import GiftUpgradeMultiplier from './GiftUpgradeMultiplier';
 import UpgradePreview from './UpgradePreview';
-import UpgradeCircle from './UpgradeCircle';
 import {useToast} from '../../hooks/use-toast';
 import {apiService} from "@/utils/api.ts";
 
@@ -36,7 +35,6 @@ const GiftUpgradeSelector = ({isLoading}: GiftUpgradeSelectorProps) => {
     const [showPreview, setShowPreview] = useState(false);
     const [totalValue, setTotalValue] = useState(0);
     const [potentialReward, setPotentialReward] = useState<GiftItem | null>(null);
-    const [showUpgradeCircle, setShowUpgradeCircle] = useState(false);
     const {toast} = useToast();
     const [userGifts, setUserGifts] = useState([]);
 
@@ -126,11 +124,6 @@ const GiftUpgradeSelector = ({isLoading}: GiftUpgradeSelectorProps) => {
             return;
         }
 
-        setShowUpgradeCircle(true);
-    };
-
-    const handleSpinComplete = () => {
-        setShowUpgradeCircle(false);
         setShowPreview(true);
     };
 
@@ -180,80 +173,69 @@ const GiftUpgradeSelector = ({isLoading}: GiftUpgradeSelectorProps) => {
                     </div>
                 ) : (
                     <>
-                        {showUpgradeCircle ? (
-                            <div className="py-6">
-                                <UpgradeCircle 
-                                    multiplier={selectedMultiplier} 
-                                    onSpinComplete={handleSpinComplete}
-                                />
-                            </div>
-                        ) : (
-                            <>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-6">
-                                    {userGifts.map((gift) => (
-                                        <div
-                                            key={gift.gift_id}
-                                            className={`relative bg-white/5 rounded-lg overflow-hidden cursor-pointer hover:bg-white/10 transition-colors border ${
-                                                selectedGifts.some(g => g.gift_id === gift.gift_id)
-                                                    ? 'border-purple-500'
-                                                    : 'border-white/10'
-                                            }`}
-                                            onClick={() => toggleGiftSelection(gift)}
-                                        >
-                                            {selectedGifts.some(g => g.gift_id === gift.gift_id) && (
-                                                <div className="absolute top-2 right-2 bg-purple-500 rounded-full p-1 z-10">
-                                                    <Check size={14}/>
-                                                </div>
-                                            )}
-                                            <div className="w-full aspect-square relative">
-                                                <LottieItem
-                                                    animationData={gift.link}
-                                                    className="w-full h-full"
-                                                    loop={false}
-                                                    autoplay={false}
-                                                />
-                                            </div>
-                                            <div className="p-2 text-center">
-                                                <p className="text-xs font-medium truncate">{gift.title}</p>
-                                                <p className="text-yellow-400 text-xs">{gift.price} TON</p>
-                                            </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-6">
+                            {userGifts.map((gift) => (
+                                <div
+                                    key={gift.gift_id}
+                                    className={`relative bg-white/5 rounded-lg overflow-hidden cursor-pointer hover:bg-white/10 transition-colors border ${
+                                        selectedGifts.some(g => g.gift_id === gift.gift_id)
+                                            ? 'border-purple-500'
+                                            : 'border-white/10'
+                                    }`}
+                                    onClick={() => toggleGiftSelection(gift)}
+                                >
+                                    {selectedGifts.some(g => g.gift_id === gift.gift_id) && (
+                                        <div className="absolute top-2 right-2 bg-purple-500 rounded-full p-1 z-10">
+                                            <Check size={14}/>
                                         </div>
-                                    ))}
+                                    )}
+                                    <div className="w-full aspect-square relative">
+                                        <LottieItem
+                                            animationData={gift.link}
+                                            className="w-full h-full"
+                                            loop={false}
+                                            autoplay={false}
+                                        />
+                                    </div>
+                                    <div className="p-2 text-center">
+                                        <p className="text-xs font-medium truncate">{gift.title}</p>
+                                        <p className="text-yellow-400 text-xs">{gift.price} TON</p>
+                                    </div>
                                 </div>
+                            ))}
+                        </div>
 
-                                <div className="space-y-4">
-                                    <div className="flex items-center justify-between bg-white/5 p-3 rounded-lg">
-                                        <span>Выбрано подарков:</span>
-                                        <span className="font-bold">{selectedGifts.length}</span>
-                                    </div>
+                        <div className="space-y-4">
+                            <div className="flex items-center justify-between bg-white/5 p-3 rounded-lg">
+                                <span>Выбрано подарков:</span>
+                                <span className="font-bold">{selectedGifts.length}</span>
+                            </div>
 
-                                    <div className="flex items-center justify-between bg-white/5 p-3 rounded-lg">
-                                        <span>Общая стоимость:</span>
-                                        <span className="font-bold text-yellow-400">{totalValue.toFixed(2)} TON</span>
-                                    </div>
+                            <div className="flex items-center justify-between bg-white/5 p-3 rounded-lg">
+                                <span>Общая стоимость:</span>
+                                <span className="font-bold text-yellow-400">{totalValue.toFixed(2)} TON</span>
+                            </div>
 
-                                    <GiftUpgradeMultiplier
-                                        selectedMultiplier={selectedMultiplier}
-                                        onChange={handleMultiplierChange}
-                                    />
+                            <GiftUpgradeMultiplier
+                                selectedMultiplier={selectedMultiplier}
+                                onChange={handleMultiplierChange}
+                            />
 
-                                    <div className="flex items-center justify-between bg-white/5 p-3 rounded-lg">
-                                        <span>Потенциальная стоимость:</span>
-                                        <span
-                                            className="font-bold text-green-400">{(totalValue * selectedMultiplier).toFixed(2)} TON</span>
-                                    </div>
+                            <div className="flex items-center justify-between bg-white/5 p-3 rounded-lg">
+                                <span>Потенциальная стоимость:</span>
+                                <span
+                                    className="font-bold text-green-400">{(totalValue * selectedMultiplier).toFixed(2)} TON</span>
+                            </div>
 
-                                    <Button
-                                        onClick={handleStartUpgrade}
-                                        disabled={selectedGifts.length === 0}
-                                        className="w-full py-6 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
-                                    >
-                                        <ArrowUpCircle className="mr-2"/>
-                                        Начать апгрейд
-                                    </Button>
-                                </div>
-                            </>
-                        )}
+                            <Button
+                                onClick={handleStartUpgrade}
+                                disabled={selectedGifts.length === 0}
+                                className="w-full py-6 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                            >
+                                <ArrowUpCircle className="mr-2"/>
+                                Начать апгрейд
+                            </Button>
+                        </div>
                     </>
                 )}
             </StarCard>
@@ -272,6 +254,7 @@ const GiftUpgradeSelector = ({isLoading}: GiftUpgradeSelectorProps) => {
 };
 
 export default GiftUpgradeSelector;
+
 
 // Mock data for upgradable gifts
 const upgradableGifts = [

@@ -188,4 +188,22 @@ export const apiService = {
             throw error;
         }
     },
+
+    async withdrawGift(gift_id: string) {
+        try {
+            return await mainApi.post('/withdraw', {"gift_id": gift_id});
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
+
+    async withdrawDefaultGift(gift_id: string) {
+        try {
+            return await mainApi.post('/withdraw_default_gift', {"gift_id": gift_id});
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
 };

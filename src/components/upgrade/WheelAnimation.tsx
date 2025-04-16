@@ -76,6 +76,7 @@ export const WheelRoulette = ({items, multiplier, forceWin, onSpinComplete}: Whe
         const finalRotation = fullRotations * 360;
 
         let randomOffset: number;
+        console.log(forceWin)
         if (forceWin) {
             randomOffset = Math.floor(Math.random() * 37) + 162;
         } else {
@@ -247,8 +248,8 @@ export const WheelRoulette = ({items, multiplier, forceWin, onSpinComplete}: Whe
                         }}
                     >
                         <div className="text-white font-bold text-center">
-                            <span className="text-xs block opacity-80">АПГРЕЙД</span>
-                            {multiplier && <span className="text-xs block opacity-80">x{multiplier}</span>}
+                            <span className="text-xl block opacity-80">АПГРЕЙД</span>
+                            {multiplier && <span className="text-xl block opacity-80">x{multiplier}</span>}
                         </div>
                     </div>
                 </div>

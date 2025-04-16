@@ -68,12 +68,6 @@ const UpgradePreview = ({
         setIsSuccess(res.data['is_win']);
         setWheelItems(wheelItems1);
         setStage('spinning');
-
-        // Randomly determine if the upgrade is successful based on the probability
-        const randomSuccess = Math.random() < successProbability;
-        setIsSuccess(randomSuccess);
-        // We'll use the onSpinComplete callback to transition to result stage
-        // instead of using a setTimeout here
     };
 
     // Handle spin completion from WheelRoulette component
@@ -134,13 +128,13 @@ const UpgradePreview = ({
                                     <div
                                         className="w-32 h-32 mx-auto bg-white/10 rounded-lg p-2 border border-white/20">
                                         <img
-                                            src='https://dettext.com/wp-content/uploads/2024/04/kartinka-znak-voprosa-dlia-detei/83992-dettext_com-kartinka-znak-voprosa-dlia-detei.jpg'
+                                            src='./../../../public/assets/a.jpg'
                                             className="w-full h-full object-cover"
                                             onError={(e) => {
                                                 // Fallback if image fails to load
                                                 const target = e.target as HTMLImageElement;
                                                 target.onerror = null;
-                                                target.src = 'https://dettext.com/wp-content/uploads/2024/04/kartinka-znak-voprosa-dlia-detei/83992-dettext_com-kartinka-znak-voprosa-dlia-detei.jpg';
+                                                target.src = './../../../public/assets/a.jpg';
                                             }}
                                         />
                                     </div>
@@ -165,7 +159,7 @@ const UpgradePreview = ({
                             <WheelRoulette
                                 items={wheelItems}
                                 multiplier={multiplier}
-                                forceWin={isSuccess} // Pass the predetermined success value
+                                forceWin={isSuccess}
                                 onSpinComplete={handleSpinComplete} // Add the callback
                             />
                         </div>

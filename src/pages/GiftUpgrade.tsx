@@ -1,8 +1,8 @@
-
 import React, {useState, useEffect} from 'react';
 import {motion} from 'framer-motion';
 import StarBackground from '../components/StarBackground';
 import GiftUpgradeSelector from '../components/upgrade/GiftUpgradeSelector';
+import UpgradePreview from '../components/upgrade/UpgradePreview';
 import WebApp from "@twa-dev/sdk";
 import {apiService} from '@/utils/api';
 import {useToast} from '../hooks/use-toast';
