@@ -23,7 +23,7 @@ export const staticGiftItems: RouletteItem[] = [
     {
         'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5168043875654172773/1x/000.png',
         'title': 'Champ',
-        'price': 0.45,
+        'price': 0.5,
     },
     {
         'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5170144170496491616/1x/000.png',
@@ -36,9 +36,9 @@ export const staticGiftItems: RouletteItem[] = [
         'price': 0.1
     },
     {
-        'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5170250947678437525/1x/000.png',
-        'title': 'Gift',
-        'price': 0.1,
+        'link': 'https://easygift.site/assets/ring-CaIX7Rlr.webp',
+        'title': 'Ring',
+        'price': 0.5,
     },
     {
         'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5170314324215857265/1x/000.png',
