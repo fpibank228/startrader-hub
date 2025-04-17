@@ -35,7 +35,7 @@ const CryptoTopup = () => {
         if (!isNaN(numValue) && numValue > 0) {
             setAmount(numValue);
         } else {
-            setAmount(0);
+            setAmount(0.5);
         }
     };
 
@@ -154,7 +154,7 @@ const CryptoTopup = () => {
                                 <label className="block text-white/90 text-sm mb-2">Сумма в TON:</label>
                                 <input
                                     type="number"
-                                    min="0.1"
+                                    min="0.5"
                                     step="0.1"
                                     placeholder="Введите сумму в TON"
                                     value={amount || ''}

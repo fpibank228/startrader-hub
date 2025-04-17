@@ -32,7 +32,7 @@ const Index = () => {
         navigate('/profile');
     };
     const handleUpgradeGiftsClick = () => {
-        navigate('/gift-upgrade');
+        navigate('/roulette/upgrade');
     };
 
     return (

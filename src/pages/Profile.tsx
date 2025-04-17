@@ -566,7 +566,7 @@ const Profile = () => {
                                         ))}
                                     </div>
                                 )}
-                                {gifts.length === 0 ? (
+                                {defaultGifts.length === 0 ? (
                                     <div className="">
                                     </div>
                                 ) : (
