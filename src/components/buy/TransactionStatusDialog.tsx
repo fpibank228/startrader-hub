@@ -22,7 +22,7 @@ const TransactionStatusDialog = ({ isLoading, isSuccess }: TransactionStatusDial
           <>
             <Check className="text-green-500 w-8 h-8 mb-4" />
             <p className="text-gray-700">Транзакция прошла успешно!</p>
-            <p className="text-gray-500 text-sm">Ваши звезды придут к вам на аккаунт.</p>
+            <p className="text-gray-500 text-sm">Ваши средства будут зачислены вам на баланс.</p>
           </>
         )}
       </div>
