@@ -55,7 +55,7 @@ const BasicRoulette = () => {
         chance: 'no',
         link: 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5168103777563050263/1x/000.png',
         title: 'Placeholder',
-        price: 0.25,
+        price: 0.2,
       });
     }
     console.log(otherItems);
