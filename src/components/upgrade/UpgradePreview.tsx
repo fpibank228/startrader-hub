@@ -126,17 +126,8 @@ const UpgradePreview = ({
                                     </p>
 
                                     <div
-                                        className="w-32 h-32 mx-auto bg-white/10 rounded-lg p-2 border border-white/20">
-                                        <img
-                                            src='./../../../public/assets/a.jpg'
-                                            className="w-full h-full object-cover"
-                                            onError={(e) => {
-                                                // Fallback if image fails to load
-                                                const target = e.target as HTMLImageElement;
-                                                target.onerror = null;
-                                                target.src = './../../../public/assets/a.jpg';
-                                            }}
-                                        />
+                                        className="w-32 h-32 mx-auto bg-white/10 rounded-lg p-2 border border-white/20 flex items-center justify-center text-white text-4xl font-bold">
+                                        ?
                                     </div>
 
                                     <p className="text-green-400 font-bold">Потенциальная
