@@ -54,7 +54,7 @@ const UpgradePreview = ({
     const navigate = useNavigate();
 
     // Set up success probability based on multiplier
-    const successProbability = multiplier === 2 ? 0.7 : (multiplier === 5 ? 0.4 : 0.2);
+    const successProbability = multiplier === 2 ? 0.5 : (multiplier === 5 ? 0.25 : 0.1);
 
     // When the animation starts, determine success
     const startAnimation = async () => {
