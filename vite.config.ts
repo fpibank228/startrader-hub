@@ -1,4 +1,3 @@
-
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -32,8 +31,8 @@ export default defineConfig(({ mode }) => ({
     },
   },
   define: {
-    global: 'globalThis',
-    'process.env': {},
+    global: 'globalThis', // Добавьте эту строку
+    'process.env': {}, // Добавьте эту строку
   },
   optimizeDeps: {
     include: ['buffer'],
@@ -49,4 +48,3 @@ export default defineConfig(({ mode }) => ({
     },
   },
 }));
-
