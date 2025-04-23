@@ -1,3 +1,4 @@
+
 import React, {useState, useEffect} from 'react';
 import {motion} from 'framer-motion';
 import {History, User, DollarSign, Share2, Wallet, Loader, Gift, CreditCard, Copy} from 'lucide-react';
@@ -381,13 +382,13 @@ const Profile = () => {
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path fillRule="evenodd" clipRule="evenodd"
                                                               d="M6.63869 12.1902L3.50621 14.1092C3.18049 14.3087 2.75468 14.2064 2.55515 13.8807C2.45769 13.7216 2.42864 13.5299 2.47457 13.3491L2.95948 11.4405C3.13452 10.7515 3.60599 10.1756 4.24682 9.86791L7.6642 8.22716C7.82352 8.15067 7.89067 7.95951 7.81418 7.80019C7.75223 7.67116 7.61214 7.59896 7.47111 7.62338L3.66713 8.28194C2.89387 8.41581 2.1009 8.20228 1.49941 7.69823L0.297703 6.69116C0.00493565 6.44581 -0.0335059 6.00958 0.211842 5.71682C0.33117 5.57442 0.502766 5.48602 0.687982 5.47153L4.35956 5.18419C4.61895 5.16389 4.845 4.99974 4.94458 4.75937L6.36101 1.3402C6.5072 0.987302 6.91179 0.819734 7.26469 0.965925C7.43413 1.03612 7.56876 1.17075 7.63896 1.3402L9.05539 4.75937C9.15496 4.99974 9.38101 5.16389 9.6404 5.18419L13.3322 5.47311C13.713 5.50291 13.9975 5.83578 13.9677 6.2166C13.9534 6.39979 13.8667 6.56975 13.7269 6.68896L10.9114 9.08928C10.7131 9.25826 10.6267 9.52425 10.6876 9.77748L11.5532 13.3733C11.6426 13.7447 11.414 14.1182 11.0427 14.2076C10.8642 14.2506 10.676 14.2208 10.5195 14.1249L7.36128 12.1902C7.13956 12.0544 6.8604 12.0544 6.63869 12.1902Z"
-                                                              fill="ddd"></path>
+                                                              fill="currentColor"></path>
                                                     </svg>
                                                 </h3>
                                                 <Button
                                                     onClick={handleTopUpClick}
                                                     variant="secondary"
-                                                    className="relative bg-white/20 text-white hover:bg-white/30 px-4 py-2" // Добавлены отступы
+                                                    className="relative bg-white/20 text-white hover:bg-white/30 px-4 py-2"
                                                 >
                                                     <CreditCard size={16} className="mr-1"/>
                                                     Пополнить
@@ -399,32 +400,24 @@ const Profile = () => {
                                     <div className="w-full h-0.5 bg-white/10 my-4"></div>
 
                                     <div className="w-full gap-4">
-                                        <div
-                                            className="grid grid-cols-2 gap-4">
-                                            <div
-                                                className="bg-white/5 rounded-lg p-4 text-center flex items-center justify-center">
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="bg-white/5 rounded-lg p-4 text-center flex items-center justify-center">
                                                 <div>
-                                                <p className="text-4xl font-bold">50%</p>
+                                                    <p className="text-4xl font-bold">50%</p>
                                                     <p className="text-base text-white/70">твой процент</p>
                                                 </div>
                                             </div>
 
-                                            <div
-                                                className="flex flex-col gap-4">
+                                            <div className="flex flex-col gap-4">
                                                 <div className="bg-white/5 rounded-lg p-4">
-                                                    <div
-                                                        className="flex items-center justify-center gap-1 text-blue-50">
-                                                        <span
-                                                            className="font-bold">{userInfo['ref_user'] || '0'} приглашено</span>
+                                                    <div className="flex items-center justify-center gap-1 text-blue-50">
+                                                        <span className="font-bold">{userInfo['ref_user'] || '0'} приглашено</span>
                                                     </div>
                                                 </div>
 
-                                                <div
-                                                    className="bg-white/5 rounded-lg p-4 relative group border-white/20">
-                                                    <div
-                                                        className="flex flex-col items-center justify-center gap-1 text-blue-50/50">
-                                                        <span
-                                                            className="font-bold text-center text-white/80">{userInfo['user_details']['ref_balance']} TON</span>
+                                                <div className="bg-white/5 rounded-lg p-4 relative group border-white/20">
+                                                    <div className="flex flex-col items-center justify-center gap-1 text-blue-50/50">
+                                                        <span className="font-bold text-center text-white/80">{userInfo['user_details']['ref_balance']} TON</span>
                                                         <span className="text-sm text-white/80">заработано</span>
                                                     </div>
                                                 </div>
@@ -478,7 +471,7 @@ const Profile = () => {
                                          xmlns="http://www.w3.org/2000/svg">
                                         <path fillRule="evenodd" clipRule="evenodd"
                                               d="M6.63869 12.1902L3.50621 14.1092C3.18049 14.3087 2.75468 14.2064 2.55515 13.8807C2.45769 13.7216 2.42864 13.5299 2.47457 13.3491L2.95948 11.4405C3.13452 10.7515 3.60599 10.1756 4.24682 9.86791L7.6642 8.22716C7.82352 8.15067 7.89067 7.95951 7.81418 7.80019C7.75223 7.67116 7.61214 7.59896 7.47111 7.62338L3.66713 8.28194C2.89387 8.41581 2.1009 8.20228 1.49941 7.69823L0.297703 6.69116C0.00493565 6.44581 -0.0335059 6.00958 0.211842 5.71682C0.33117 5.57442 0.502766 5.48602 0.687982 5.47153L4.35956 5.18419C4.61895 5.16389 4.845 4.99974 4.94458 4.75937L6.36101 1.3402C6.5072 0.987302 6.91179 0.819734 7.26469 0.965925C7.43413 1.03612 7.56876 1.17075 7.63896 1.3402L9.05539 4.75937C9.15496 4.99974 9.38101 5.16389 9.6404 5.18419L13.3322 5.47311C13.713 5.50291 13.9975 5.83578 13.9677 6.2166C13.9534 6.39979 13.8667 6.56975 13.7269 6.68896L10.9114 9.08928C10.7131 9.25826 10.6267 9.52425 10.6876 9.77748L11.5532 13.3733C11.6426 13.7447 11.414 14.1182 11.0427 14.2076C10.8642 14.2506 10.676 14.2208 10.5195 14.1249L7.36128 12.1902C7.13956 12.0544 6.8604 12.0544 6.63869 12.1902Z"
-                                              fill="ddd"></path>
+                                              fill="currentColor"></path>
                                     </svg>
                                     <span className="font-bold">Куплено</span>
                                 </div>
@@ -510,4 +503,286 @@ const Profile = () => {
                                                             <svg width="16" height="16" viewBox="0 0 14 15"
                                                                  fill="#fde047" xmlns="http://www.w3.org/2000/svg">
                                                                 <path fillRule="evenodd" clipRule="evenodd"
-                                                                      d="M6.63869 12.1902L3.50621 14.1092C3.18049 14.3087 2.75468 14.2064 2.55515 13.8807C2.45769 13.7216 2.42864 13.5299 2.47457 13.3491L2.95948 11.4405C3.13452 10.7515 3.60599 10.1756 4.24682 9.86791L7.6642 8.22716C7.82352 8.15067 7.89067 7.95951 7.81418 7.80019C7.75223 7.67116 7.61214 7.59896 7.47111 7.62338L3.66713 8.28194C2.89387 8.41581 2.1009 8.20228 1.49941 7.69823L0.297703 6.69116C0.00493565 6.44581 -0.0335059 6.00958 0.211842 5.71682C0.33117
+                                                                      d="M6.63869 12.1902L3.50621 14.1092C3.18049 14.3087 2.75468 14.2064 2.55515 13.8807C2.45769 13.7216 2.42864 13.5299 2.47457 13.3491L2.95948 11.4405C3.13452 10.7515 3.60599 10.1756 4.24682 9.86791L7.6642 8.22716C7.82352 8.15067 7.89067 7.95951 7.81418 7.80019C7.75223 7.67116 7.61214 7.59896 7.47111 7.62338L3.66713 8.28194C2.89387 8.41581 2.1009 8.20228 1.49941 7.69823L0.297703 6.69116C0.00493565 6.44581 -0.0335059 6.00958 0.211842 5.71682C0.33117 5.57442 0.502766 5.48602 0.687982 5.47153L4.35956 5.18419C4.61895 5.16389 4.845 4.99974 4.94458 4.75937L6.36101 1.3402C6.5072 0.987302 6.91179 0.819734 7.26469 0.965925C7.43413 1.03612 7.56876 1.17075 7.63896 1.3402L9.05539 4.75937C9.15496 4.99974 9.38101 5.16389 9.6404 5.18419L13.3322 5.47311C13.713 5.50291 13.9975 5.83578 13.9677 6.2166C13.9534 6.39979 13.8667 6.56975 13.7269 6.68896L10.9114 9.08928C10.7131 9.25826 10.6267 9.52425 10.6876 9.77748L11.5532 13.3733C11.6426 13.7447 11.414 14.1182 11.0427 14.2076C10.8642 14.2506 10.676 14.2208 10.5195 14.1249L7.36128 12.1902C7.13956 12.0544 6.8604 12.0544 6.63869 12.1902Z"
+                                                                      fill="currentColor"></path>
+                                                            </svg>
+                                                        ) : (
+                                                            <DollarSign size={16} className="text-green-500"/>
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-medium">
+                                                            {transaction.type === 'buy'
+                                                                ? 'Покупка звезд'
+                                                                : 'Продажа звезд'}
+                                                        </p>
+                                                        <p className="text-xs text-white/70">
+                                                            {new Date(transaction.date).toLocaleString()}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className={`font-medium ${
+                                                        transaction.type === 'buy'
+                                                            ? 'text-yellow-300'
+                                                            : 'text-green-500'
+                                                    }`}>
+                                                        {transaction.type === 'buy' ? '+' : '-'}{transaction.amount}
+                                                    </p>
+                                                    <p className="text-xs text-white/70">{transaction.price} TON</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        {transactions.length === 0 && (
+                                            <div className="text-center py-10 text-white/50">
+                                                <p>Операций пока нет</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </StarCard>
+                        </motion.div>
+                    )}
+
+                    {tab === 'gifts' && (
+                        <motion.div
+                            initial={{opacity: 0, y: 20}}
+                            animate={{opacity: 1, y: 0}}
+                            transition={{duration: 0.5}}
+                        >
+                            <div className="text-center mb-6">
+                                <div className="bg-white/5 rounded-lg p-4 mb-4 mx-auto max-w-xs">
+                                    <p className="text-sm text-white/70 mb-1">Подарков у вас</p>
+                                    <p className="text-2xl font-bold">{gifts.length + defaultGifts.length}</p>
+                                </div>
+                            </div>
+
+                            {isLoading ? (
+                                <div className="flex items-center justify-center p-10">
+                                    <Loader className="animate-spin text-customPurple w-10 h-10"/>
+                                </div>
+                            ) : (
+                                <>
+                                    {gifts.length + defaultGifts.length > 0 ? (
+                                        <>
+                                            <div className="mb-6">
+                                                <h3 className="font-medium mb-3">Ваши подарки</h3>
+
+                                                <div className="grid grid-cols-3 gap-2">
+                                                    {gifts.map((gift, index) => (
+                                                        <div
+                                                            key={`gift-${index}`}
+                                                            onClick={() => handleGiftClick(gift)}
+                                                            className="bg-white/5 rounded-lg p-2 flex flex-col items-center cursor-pointer hover:bg-white/10 transition-colors"
+                                                        >
+                                                            <div
+                                                                className="w-full aspect-square mb-2 bg-gradient-to-br from-purple-500/30 to-customPurple/10 rounded-lg flex items-center justify-center overflow-hidden">
+                                                                <img
+                                                                    src={gift.url || "https://placehold.co/100"}
+                                                                    alt={gift.title}
+                                                                    className="w-full h-full object-contain"
+                                                                />
+                                                            </div>
+                                                            <p className="text-xs font-medium truncate w-full text-center">{gift.title}</p>
+                                                            <p className="text-xs text-white/70">{gift.price}
+                                                                <svg width="12" height="12" viewBox="0 0 14 15"
+                                                                     fill="#FDE047" className="inline ml-0.5"
+                                                                     xmlns="http://www.w3.org/2000/svg">
+                                                                    <path fillRule="evenodd" clipRule="evenodd"
+                                                                          d="M6.63869 12.1902L3.50621 14.1092C3.18049 14.3087 2.75468 14.2064 2.55515 13.8807C2.45769 13.7216 2.42864 13.5299 2.47457 13.3491L2.95948 11.4405C3.13452 10.7515 3.60599 10.1756 4.24682 9.86791L7.6642 8.22716C7.82352 8.15067 7.89067 7.95951 7.81418 7.80019C7.75223 7.67116 7.61214 7.59896 7.47111 7.62338L3.66713 8.28194C2.89387 8.41581 2.1009 8.20228 1.49941 7.69823L0.297703 6.69116C0.00493565 6.44581 -0.0335059 6.00958 0.211842 5.71682C0.33117 5.57442 0.502766 5.48602 0.687982 5.47153L4.35956 5.18419C4.61895 5.16389 4.845 4.99974 4.94458 4.75937L6.36101 1.3402C6.5072 0.987302 6.91179 0.819734 7.26469 0.965925C7.43413 1.03612 7.56876 1.17075 7.63896 1.3402L9.05539 4.75937C9.15496 4.99974 9.38101 5.16389 9.6404 5.18419L13.3322 5.47311C13.713 5.50291 13.9975 5.83578 13.9677 6.2166C13.9534 6.39979 13.8667 6.56975 13.7269 6.68896L10.9114 9.08928C10.7131 9.25826 10.6267 9.52425 10.6876 9.77748L11.5532 13.3733C11.6426 13.7447 11.414 14.1182 11.0427 14.2076C10.8642 14.2506 10.676 14.2208 10.5195 14.1249L7.36128 12.1902C7.13956 12.0544 6.8604 12.0544 6.63869 12.1902Z"
+                                                                          fill="currentColor"></path>
+                                                                </svg>
+                                                            </p>
+                                                        </div>
+                                                    ))}
+
+                                                    {defaultGifts.map((gift, index) => (
+                                                        <div
+                                                            key={`default-gift-${index}`}
+                                                            onClick={() => handleDefaultGiftClick(gift)}
+                                                            className="bg-white/5 rounded-lg p-2 flex flex-col items-center cursor-pointer hover:bg-white/10 transition-colors"
+                                                        >
+                                                            <div
+                                                                className="w-full aspect-square mb-2 bg-gradient-to-br from-purple-500/30 to-customPurple/10 rounded-lg flex items-center justify-center overflow-hidden">
+                                                                <img
+                                                                    src={getGiftLink(gift.gift_title)}
+                                                                    alt={gift.gift_title}
+                                                                    className="w-full h-full object-contain"
+                                                                />
+                                                            </div>
+                                                            <p className="text-xs font-medium truncate w-full text-center">{gift.gift_title}</p>
+                                                            <p className="text-xs text-white/70">{gift.gift_price}
+                                                                <svg width="12" height="12" viewBox="0 0 14 15"
+                                                                     fill="#FDE047" className="inline ml-0.5"
+                                                                     xmlns="http://www.w3.org/2000/svg">
+                                                                    <path fillRule="evenodd" clipRule="evenodd"
+                                                                          d="M6.63869 12.1902L3.50621 14.1092C3.18049 14.3087 2.75468 14.2064 2.55515 13.8807C2.45769 13.7216 2.42864 13.5299 2.47457 13.3491L2.95948 11.4405C3.13452 10.7515 3.60599 10.1756 4.24682 9.86791L7.6642 8.22716C7.82352 8.15067 7.89067 7.95951 7.81418 7.80019C7.75223 7.67116 7.61214 7.59896 7.47111 7.62338L3.66713 8.28194C2.89387 8.41581 2.1009 8.20228 1.49941 7.69823L0.297703 6.69116C0.00493565 6.44581 -0.0335059 6.00958 0.211842 5.71682C0.33117 5.57442 0.502766 5.48602 0.687982 5.47153L4.35956 5.18419C4.61895 5.16389 4.845 4.99974 4.94458 4.75937L6.36101 1.3402C6.5072 0.987302 6.91179 0.819734 7.26469 0.965925C7.43413 1.03612 7.56876 1.17075 7.63896 1.3402L9.05539 4.75937C9.15496 4.99974 9.38101 5.16389 9.6404 5.18419L13.3322 5.47311C13.713 5.50291 13.9975 5.83578 13.9677 6.2166C13.9534 6.39979 13.8667 6.56975 13.7269 6.68896L10.9114 9.08928C10.7131 9.25826 10.6267 9.52425 10.6876 9.77748L11.5532 13.3733C11.6426 13.7447 11.414 14.1182 11.0427 14.2076C10.8642 14.2506 10.676 14.2208 10.5195 14.1249L7.36128 12.1902C7.13956 12.0544 6.8604 12.0544 6.63869 12.1902Z"
+                                                                          fill="currentColor"></path>
+                                                                </svg>
+                                                            </p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                        </>
+                                    ) : (
+                                        <div className="bg-white/5 rounded-lg p-8 text-center">
+                                            <p className="text-white/70 mb-3">У вас еще нет подарков</p>
+                                            <p className="text-sm text-white/50">
+                                                Подарки можно получить в рулетке или приобрести другим способом
+                                            </p>
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                        </motion.div>
+                    )}
+                </div>
+            </div>
+
+            {/* Dialog for top-up selection */}
+            <Dialog open={isTopUpDialogOpen} onOpenChange={setIsTopUpDialogOpen}>
+                <DialogContent className="bg-customDarkBg border-customPurple/40 text-white max-w-sm mx-auto">
+                    <DialogHeader>
+                        <DialogTitle className="text-center">Пополнение баланса</DialogTitle>
+                        <DialogDescription className="text-center text-white/70">
+                            Выберите способ пополнения баланса
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="grid gap-4 py-4">
+                        <Button onClick={handleCryptoTopUpClick} className="bg-customPurple hover:bg-customPurple/80">
+                            <Wallet size={16} className="mr-2"/>
+                            TON Криптовалюта
+                        </Button>
+                        <Button onClick={handleRublePaymentClick} className="bg-blue-600 hover:bg-blue-700">
+                            <CreditCard size={16} className="mr-2"/>
+                            Рубли
+                        </Button>
+                        <Button onClick={handleGiftTopUpClick} className="bg-pink-600 hover:bg-pink-700">
+                            <Gift size={16} className="mr-2"/>
+                            Подарки
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
+
+            {/* Dialog for gift details */}
+            <Dialog open={selectedGift !== null || selectedDefaultGift !== null}
+                    onOpenChange={handleCloseGiftDetail}>
+                <DialogContent className="bg-customDarkBg border-customPurple/40 text-white max-w-sm mx-auto">
+                    {selectedGift && (
+                        <>
+                            <DialogHeader>
+                                <DialogTitle
+                                    className="text-center">{selectedGift.title || selectedGift.name || 'Подарок'}</DialogTitle>
+                            </DialogHeader>
+
+                            <div className="w-40 h-40 mx-auto bg-gradient-to-br from-purple-500/30 to-customPurple/10 rounded-lg flex items-center justify-center overflow-hidden">
+                                <img
+                                    src={selectedGift.url || 'https://placehold.co/200'}
+                                    alt={selectedGift.title || selectedGift.name || 'Подарок'}
+                                    className="w-full h-full object-contain"
+                                />
+                            </div>
+
+                            <div className="text-center mb-4">
+                                <p className="text-lg font-bold flex items-center justify-center gap-1">
+                                    {selectedGift.price}
+                                    <svg width="18" height="18" viewBox="0 0 14 15" fill="#FDE047"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path fillRule="evenodd" clipRule="evenodd"
+                                              d="M6.63869 12.1902L3.50621 14.1092C3.18049 14.3087 2.75468 14.2064 2.55515 13.8807C2.45769 13.7216 2.42864 13.5299 2.47457 13.3491L2.95948 11.4405C3.13452 10.7515 3.60599 10.1756 4.24682 9.86791L7.6642 8.22716C7.82352 8.15067 7.89067 7.95951 7.81418 7.80019C7.75223 7.67116 7.61214 7.59896 7.47111 7.62338L3.66713 8.28194C2.89387 8.41581 2.1009 8.20228 1.49941 7.69823L0.297703 6.69116C0.00493565 6.44581 -0.0335059 6.00958 0.211842 5.71682C0.33117 5.57442 0.502766 5.48602 0.687982 5.47153L4.35956 5.18419C4.61895 5.16389 4.845 4.99974 4.94458 4.75937L6.36101 1.3402C6.5072 0.987302 6.91179 0.819734 7.26469 0.965925C7.43413 1.03612 7.56876 1.17075 7.63896 1.3402L9.05539 4.75937C9.15496 4.99974 9.38101 5.16389 9.6404 5.18419L13.3322 5.47311C13.713 5.50291 13.9975 5.83578 13.9677 6.2166C13.9534 6.39979 13.8667 6.56975 13.7269 6.68896L10.9114 9.08928C10.7131 9.25826 10.6267 9.52425 10.6876 9.77748L11.5532 13.3733C11.6426 13.7447 11.414 14.1182 11.0427 14.2076C10.8642 14.2506 10.676 14.2208 10.5195 14.1249L7.36128 12.1902C7.13956 12.0544 6.8604 12.0544 6.63869 12.1902Z"
+                                              fill="currentColor"></path>
+                                    </svg>
+                                </p>
+
+                                {selectedGift.symbol && (
+                                    <p className="text-white/70 mt-1">{selectedGift.symbol}</p>
+                                )}
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <Button onClick={withdrawClick} className="bg-customPurple hover:bg-customPurple/80">
+                                    Вывести
+                                </Button>
+                                <Button onClick={handleSellGift} className="bg-white/10 hover:bg-white/20">
+                                    Продать
+                                </Button>
+                            </div>
+                        </>
+                    )}
+
+                    {selectedDefaultGift && (
+                        <>
+                            <DialogHeader>
+                                <DialogTitle className="text-center">{selectedDefaultGift.gift_title}</DialogTitle>
+                            </DialogHeader>
+
+                            <div className="w-40 h-40 mx-auto bg-gradient-to-br from-purple-500/30 to-customPurple/10 rounded-lg flex items-center justify-center overflow-hidden">
+                                <img
+                                    src={getGiftLink(selectedDefaultGift.gift_title)}
+                                    alt={selectedDefaultGift.gift_title}
+                                    className="w-full h-full object-contain"
+                                />
+                            </div>
+
+                            <div className="text-center mb-4">
+                                <p className="text-lg font-bold flex items-center justify-center gap-1">
+                                    {selectedDefaultGift.gift_price}
+                                    <svg width="18" height="18" viewBox="0 0 14 15" fill="#FDE047"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path fillRule="evenodd" clipRule="evenodd"
+                                              d="M6.63869 12.1902L3.50621 14.1092C3.18049 14.3087 2.75468 14.2064 2.55515 13.8807C2.45769 13.7216 2.42864 13.5299 2.47457 13.3491L2.95948 11.4405C3.13452 10.7515 3.60599 10.1756 4.24682 9.86791L7.6642 8.22716C7.82352 8.15067 7.89067 7.95951 7.81418 7.80019C7.75223 7.67116 7.61214 7.59896 7.47111 7.62338L3.66713 8.28194C2.89387 8.41581 2.1009 8.20228 1.49941 7.69823L0.297703 6.69116C0.00493565 6.44581 -0.0335059 6.00958 0.211842 5.71682C0.33117 5.57442 0.502766 5.48602 0.687982 5.47153L4.35956 5.18419C4.61895 5.16389 4.845 4.99974 4.94458 4.75937L6.36101 1.3402C6.5072 0.987302 6.91179 0.819734 7.26469 0.965925C7.43413 1.03612 7.56876 1.17075 7.63896 1.3402L9.05539 4.75937C9.15496 4.99974 9.38101 5.16389 9.6404 5.18419L13.3322 5.47311C13.713 5.50291 13.9975 5.83578 13.9677 6.2166C13.9534 6.39979 13.8667 6.56975 13.7269 6.68896L10.9114 9.08928C10.7131 9.25826 10.6267 9.52425 10.6876 9.77748L11.5532 13.3733C11.6426 13.7447 11.414 14.1182 11.0427 14.2076C10.8642 14.2506 10.676 14.2208 10.5195 14.1249L7.36128 12.1902C7.13956 12.0544 6.8604 12.0544 6.63869 12.1902Z"
+                                              fill="currentColor"></path>
+                                    </svg>
+                                </p>
+
+                                <div className="flex items-center justify-center gap-1 mt-1 text-white/70">
+                                    <span>От: @{selectedDefaultGift.username}</span>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <Button onClick={withdrawClick} className="bg-customPurple hover:bg-customPurple/80">
+                                    Вывести
+                                </Button>
+                                <Button onClick={handleSellDefaultGift} className="bg-white/10 hover:bg-white/20">
+                                    Продать
+                                </Button>
+                            </div>
+                        </>
+                    )}
+                </DialogContent>
+            </Dialog>
+
+            {/* Dialog for Gift topup */}
+            <Dialog open={isGiftDialogOpen} onOpenChange={setIsGiftDialogOpen}>
+                <DialogContent className="bg-customDarkBg border-customPurple/40 text-white max-w-sm mx-auto">
+                    <DialogHeader>
+                        <DialogTitle className="text-center">Получить подарок</DialogTitle>
+                        <DialogDescription className="text-center text-white/70">
+                            Отправьте подарок от @giftchance
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="p-4 text-center space-y-4">
+                        <div className="flex items-center justify-center gap-2">
+                            <p className="text-lg font-medium">@giftchance</p>
+                            <button onClick={copyGiftUsername} className="text-customPurple hover:text-customPurple/80">
+                                <Copy size={16}/>
+                            </button>
+                        </div>
+
+                        <p className="text-sm text-white/70">
+                            Отправьте любой подарок боту @giftchance и он будет зачислен на ваш аккаунт
+                        </p>
+                    </div>
+                </DialogContent>
+            </Dialog>
+        </div>
+    );
+};
+
+export default Profile;
