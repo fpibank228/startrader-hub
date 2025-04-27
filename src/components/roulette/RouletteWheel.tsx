@@ -175,7 +175,7 @@ const RouletteWheel = ({items: initialItems, onSpin, onPlayAgain, userData}: Rou
                 />
 
                 <div className="mt-6">
-                    <SpinButton isSpinning={isSpinning} onSpin={spinWheel} price=" за 0.2 TON"/>
+                    <SpinButton isSpinning={isSpinning} onSpin={spinWheel} price=" за 25"/>
                 </div>
             </StarCard>
 

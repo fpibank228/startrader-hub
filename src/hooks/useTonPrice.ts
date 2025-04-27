@@ -11,7 +11,7 @@ export const useTonPrice = () => {
   useEffect(() => {
     const fetchTonPrice = async () => {
       try {
-        const response = await apiService.getTonRate();
+        const response = await apiService.getTonRateUsd();
         const price = response.data.rates.TON.prices.USD;
         setTonPrice(price);
       } catch (error) {

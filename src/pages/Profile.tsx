@@ -156,7 +156,7 @@ const Profile = () => {
 
     const handleRublePaymentClick = () => {
         setIsTopUpDialogOpen(false);
-        navigate('/buy/rubles');
+        navigate('/topup/rubles');
     };
 
     const withdrawClick = async () => {
@@ -641,17 +641,15 @@ const Profile = () => {
                 </div>
             </div>
 
-            {/* Dialog for top-up selection */}
             <Dialog open={isTopUpDialogOpen} onOpenChange={setIsTopUpDialogOpen}>
-                <DialogContent className="bg-customDarkBg border-customPurple/40 text-white max-w-sm mx-auto">
+                <DialogContent className="bg-gradient-to-b from-customMidBlue to-customPurple/90 border-none">
                     <DialogHeader>
-                        <DialogTitle className="text-center">Пополнение баланса</DialogTitle>
+                        <DialogTitle className="text-xl text-center">Пополнить баланс</DialogTitle>
                         <DialogDescription className="text-center text-white/70">
-                            Выберите способ пополнения баланса
+                            Выберите способ пополнения
                         </DialogDescription>
                     </DialogHeader>
-
-                    <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-1 gap-4 mt-4">
                         <Button onClick={handleCryptoTopUpClick} className="bg-customPurple hover:bg-customPurple/80">
                             <Wallet size={16} className="mr-2"/>
                             TON Криптовалюта
@@ -759,24 +757,23 @@ const Profile = () => {
 
             {/* Dialog for Gift topup */}
             <Dialog open={isGiftDialogOpen} onOpenChange={setIsGiftDialogOpen}>
-                <DialogContent className="bg-customDarkBg border-customPurple/40 text-white max-w-sm mx-auto">
+                <DialogContent className="bg-gradient-to-b from-customMidBlue to-customPurple/90 border-none">
                     <DialogHeader>
-                        <DialogTitle className="text-center">Получить подарок</DialogTitle>
+                        <DialogTitle className="text-xl text-center">Пополнить подарками</DialogTitle>
                         <DialogDescription className="text-center text-white/70">
-                            Отправьте подарок от @giftchance
+                            Для пополнения отправьте подарок пользователю
                         </DialogDescription>
                     </DialogHeader>
-
-                    <div className="p-4 text-center space-y-4">
-                        <div className="flex items-center justify-center gap-2">
-                            <p className="text-lg font-medium">@giftchance</p>
-                            <button onClick={copyGiftUsername} className="text-customPurple hover:text-customPurple/80">
+                    <div className="flex flex-col items-center gap-4 mt-4">
+                        <div className="bg-white/10 w-full p-4 rounded-lg flex items-center justify-between">
+                            <span className="font-mono">@giftchance</span>
+                            <Button variant="ghost" size="sm" onClick={copyGiftUsername} className="hover:bg-white/10">
                                 <Copy size={16}/>
-                            </button>
+                            </Button>
                         </div>
-
-                        <p className="text-sm text-white/70">
-                            Отправьте любой подарок боту @giftchance и он будет зачислен на ваш аккаунт
+                        <p className="text-sm text-white/70 text-center">
+                            Перешлите желаемый подарок на указанный выше аккаунт, и мы автоматически пополним ваш
+                            баланс.
                         </p>
                     </div>
                 </DialogContent>

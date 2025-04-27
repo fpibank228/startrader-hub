@@ -24,9 +24,18 @@ mainApi.interceptors.request.use(config => {
 });
 
 export const apiService = {
-    async getTonRate() {
+    async getTonRateUsd() {
         try {
             return await tonApi.get('/rates?tokens=ton&currencies=usd');
+        } catch (error) {
+            console.error('TON API Error:', error);
+            throw error;
+        }
+    },
+
+    async getTonRateRub() {
+        try {
+            return await tonApi.get('/rates?tokens=ton&currencies=rub');
         } catch (error) {
             console.error('TON API Error:', error);
             throw error;
@@ -201,6 +210,15 @@ export const apiService = {
     async withdrawDefaultGift(gift_id: string) {
         try {
             return await mainApi.post('/withdraw_default_gift', {"gift_id": gift_id});
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
+
+    async topUpRubles(amount: number) {
+        try {
+            return await mainApi.post('/top_up/rubles', {"amount": amount});
         } catch (error) {
             console.error('Generate link check API Error:', error);
             throw error;
