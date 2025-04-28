@@ -31,12 +31,7 @@ const CryptoTopup = () => {
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         const numValue = parseFloat(value);
-
-        if (!isNaN(numValue) && numValue > 0) {
-            setAmount(numValue);
-        } else {
-            setAmount(0.5);
-        }
+        setAmount(numValue);
     };
 
     const calculatePrices = () => {
@@ -154,10 +149,7 @@ const CryptoTopup = () => {
                                 <label className="block text-white/90 text-sm mb-2">Сумма в TON:</label>
                                 <input
                                     type="number"
-                                    min="0.5"
-                                    step="0.1"
                                     placeholder="Введите сумму в TON"
-                                    value={amount || ''}
                                     onChange={handleAmountChange}
                                     className="w-full bg-white/5 border border-white/10 rounded-md p-3 text-white focus:outline-none focus:border-customPurple"
                                     style={{
@@ -178,7 +170,7 @@ const CryptoTopup = () => {
 
                     <PaymentButton
                         handlePayment={handlePayment}
-                        isDisabled={!tonConnectUI.connected || !amount || amount <= 0 || !tonPrice}
+                        isDisabled={!tonConnectUI.connected || !amount || amount < 0.5 || !tonPrice}
                         buttonText="Пополнить баланс"
                         paymentMethod="crypto"
                     />
