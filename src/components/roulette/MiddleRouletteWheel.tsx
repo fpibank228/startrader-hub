@@ -37,7 +37,7 @@ interface RouletteWheelProps {
     userData: UserData;
 }
 
-const RouletteWheel = ({items: initialItems, onSpin, onPlayAgain, userData}: RouletteWheelProps) => {
+const MiddleRouletteWheel = ({items: initialItems, onSpin, onPlayAgain, userData}: RouletteWheelProps) => {
     const [isSpinning, setIsSpinning] = useState(false);
     const [slidePosition, setSlidePosition] = useState(0);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -59,7 +59,7 @@ const RouletteWheel = ({items: initialItems, onSpin, onPlayAgain, userData}: Rou
     }, [initialItems]);
 
     const spinWheel = async () => {
-        if (userData && userData.balance < 25) {
+        if (userData && userData.balance < 50) {
             toast({
                 title: 'Недостаточно средств',
                 description: 'На вашем балансе недостаточно средств для вращения',
@@ -68,7 +68,7 @@ const RouletteWheel = ({items: initialItems, onSpin, onPlayAgain, userData}: Rou
             return;
         }
         try {
-            const response = await apiService.createDefaultGiftSpin();
+            const response = await apiService.createMiddleDefaultGiftSpin();
             await setWinItem(response.data);
             if (!response || !response.data) {
                 throw new Error('Invalid response from server');
@@ -172,7 +172,7 @@ const RouletteWheel = ({items: initialItems, onSpin, onPlayAgain, userData}: Rou
                 />
 
                 <div className="mt-6">
-                    <SpinButton isSpinning={isSpinning} onSpin={spinWheel} price=" за 25"/>
+                    <SpinButton isSpinning={isSpinning} onSpin={spinWheel} price=" за 50"/>
                 </div>
             </StarCard>
 
@@ -199,4 +199,4 @@ const RouletteWheel = ({items: initialItems, onSpin, onPlayAgain, userData}: Rou
     );
 };
 
-export default RouletteWheel;
+export default MiddleRouletteWheel;

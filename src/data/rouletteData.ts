@@ -66,23 +66,23 @@ export const staticGiftItems: RouletteItem[] = [
         'price': 100,
     },
     {
-        'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5782984811920491178/2x/000.png',
+        'link': 'https://blog.invitemember.com/content/images/2024/07/Telegram-Stars.png',
         'title': '150 Stars',
         'price': 150,
     },
     {
-        'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5782984811920491178/2x/000.png',
-        'title': '150 Stars',
+        'link': 'https://blog.invitemember.com/content/images/2024/07/Telegram-Stars.png',
+        'title': '350 Stars',
         'price': 350,
     },
     {
-        'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5782984811920491178/2x/000.png',
-        'title': '150 Stars',
+        'link': 'https://blog.invitemember.com/content/images/2024/07/Telegram-Stars.png',
+        'title': '500 Stars',
         'price': 500,
     },
     {
-        'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5782984811920491178/2x/000.png',
-        'title': '150 Stars',
+        'link': 'https://blog.invitemember.com/content/images/2024/07/Telegram-Stars.png',
+        'title': '1000 Stars',
         'price': 1000,
     },
 ]
@@ -94,6 +94,20 @@ export const rouletteOptions = [
         description: 'Испытайте свою удачу с шансом выигрыша',
         image: 'https://cdn.pixabay.com/photo/2017/02/13/01/26/the-question-mark-2061539_1280.png',
         path: '/roulette/basic'
+    },
+    {
+        id: 'middle',
+        title: 'Средняя рулетка',
+        description: 'Испытайте свою удачу с шансом выигрыша',
+        image: 'https://cdn.pixabay.com/photo/2017/02/13/01/26/the-question-mark-2061539_1280.png',
+        path: '/roulette/middle'
+    },
+    {
+        id: 'big',
+        title: 'Крупная рулетка',
+        description: 'Испытайте свою удачу с шансом выигрыша',
+        image: 'https://cdn.pixabay.com/photo/2017/02/13/01/26/the-question-mark-2061539_1280.png',
+        path: '/roulette/big'
     },
     {
         id: 'nft',

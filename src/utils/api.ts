@@ -189,6 +189,43 @@ export const apiService = {
         }
     },
 
+    async createMediumDefaultGiftSpinInvoice() {
+        try {
+            return await mainApi.post('/create_default_gift_spin_invoice_medium');
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
+
+
+    async createMiddleDefaultGiftSpin() {
+        try {
+            return await mainApi.post('/create_default_gift_spin_medium');
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
+
+    async createBigDefaultGiftSpinInvoice() {
+        try {
+            return await mainApi.post('/create_default_gift_spin_invoice_big');
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
+
+    async createBigDefaultGiftSpin() {
+        try {
+            return await mainApi.post('/create_default_gift_spin_big');
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
+
     async createUpgrade(gift_ids: string[], multiplier: number) {
         try {
             return await mainApi.post('/upgrade', {"gifts_for_upgrade": gift_ids, "multiplier": multiplier});

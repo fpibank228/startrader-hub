@@ -18,6 +18,8 @@ import WebApp from '@twa-dev/sdk';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { apiService } from './utils/api';
 import RublePayment from "@/pages/RublePayment.tsx";
+import MiddleBasicRoulette from "@/pages/MiddleBasicRoulette.tsx";
+import BigBasicRoulette from "@/pages/BigBasicRoulette.tsx";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -47,6 +49,8 @@ const App = () => {
                             <Route path="/topup" element={<CryptoTopup/>}/>
                             <Route path="/roulette" element={<Roulette/>}/>
                             <Route path="/roulette/basic" element={<BasicRoulette/>}/>
+                            <Route path="/roulette/middle" element={<MiddleBasicRoulette/>}/>
+                            <Route path="/roulette/big" element={<BigBasicRoulette/>}/>
                             <Route path="/roulette/nft" element={<FixedRoulette/>}/>
                             <Route path="/profile" element={<Profile/>}/>
                             <Route path="/roulette/upgrade" element={<GiftUpgrade/>}/>
