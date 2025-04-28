@@ -9,6 +9,8 @@ import WebApp from "@twa-dev/sdk";
 import {apiService} from "@/utils/api.ts";
 import {initUtils} from '@tma.js/sdk';
 import LottieItem from '../components/roulette/LottieItem';
+import TONBalanceDisplay from '../components/roulette/TONBalanceDisplay';
+import PromoCodeInput from '../components/profile/PromoCodeInput';
 import {
     Dialog,
     DialogContent,
@@ -52,7 +54,7 @@ const Profile = () => {
     const [tab, setTab] = useState<'profile' | 'history' | 'gifts'>('profile');
     const [walletConnected, setWalletConnected] = useState(false);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
-    const [userInfo, setUserInfo] = useState({"ref_user": 0, "user_details": {"balance": 0}});
+    const [userInfo, setUserInfo] = useState({"ref_user": 0, "user_details": {"balance": 0, "ref_balance": 0}});
     const [isLoading, setIsLoading] = useState(false);
     const [selectedGift, setSelectedGift] = useState<GiftItem | null>(null);
     const [selectedDefaultGift, setSelectedDefaultGift] = useState<DefaultGiftItem | null>(null);
@@ -96,6 +98,7 @@ const Profile = () => {
             setIsLoading(false);
         }
     };
+    
     const default_gifts = [
         {
             'link': 'https://idwyjbqan6cqi.mediwall.org/static_gifts/5170145012310081615/2x/000.png',
@@ -394,48 +397,17 @@ const Profile = () => {
                                     <h2 className="text-xl font-bold mb-1">{WebApp.initDataUnsafe.user ? WebApp.initDataUnsafe.user.first_name : "error"}</h2>
                                     <p className="text-white/70 text-sm mb-4">@{WebApp.initDataUnsafe.user ? WebApp.initDataUnsafe.user.username : "error"}</p>
                                     <TonConnectButton className={`mb-4`}/>
-
-                                    {/* Balance display card */}
-                                    <div
-                                        className="w-full bg-gradient-to-r from-customPurple to-customMidBlue rounded-lg p-4 mb-4 relative overflow-hidden">
-                                        <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
-                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                                                    stroke="white" strokeWidth="2" strokeLinecap="round"
-                                                    strokeLinejoin="round"/>
-                                                <path
-                                                    d="M15 9C15 8 14 6 12 6C10 6 9 7.5 9 9C9 10.5 10 11 11 11.5C12 12 13 12.5 13 14C13 15.5 12 17 10 17C8 17 7 15.5 7 14.5"
-                                                    stroke="white" strokeWidth="2" strokeLinecap="round"
-                                                    strokeLinejoin="round"/>
-                                                <path d="M12 5V6" stroke="white" strokeWidth="2" strokeLinecap="round"
-                                                      strokeLinejoin="round"/>
-                                                <path d="M12 18V19" stroke="white" strokeWidth="2" strokeLinecap="round"
-                                                      strokeLinejoin="round"/>
-                                            </svg>
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <h1 className="text-white/70 mb-1 font-bold text-xl">Баланс</h1>
-                                            <div className="flex items-center justify-between">
-                                                <h3 className="flex gap-1 text-2xl font-bold text-white">{userInfo.user_details.balance}
-                                                    <svg width="32" height="32" viewBox="0 0 14 15" fill="#546CF3"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path fillRule="evenodd" clipRule="evenodd"
-                                                              d="M6.63869 12.1902L3.50621 14.1092C3.18049 14.3087 2.75468 14.2064 2.55515 13.8807C2.45769 13.7216 2.42864 13.5299 2.47457 13.3491L2.95948 11.4405C3.13452 10.7515 3.60599 10.1756 4.24682 9.86791L7.6642 8.22716C7.82352 8.15067 7.89067 7.95951 7.81418 7.80019C7.75223 7.67116 7.61214 7.59896 7.47111 7.62338L3.66713 8.28194C2.89387 8.41581 2.1009 8.20228 1.49941 7.69823L0.297703 6.69116C0.00493565 6.44581 -0.0335059 6.00958 0.211842 5.71682C0.33117 5.57442 0.502766 5.48602 0.687982 5.47153L4.35956 5.18419C4.61895 5.16389 4.845 4.99974 4.94458 4.75937L6.36101 1.3402C6.5072 0.987302 6.91179 0.819734 7.26469 0.965925C7.43413 1.03612 7.56876 1.17075 7.63896 1.3402L9.05539 4.75937C9.15496 4.99974 9.38101 5.16389 9.6404 5.18419L13.3322 5.47311C13.713 5.50291 13.9975 5.83578 13.9677 6.2166C13.9534 6.39979 13.8667 6.56975 13.7269 6.68896L10.9114 9.08928C10.7131 9.25826 10.6267 9.52425 10.6876 9.77748L11.5532 13.3733C11.6426 13.7447 11.414 14.1182 11.0427 14.2076C10.8642 14.2506 10.676 14.2208 10.5195 14.1249L7.36128 12.1902C7.13956 12.0544 6.8604 12.0544 6.63869 12.1902Z"
-                                                              fill="currentColor"></path>
-                                                    </svg>
-                                                </h3>
-                                                <Button
-                                                    onClick={handleTopUpClick}
-                                                    variant="secondary"
-                                                    className="relative bg-white/20 text-white hover:bg-white/30 px-4 py-2"
-                                                >
-                                                    <CreditCard size={16} className="mr-1"/>
-                                                    Пополнить
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
+                                    {/* Use the new TONBalanceDisplay component */}
+                                    <TONBalanceDisplay balance={userInfo.user_details.balance} />
+                                    
+                                    {/* Add the new PromoCode component */}
+                                    <PromoCodeInput 
+                                      onSuccess={(code) => {
+                                        // Here you would call an API to apply the promo code
+                                        console.log("Promo code activated:", code);
+                                      }} 
+                                    />
 
                                     <div className="w-full h-0.5 bg-white/10 my-4"></div>
 
@@ -462,15 +434,16 @@ const Profile = () => {
                                                     className="bg-white/5 rounded-lg p-4 relative group border-white/20">
                                                     <div
                                                         className="flex flex-col items-center justify-center gap-1 text-blue-50/50">
-                                                        <span
-                                                            className="font-bold text-center text-white/80 flex items-center gap-1">{userInfo['user_details']['ref_balance']}
+                                                        <div className="flex items-center gap-1">
+                                                            <span className="font-bold text-white/80">{userInfo.user_details.ref_balance}</span>
                                                             <svg width="18" height="18" viewBox="0 0 14 15"
                                                                  fill="#546CF3"
                                                                  xmlns="http://www.w3.org/2000/svg">
-                                                        <path fillRule="evenodd" clipRule="evenodd"
-                                                              d="M6.63869 12.1902L3.50621 14.1092C3.18049 14.3087 2.75468 14.2064 2.55515 13.8807C2.45769 13.7216 2.42864 13.5299 2.47457 13.3491L2.95948 11.4405C3.13452 10.7515 3.60599 10.1756 4.24682 9.86791L7.6642 8.22716C7.82352 8.15067 7.89067 7.95951 7.81418 7.80019C7.75223 7.67116 7.61214 7.59896 7.47111 7.62338L3.66713 8.28194C2.89387 8.41581 2.1009 8.20228 1.49941 7.69823L0.297703 6.69116C0.00493565 6.44581 -0.0335059 6.00958 0.211842 5.71682C0.33117 5.57442 0.502766 5.48602 0.687982 5.47153L4.35956 5.18419C4.61895 5.16389 4.845 4.99974 4.94458 4.75937L6.36101 1.3402C6.5072 0.987302 6.91179 0.819734 7.26469 0.965925C7.43413 1.03612 7.56876 1.17075 7.63896 1.3402L9.05539 4.75937C9.15496 4.99974 9.38101 5.16389 9.6404 5.18419L13.3322 5.47311C13.713 5.50291 13.9975 5.83578 13.9677 6.2166C13.9534 6.39979 13.8667 6.56975 13.7269 6.68896L10.9114 9.08928C10.7131 9.25826 10.6267 9.52425 10.6876 9.77748L11.5532 13.3733C11.6426 13.7447 11.414 14.1182 11.0427 14.2076C10.8642 14.2506 10.676 14.2208 10.5195 14.1249L7.36128 12.1902C7.13956 12.0544 6.8604 12.0544 6.63869 12.1902Z"
-                                                              fill="currentColor"></path>
-                                                    </svg></span>
+                                                                <path fillRule="evenodd" clipRule="evenodd"
+                                                                    d="M6.63869 12.1902L3.50621 14.1092C3.18049 14.3087 2.75468 14.2064 2.55515 13.8807C2.45769 13.7216 2.42864 13.5299 2.47457 13.3491L2.95948 11.4405C3.13452 10.7515 3.60599 10.1756 4.24682 9.86791L7.6642 8.22716C7.82352 8.15067 7.89067 7.95951 7.81418 7.80019C7.75223 7.67116 7.61214 7.59896 7.47111 7.62338L3.66713 8.28194C2.89387 8.41581 2.1009 8.20228 1.49941 7.69823L0.297703 6.69116C0.00493565 6.44581 -0.0335059 6.00958 0.211842 5.71682C0.33117 5.57442 0.502766 5.48602 0.687982 5.47153L4.35956 5.18419C4.61895 5.16389 4.845 4.99974 4.94458 4.75937L6.36101 1.3402C6.5072 0.987302 6.91179 0.819734 7.26469 0.965925C7.43413 1.03612 7.56876 1.17075 7.63896 1.3402L9.05539 4.75937C9.15496 4.99974 9.38101 5.16389 9.6404 5.18419L13.3322 5.47311C13.713 5.50291 13.9975 5.83578 13.9677 6.2166C13.9534 6.39979 13.8667 6.56975 13.7269 6.68896L10.9114 9.08928C10.7131 9.25826 10.6267 9.52425 10.6876 9.77748L11.5532 13.3733C11.6426 13.7447 11.414 14.1182 11.0427 14.2076C10.8642 14.2506 10.676 14.2208 10.5195 14.1249L7.36128 12.1902C7.13956 12.0544 6.8604 12.0544 6.63869 12.1902Z"
+                                                                    fill="currentColor"></path>
+                                                            </svg>
+                                                        </div>
                                                         <span className="text-sm text-white/80">заработано</span>
                                                     </div>
                                                 </div>
@@ -556,338 +529,4 @@ const Profile = () => {
                                                             <svg width="16" height="16" viewBox="0 0 14 15"
                                                                  fill="#fde047" xmlns="http://www.w3.org/2000/svg">
                                                                 <path fillRule="evenodd" clipRule="evenodd"
-                                                                      d="M6.63869 12.1902L3.50621 14.1092C3.18049 14.3087 2.75468 14.2064 2.55515 13.8807C2.45769 13.7216 2.42864 13.5299 2.47457 13.3491L2.95948 11.4405C3.13452 10.7515 3.60599 10.1756 4.24682 9.86791L7.6642 8.22716C7.82352 8.15067 7.89067 7.95951 7.81418 7.80019C7.75223 7.67116 7.61214 7.59896 7.47111 7.62338L3.66713 8.28194C2.89387 8.41581 2.1009 8.20228 1.49941 7.69823L0.297703 6.69116C0.00493565 6.44581 -0.0335059 6.00958 0.211842 5.71682C0.33117 5.57442 0.502766 5.48602 0.687982 5.47153L4.35956 5.18419C4.61895 5.16389 4.845 4.99974 4.94458 4.75937L6.36101 1.3402C6.5072 0.987302 6.91179 0.819734 7.26469 0.965925C7.43413 1.03612 7.56876 1.17075 7.63896 1.3402L9.05539 4.75937C9.15496 4.99974 9.38101 5.16389 9.6404 5.18419L13.3322 5.47311C13.713 5.50291 13.9975 5.83578 13.9677 6.2166C13.9534 6.39979 13.8667 6.56975 13.7269 6.68896L10.9114 9.08928C10.7131 9.25826 10.6267 9.52425 10.6876 9.77748L11.5532 13.3733C11.6426 13.7447 11.414 14.1182 11.0427 14.2076C10.8642 14.2506 10.676 14.2208 10.5195 14.1249L7.36128 12.1902C7.13956 12.0544 6.8604 12.0544 6.63869 12.1902Z"
-                                                                      fill="currentColor"></path>
-                                                            </svg>
-                                                        ) : (
-                                                            <DollarSign size={16} className="text-green-500"/>
-                                                        )}
-                                                    </div>
-                                                    <div>
-                                                        <p className="font-medium">
-                                                            {transaction.type === 'buy'
-                                                                ? 'Покупка звезд'
-                                                                : 'Продажа звезд'}
-                                                        </p>
-                                                        <p className="text-xs text-white/70">
-                                                            {new Date(transaction.date).toLocaleString()}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div className="text-right">
-                                                    <p className={`font-medium ${
-                                                        transaction.type === 'buy'
-                                                            ? 'text-yellow-300'
-                                                            : 'text-green-500'
-                                                    }`}>
-                                                        {transaction.type === 'buy' ? '+' : '-'}{transaction.amount}
-                                                    </p>
-                                                    <p className="text-xs text-white/70">{transaction.price}</p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                        {transactions.length === 0 && (
-                                            <div className="text-center py-10 text-white/50">
-                                                <p>Операций пока нет</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-                            </StarCard>
-                        </motion.div>
-                    )}
-
-                    {tab === 'gifts' && (
-                        <motion.div
-                            initial={{opacity: 0, y: 20}}
-                            animate={{opacity: 1, y: 0}}
-                            transition={{duration: 0.5}}
-                        >
-                            <StarCard className="mb-6">
-                                <h3 className="text-lg font-medium mb-4">Ваши подарки</h3>
-
-                                {gifts.length === 0 ? (
-                                    <div className="text-center py-6 text-white/60">
-                                        <Gift size={40} className="mx-auto mb-3 opacity-40"/>
-                                        <p>У вас пока нет подарков</p>
-                                        <p className="text-sm mt-2">Выиграйте их в рулетке!</p>
-                                    </div>
-                                ) : (
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                        {gifts.map((gift, index) => (
-                                            <div
-                                                key={index}
-                                                className="bg-white/5 rounded-lg overflow-hidden cursor-pointer hover:bg-white/10 transition-colors border border-white/10 hover:border-white/20"
-                                                onClick={() => handleGiftClick(gift)}
-                                            >
-                                                <div className="w-full aspect-square relative">
-                                                    <LottieItem
-                                                        animationData={`https://nft.fragment.com/gift/${gift.name.toLowerCase()}.lottie.json`}
-                                                        className="w-full h-full"
-                                                        autoplay={false}
-                                                    />
-                                                </div>
-                                                <div className="p-2 text-center">
-                                                    <p className="text-xs font-medium truncate">{gift.title}</p>
-                                                    <p className="text-yellow-400 text-xs">{gift.price} TON</p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                                {defaultGifts.length === 0 ? (
-                                    <div className="">
-                                    </div>
-                                ) : (
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3">
-                                        {defaultGifts.map((gift, index) => (
-                                            <div
-                                                key={index}
-                                                className="bg-white/5 rounded-lg overflow-hidden cursor-pointer hover:bg-white/10 transition-colors border border-white/10 hover:border-white/20"
-                                                onClick={() => handleDefaultGiftClick(gift)}
-                                            >
-                                                <div
-                                                    className="w-full aspect-square relative flex flex-col items-center justify-center">
-                                                    <img
-                                                        src={getGiftLink(gift.gift_title)}
-                                                        alt={gift.gift_title}
-                                                        className="w-3/4 h-3/4"
-                                                        onError={(e) => {
-                                                            // Fallback if image fails to load
-                                                            const target = e.target as HTMLImageElement;
-                                                            target.onerror = null;
-                                                            target.src = 'https://placehold.co/100x100/purple/white?text=Prize';
-                                                        }}
-                                                    />
-                                                </div>
-                                                <div className="p-2 text-center">
-                                                    <p className="text-xs font-medium truncate">{gift.gift_title}</p>
-                                                    <p className="text-yellow-400 text-xs">{gift.gift_price} TON</p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </StarCard>
-                        </motion.div>
-                    )}
-                </div>
-            </div>
-
-            <Dialog open={isTopUpDialogOpen} onOpenChange={setIsTopUpDialogOpen}>
-                <DialogContent className="bg-gradient-to-b from-customMidBlue to-customPurple/90 border-none">
-                    <DialogHeader>
-                        <DialogTitle className="text-xl text-center">Пополнить баланс</DialogTitle>
-                        <DialogDescription className="text-center text-white/70">
-                            Выберите способ пополнения
-                        </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid grid-cols-1 gap-4 mt-4">
-                        <Button onClick={handleCryptoTopUpClick} className="bg-customPurple hover:bg-customPurple/80">
-                            <Wallet size={16} className="mr-2"/>
-                            TON Криптовалюта
-                        </Button>
-                        <Button onClick={handleRublePaymentClick} className="bg-blue-600 hover:bg-blue-700">
-                            <CreditCard size={16} className="mr-2"/>
-                            Рубли
-                        </Button>
-                        <Button onClick={handleGiftTopUpClick} className="bg-pink-600 hover:bg-pink-700">
-                            <Gift size={16} className="mr-2"/>
-                            Подарки
-                        </Button>
-                    </div>
-                </DialogContent>
-            </Dialog>
-
-            {/* Dialog for gift details */}
-            {selectedGift && (
-                <div
-                    className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-                    onClick={handleCloseGiftDetail}
-                >
-                    <div
-                        className="bg-gradient-to-b from-customPurple/90 to-customMidBlue/90 rounded-2xl p-5 max-w-sm w-full"
-                        onClick={e => e.stopPropagation()}
-                    >
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-lg font-bold">{selectedGift.title}</h3>
-                            <button
-                                onClick={handleCloseGiftDetail}
-                                className="p-1 rounded-full bg-white/10 hover:bg-white/20"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                     strokeLinejoin="round">
-                                    <path d="M18 6 6 18"/>
-                                    <path d="m6 6 12 12"/>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div className="w-40 h-40 mx-auto mb-4">
-                            <div
-                                className="w-full h-full rounded-lg overflow-hidden border-2 border-white/30 shadow-lg">
-                                <LottieItem
-                                    animationData={`https://nft.fragment.com/gift/${selectedGift.name.toLowerCase()}.lottie.json`}
-                                    className="w-full h-full"
-                                    loop={true}
-                                    autoplay={true}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="flex justify-between mb-4">
-                            <span className="text-yellow-400 font-bold">{selectedGift.price} TON</span>
-                            {selectedGift.collectible_id && (
-                                <span className="text-white/70 text-sm">#{selectedGift.collectible_id}</span>
-                            )}
-                        </div>
-
-                        <div className="space-y-2 mb-4">
-                            {selectedGift.model && (
-                                <div className="bg-white/10 p-2 rounded-lg">
-                                    <span className="text-sm">Модель: <span
-                                        className="text-white/80">{selectedGift.model}</span></span>
-                                </div>
-                            )}
-
-                            {selectedGift.symbol && (
-                                <div className="bg-white/10 p-2 rounded-lg">
-                                    <span className="text-sm">Символ: <span
-                                        className="text-white/80">{selectedGift.symbol}</span></span>
-                                </div>
-                            )}
-
-                            {selectedGift.backdrop && (
-                                <div className="bg-white/10 p-2 rounded-lg">
-                                    <span className="text-sm">Фон: <span
-                                        className="text-white/80">{selectedGift.backdrop}</span></span>
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-3">
-                            <button
-                                onClick={withdrawClick}
-                                className="py-2 rounded-lg bg-gradient-to-r from-customPurple/80 to-purple-900/80 hover:from-customPurple hover:to-purple-900 flex items-center justify-center gap-1"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                     strokeLinejoin="round">
-                                    <path
-                                        d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/>
-                                    <path d="M16.5 9.4 7.55 4.24"/>
-                                    <polyline points="3.29 7 12 12 20.71 7"/>
-                                    <line x1="12" y1="22" x2="12" y2="12"/>
-                                    <circle cx="18.5" cy="15.5" r="2.5"/>
-                                    <path d="M20.27 17.27 22 19"/>
-                                </svg>
-                                <span className="text-sm">Вывести</span>
-                            </button>
-
-                            <button
-                                onClick={handleSellGift}
-                                className="py-2 rounded-lg bg-gradient-to-r from-customPurple/80 to-purple-900/80 hover:from-customPurple hover:to-purple-900 flex items-center justify-center gap-1"
-                            >
-                                <Wallet size={16}/>
-                                <span className="text-sm">Продать</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {selectedDefaultGift && (
-                <div
-                    className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-                    onClick={handleCloseGiftDetail}
-                >
-                    <div
-                        className="bg-gradient-to-b from-customPurple/90 to-customMidBlue/90 rounded-2xl p-5 max-w-sm w-full"
-                        onClick={e => e.stopPropagation()}
-                    >
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-lg font-bold">{selectedDefaultGift.gift_title}</h3>
-                            <button
-                                onClick={handleCloseGiftDetail}
-                                className="p-1 rounded-full bg-white/10 hover:bg-white/20"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                     strokeLinejoin="round">
-                                    <path d="M18 6 6 18"/>
-                                    <path d="m6 6 12 12"/>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div className="w-40 h-40 mx-auto mb-4">
-                            <div
-                                className="w-full h-full rounded-lg overflow-hidden border-2 border-white/30 shadow-lg flex items-center justify-center gap-1">
-                                <img
-                                    src={getGiftLink(selectedDefaultGift.gift_title)}
-                                    alt={selectedDefaultGift.gift_title}
-                                    className="w-3/4 h-3/4"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-3">
-                            <button
-                                onClick={withdrawClick}
-                                className="py-2 rounded-lg bg-gradient-to-r from-customPurple/80 to-purple-900/80 hover:from-customPurple hover:to-purple-900 flex items-center justify-center gap-1"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                     strokeLinejoin="round">
-                                    <path
-                                        d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/>
-                                    <path d="M16.5 9.4 7.55 4.24"/>
-                                    <polyline points="3.29 7 12 12 20.71 7"/>
-                                    <line x1="12" y1="22" x2="12" y2="12"/>
-                                    <circle cx="18.5" cy="15.5" r="2.5"/>
-                                    <path d="M20.27 17.27 22 19"/>
-                                </svg>
-                                <span className="text-sm">Вывести</span>
-                            </button>
-
-                            <button
-                                onClick={handleSellDefaultGift}
-                                className="py-2 rounded-lg bg-gradient-to-r from-customPurple/80 to-purple-900/80 hover:from-customPurple hover:to-purple-900 flex items-center justify-center gap-1"
-                            >
-                                <Wallet size={16}/>
-                                <span className="text-sm">Продать</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Dialog for Gift topup */}
-            <Dialog open={isGiftDialogOpen} onOpenChange={setIsGiftDialogOpen}>
-                <DialogContent className="bg-gradient-to-b from-customMidBlue to-customPurple/90 border-none">
-                    <DialogHeader>
-                        <DialogTitle className="text-xl text-center">Пополнить подарками</DialogTitle>
-                        <DialogDescription className="text-center text-white/70">
-                            Для пополнения отправьте подарок пользователю
-                        </DialogDescription>
-                    </DialogHeader>
-                    <div className="flex flex-col items-center gap-4 mt-4">
-                        <div className="bg-white/10 w-full p-4 rounded-lg flex items-center justify-between">
-                            <span className="font-mono">@giftchance</span>
-                            <Button variant="ghost" size="sm" onClick={copyGiftUsername} className="hover:bg-white/10">
-                                <Copy size={16}/>
-                            </Button>
-                        </div>
-                        <p className="text-sm text-white/70 text-center">
-                            Перешлите желаемый подарок на указанный выше аккаунт, и мы автоматически пополним ваш
-                            баланс.
-                        </p>
-                    </div>
-                </DialogContent>
-            </Dialog>
-        </div>
-    );
-};
-
-export default Profile;
+                                                                      d="M6.63869 12.1902L3.50621 14.1092C3.18049 14.3087 2.75468 14.2064 2.55515 13.8807C2.45769 13.7216 2.42864 13.5299 2.47457 13.3491L2.95948 11.4405C3.13452 10.7515 3.60599 10.1756 4.24682 9.86791L7.6642 8.22716C7.82352 8.15067 7.89067 7.95951 7.81418 7.80019C7.75223 7.67116 7.61214 7.59896 7.47111 7.62338L3.66713 8.28194C2.89387 8.41581 2.1009 8.20228 1.49941 7.69823L0.297703 6
