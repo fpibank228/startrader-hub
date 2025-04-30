@@ -8,7 +8,7 @@ const Navigation = () => {
     const inactiveClass = 'text-white/50';
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-t from-customDarkBlue/95 via-customDarkBlue/95 to-customDarkBlue/90 backdrop-blur-sm border-t border-white/10 px-2 pt-2 pb-6">
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-t from-custmDark/95 via-custmDark/95 to-custmDark/90 backdrop-blur-xl border-t border-white/10 px-2 pt-2 pb-6">
             <div className="grid grid-cols-4 gap-1">
                 <NavLink
                     to="/"

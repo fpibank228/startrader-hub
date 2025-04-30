@@ -72,6 +72,7 @@ export default {
 				customBlue: '#704ef8',
 				customDarkGray: '#282828',
 				custmDarkGray: '#546cf3',
+				custmBlue2: '#4291da',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

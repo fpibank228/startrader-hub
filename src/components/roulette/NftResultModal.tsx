@@ -37,7 +37,7 @@ const NftResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteResult
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="bg-gradient-to-b from-customMidBlue to-customPurple/90 border-none max-w-md p-0 overflow-hidden">
+      <DialogContent className="bg-gradient-to-b bg-customDark border-white/40 border-2 p-0 overflow-hidden max-w-sm w-full rounded-2xl ">
         <DialogHeader className="p-4 pb-0">
           <DialogTitle className="text-xl text-center">Ваш выигрыш!</DialogTitle>
         </DialogHeader>
@@ -112,7 +112,7 @@ const NftResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteResult
             <Button
               variant="outline"
               onClick={onClose}
-              className="w-full bg-white/10 border-white/20 hover:bg-white/20"
+              className="bg-gradient-to-r customBlue mx-5 py-5 h-auto"
             >
               Забрать
             </Button>
@@ -120,7 +120,7 @@ const NftResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteResult
             {onPlayAgain && (
               <Button
                 onClick={onPlayAgain}
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                className="bg-gradient-to-r customBlue mx-5 py-5 h-auto"
               >
                 Продать за {result.price} TON
               </Button>

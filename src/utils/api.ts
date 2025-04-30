@@ -261,4 +261,13 @@ export const apiService = {
             throw error;
         }
     },
+
+    async checkPromocode(promocode: string) {
+        try {
+            return await mainApi.post('/check_promocode', {"promocode": promocode});
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
 };

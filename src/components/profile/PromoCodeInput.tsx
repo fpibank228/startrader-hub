@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Ticket, CheckCircle2, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import {apiService} from "@/utils/api.ts";
 
 interface PromoCodeInputProps {
   onSuccess?: (code: string) => void;
@@ -28,31 +29,28 @@ const PromoCodeInput = ({ onSuccess }: PromoCodeInputProps) => {
     }
     
     setIsLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      try {
-        // Mock successful response - in real app this would be an API call
-        if (code === "TEST123") {
-          setStatus("success");
-          toast({
-            title: "Успешно",
-            description: "Промокод активирован",
-          });
-          onSuccess?.(code);
-        } else {
-          setStatus("error");
-          toast({
-            title: "Ошибка",
-            description: "Неверный промокод",
-            variant: "destructive",
-          });
-        }
-      } finally {
-        setIsLoading(false);
-        setTimeout(() => setStatus("idle"), 3000);
+
+    try {
+      const response = await apiService.checkPromocode(code.trim());
+      setStatus("success");
+      toast({
+        title: "Успешено!",
+        description: `Бонус скоро к вам придет!`,
+        variant: 'green',
+      });
+      if (!response || !response.data) {
+        throw new Error('Invalid response from server');
       }
-    }, 1000);
+    } catch (error) {
+      setStatus("error");
+      console.log(error);
+      toast({
+        title: 'Ошибка',
+        description: error.response.data.detail,
+        variant: 'destructive',
+      });
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -85,8 +83,8 @@ const PromoCodeInput = ({ onSuccess }: PromoCodeInputProps) => {
         </div>
         <Button 
           type="submit" 
-          disabled={isLoading} 
-          className="bg-yellow-500/80 hover:bg-yellow-500 text-white"
+          disabled={isLoading}
+          variant="secondary1"
         >
           {isLoading ? "Проверка..." : "Активировать"}
         </Button>

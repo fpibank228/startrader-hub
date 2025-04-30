@@ -37,7 +37,7 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
   console.log(result);
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="bg-gradient-to-b from-customMidBlue to-customPurple/90 border-none max-w-md p-0 overflow-hidden">
+      <DialogContent className="bg-gradient-to-b bg-customDark border-white/40 border-2 p-6 sm:p-8 text-center rounded-3xl">
         <DialogHeader className="p-4 pb-0">
           <DialogTitle className="text-xl text-center">Ваш выигрыш!</DialogTitle>
         </DialogHeader>
@@ -117,11 +117,11 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
             )}
           </motion.div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 w-full">
+          <div className="grid grid-cols-1 gap-3 w-full">
             <Button
                 variant="outline"
                 onClick={onClose}
-                className="w-full bg-white/10 border-white/20 hover:bg-white/20"
+                className=" bg-gradient-to-r customBlue mx-5 py-5 h-auto"
             >
               Забрать
             </Button>
@@ -129,9 +129,9 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
             {onPlayAgain && (
                 <Button
                     onClick={onPlayAgain}
-                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                    className=" bg-gradient-to-r customBlue mx-5 py-5 h-auto"
                 >
-                  продать за {result.price}
+                  Продать за {result.price}
                   <svg width="18" height="18"
                        fill="#ffffff" className="inline ml-0.5"
                        xmlns="http://www.w3.org/2000/svg">
