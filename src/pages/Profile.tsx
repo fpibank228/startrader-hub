@@ -748,10 +748,10 @@ const Profile = () => {
                             <CreditCard size={16} className="mr-2"/>
                             Рубли
                         </Button>
-                        <Button onClick={handleStarTopUpClick} className="bg-pink-400 hover:bg-pink-700">
-                            <Star size={16} className="mr-2"/>
-                            Звезды
-                        </Button>
+                        {/*<Button onClick={handleStarTopUpClick} className="bg-pink-400 hover:bg-pink-700">*/}
+                        {/*    <Star size={16} className="mr-2"/>*/}
+                        {/*    Звезды*/}
+                        {/*</Button>*/}
                         <Button onClick={handleGiftTopUpClick} className="bg-pink-600 hover:bg-pink-700">
                             <Gift size={16} className="mr-2"/>
                             Подарки
