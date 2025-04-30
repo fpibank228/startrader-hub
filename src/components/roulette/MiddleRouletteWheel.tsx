@@ -98,10 +98,11 @@ const MiddleRouletteWheel = ({items: initialItems, onSpin, onPlayAgain, userData
         const totalItems = items.length;
         const targetSetIndex = 2; // Use the middle (third) set for stability
         const targetItemPosition = targetSetIndex * totalItems + winningIndex;
+        const randomOffset = Math.floor(Math.random() * 86) - 80;
 
         // Calculate the exact pixel position
         // We add 0.5 to center the item precisely in the indicator
-        const finalPosition = -((targetItemPosition + 0.5) * itemWidth);
+        const finalPosition = -((targetItemPosition + 0.5) * itemWidth + randomOffset);
 
         // Start the animation to the final position
         setTimeout(() => {
