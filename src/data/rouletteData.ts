@@ -71,17 +71,17 @@ export const staticGiftItems: RouletteItem[] = [
         'price': 150,
     },
     {
-        'link': 'https://starsbuy.space/assets/icon.jpg',
+        'link': 'https://starsbuy.space/assets/star.jpg',
         'title': '350 Stars',
         'price': 350,
     },
     {
-        'link': 'https://starsbuy.space/assets/icon.jpg',
+        'link': 'https://starsbuy.space/assets/star.jpg',
         'title': '500 Stars',
         'price': 500,
     },
     {
-        'link': 'https://starsbuy.space/assets/icon.jpg',
+        'link': 'https://starsbuy.space/assets/star.jpg',
         'title': '1000 Stars',
         'price': 1000,
     },
@@ -249,17 +249,17 @@ export const prizeGridDataMiddle: PrizeGridItem[] =  [
         'price': 100,
     },
     {
-        'link': 'https://starsbuy.space/assets/icon.jpg',
+        'link': 'https://starsbuy.space/assets/star.jpg',
         'title': '150 Stars',
         'price': 150,
     },
     {
-        'link': 'https://starsbuy.space/assets/icon.jpg',
+        'link': 'https://starsbuy.space/assets/star.jpg',
         'title': '350 Stars',
         'price': 350,
     },
     {
-        'link': 'https://starsbuy.space/assets/icon.jpg',
+        'link': 'https://starsbuy.space/assets/star.jpg',
         'title': '500 Stars',
         'price': 500,
     },
@@ -318,22 +318,22 @@ export const prizeGridDataBig: PrizeGridItem[] = [
         'price': 100,
     },
     {
-        'link': 'https://starsbuy.space/assets/icon.jpg',
+        'link': 'https://starsbuy.space/assets/star.jpg',
         'title': '150 Stars',
         'price': 150,
     },
     {
-        'link': 'https://starsbuy.space/assets/icon.jpg',
+        'link': 'https://starsbuy.space/assets/star.jpg',
         'title': '350 Stars',
         'price': 350,
     },
     {
-        'link': 'https://starsbuy.space/assets/icon.jpg',
+        'link': 'https://starsbuy.space/assets/star.jpg',
         'title': '500 Stars',
         'price': 500,
     },
     {
-        'link': 'https://starsbuy.space/assets/icon.jpg',
+        'link': 'https://starsbuy.space/assets/star.jpg',
         'title': '1000 Stars',
         'price': 1000,
     },
