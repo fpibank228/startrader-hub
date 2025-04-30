@@ -50,7 +50,7 @@ const Index = () => {
                 >
                     <Logo size="large"/>
                     <p className="mt-4 text-white/80 max-w-md mx-auto">
-                        Первая платформа для безопасной покупки и продажи Telegram звезд
+                        Первая платформа для азартных игр на nft подарки в Telegram
                     </p>
                 </motion.div>
 

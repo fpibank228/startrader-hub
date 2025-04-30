@@ -105,7 +105,7 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
           >
             <h3 className="text-xl font-bold mb-1">{result.title || "Поздравляем!"}</h3>
             {result.price && (
-                <p className=" font-medium text-lg">{result.price}
+                <p className=" font-medium text-lg pl-1">{result.price}
                   <svg width="18" height="18"
                        fill="#546CF3" className="inline ml-0.5"
                        xmlns="http://www.w3.org/2000/svg">
@@ -121,7 +121,7 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
             <Button
                 variant="outline"
                 onClick={onClose}
-                className=" bg-gradient-to-r customBlue mx-5 py-5 h-auto"
+                className=" bg-gradient-to-r custmBlue2 mx-5 py-5 h-auto"
             >
               Забрать
             </Button>
@@ -129,7 +129,7 @@ const RouletteResultModal = ({ isOpen, onClose, result, onPlayAgain }: RouletteR
             {onPlayAgain && (
                 <Button
                     onClick={onPlayAgain}
-                    className=" bg-gradient-to-r customBlue mx-5 py-5 h-auto"
+                    className="bg-blue-500 mx-5 py-5 h-auto"
                 >
                   Продать за {result.price}
                   <svg width="18" height="18"
