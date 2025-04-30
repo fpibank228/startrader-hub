@@ -1,10 +1,25 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StarCard from '../StarCard';
 import { motion } from 'framer-motion';
 import { ChevronRight, Star, Lock } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
+
+// Import images
+import basicImage from '../../assets/images/roulette/case1.jpg';
+import middleImage from '../../assets/images/roulette/case1.jpg';
+import bigImage from '../../assets/images/roulette/case1.jpg';
+import nftImage from '../../assets/images/roulette/case1.jpg';
+import upgradeImage from '../../assets/images/roulette/case1.jpg';
+
+// Image mapping
+const imageMap: { [key: string]: string } = {
+    basic: basicImage,
+    middle: middleImage,
+    big: bigImage,
+    nft: nftImage,
+    upgrade: upgradeImage
+};
 
 interface RouletteOption {
   id: string;
@@ -54,7 +69,7 @@ const RouletteSelector = ({ options, onSelect }: RouletteSelectorProps) => {
   };
 
   return (
-      <div className="grid gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {options.map((option) => (
             <motion.div
                 key={option.id}
@@ -65,18 +80,19 @@ const RouletteSelector = ({ options, onSelect }: RouletteSelectorProps) => {
                 whileTap={{ scale: option.disabled ? 1 : 0.98 }}
             >
               <StarCard
-                  className={`p-0 overflow-hidden ${option.disabled ? 'opacity-70' : 'cursor-pointer hover:shadow-lg transition-shadow'}`}
+                  className={`p-0 overflow-hidden h-full ${option.disabled ? 'opacity-70' : 'cursor-pointer hover:shadow-lg transition-shadow'}`}
                   onClick={() => !option.disabled && handleSelect(option)}
               >
                 {option.imageBg && (
                     <div
-                        className="w-full h-32 bg-cover bg-center relative"
-                        style={{ backgroundImage: `url(${option.imageBg})` }}
+                        className="w-full aspect-[16/9] relative overflow-hidden"
                     >
-                      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        {option.icon ? renderIcon(option.icon) : <Star className="w-12 h-12 text-white opacity-70" />}
-                      </div>
+                        <img 
+                            src={imageMap[option.id]} 
+                            alt={option.title}
+                            className="w-full h-full object-contain"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent"></div>
                     </div>
                 )}
 
@@ -87,7 +103,7 @@ const RouletteSelector = ({ options, onSelect }: RouletteSelectorProps) => {
                         {option.title}
                         {option.disabled && <Lock size={14} className="text-white/60" />}
                       </h3>
-                      <p className="text-sm text-white/70">{option.description}</p>
+                      <p className="text-sm text-white/70 mt-1">{option.description}</p>
                     </div>
                     {!option.disabled && <ChevronRight className="w-5 h-5 text-white/60" />}
                   </div>

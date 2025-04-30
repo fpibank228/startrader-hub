@@ -25,18 +25,8 @@ const PrizeGrid = memo(({items, onItemClick}: PrizeGridProps) => {
     const safeItems = items || [];
     const isMobile = useIsMobile();
 
-    // Helper function to shuffle array using Fisher-Yates algorithm
-    const shuffleArray = (array: RouletteItem[]): RouletteItem[] => {
-        const shuffled = [...array]; // Create a copy of the array
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // Swap elements
-        }
-        return shuffled;
-    };
 
     // Shuffle items before rendering
-    const shuffledItems = shuffleArray(safeItems);
 
     // Helper function to determine if URL is a Lottie animation
     const isLottieAnimation = (url: string): boolean => {
@@ -47,7 +37,7 @@ const PrizeGrid = memo(({items, onItemClick}: PrizeGridProps) => {
         <div className="w-full max-w-md mt-4">
             <h3 className="text-center text-lg font-medium mb-4">Возможные выигрыши</h3>
             <div className="grid grid-cols-3 gap-4">
-                {shuffledItems.map((item, index) => (
+                {items.map((item, index) => (
                     <StarCard
                         key={index}
                         className="p-3 flex flex-col items-center cursor-pointer hover:bg-white/10 transition-colors"

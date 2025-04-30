@@ -9,6 +9,7 @@ import ItemDetailModal from './ItemDetailModal';
 import TONBalanceDisplay from "@/components/roulette/TONBalanceDisplay.tsx";
 import {useToast} from "@/hooks/use-toast.ts";
 import {apiService} from "@/utils/api.ts";
+import {prizeGridDataBig} from "@/data/rouletteData.ts";
 
 interface RouletteItem {
     chance: string;
@@ -177,7 +178,7 @@ const BigRouletteWheel = ({items: initialItems, onSpin, onPlayAgain, userData}: 
             </StarCard>
 
             {/* Показываем все возможные выигрыши под рулеткой */}
-            <PrizeGrid items={items} onItemClick={handleItemClick}/>
+            <PrizeGrid items={prizeGridDataBig} onItemClick={handleItemClick}/>
 
             {/* Модальное окно с результатом */}
             <RouletteResultModal
