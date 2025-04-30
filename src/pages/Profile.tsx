@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {motion} from 'framer-motion';
-import {History, User, DollarSign, Share2, Wallet, Loader, Gift, CreditCard, Copy} from 'lucide-react';
+import {History, User, DollarSign, Share2, Wallet, Loader, Gift, CreditCard, Copy, Star} from 'lucide-react';
 import StarBackground from '../components/StarBackground';
 import StarCard from '../components/StarCard';
 import {useToast} from '../hooks/use-toast';
@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/dialog";
 import {Button} from "@/components/ui/button";
 import {useNavigate} from 'react-router-dom';
+import {Input} from "@/components/ui/input.tsx";
+import {openPopup, invoice} from "@telegram-apps/sdk-react";
 
 interface Transaction {
     id: number;
@@ -59,16 +61,64 @@ const Profile = () => {
     const [selectedGift, setSelectedGift] = useState<GiftItem | null>(null);
     const [selectedDefaultGift, setSelectedDefaultGift] = useState<DefaultGiftItem | null>(null);
     const [isTopUpDialogOpen, setIsTopUpDialogOpen] = useState(false);
+    const [isStarDialogOpen, setIsStarDialogOpen] = useState(false);
     const [isGiftDialogOpen, setIsGiftDialogOpen] = useState(false);
     const [earnedAmount, setEarnedAmount] = useState(0);
     const {toast} = useToast();
     const isFullscreen = WebApp.isFullscreen;
     const navigate = useNavigate();
+    const [amount, setAmount] = useState(""); // Состояние для хранения введенной суммы
+    const [error, setError] = useState(""); // Состояние для отображения ошибок
 
     const [gifts, setGifts] = useState<GiftItem[]>([]);
     const [defaultGifts, setDefaultGifts] = useState<DefaultGiftItem[]>([]);
 
     const [shareLink, setShareLink] = useState('https://t.me/amnyamstarsbot/app');
+
+
+    const validateInput = () => {
+        if (!amount.trim()) {
+            setError("Поле не может быть пустым");
+            return false;
+        }
+
+        const parsedAmount = parseInt(amount, 10);
+        if (isNaN(parsedAmount) || parsedAmount <= 0) {
+            setError("Введите корректное целое число больше 0");
+            return false;
+        }
+
+        setError(""); // Очистить ошибку, если ввод корректный
+        return true;
+    };
+
+    // Обработчик отправки
+    const handleConfirm = async () => {
+        if (validateInput()) {
+            // Если ввод корректен, выполняем логику пополнения
+            const parsedAmount = Number(amount); // Преобразуем строку в число
+            console.log(`Пополнение на сумму: ${parsedAmount} звезд`);
+            await openPopup({
+                title: "Неверная сумма",
+                message: "Пожалуйста, введите правильную сумму",
+                buttons: [{ id: "ok", type: "default", text: "OK" }],
+            });
+        } else {
+            // Если ввод некорректен, показываем модальное окно с ошибкой
+            await openPopup({
+                title: "Неверная сумма",
+                message: "Пожалуйста, введите правильную сумму",
+                buttons: [{ id: "ok", type: "default", text: "OK" }],
+            });
+        }
+    };
+
+    // Функция для копирования имени пользователя
+    const copyGiftUsername = () => {
+        navigator.clipboard.writeText("@giftchance").then(() => {
+            alert("Имя пользователя скопировано: @giftchance");
+        });
+    };
 
     useEffect(() => {
         const userIdParam = WebApp.initDataUnsafe.user?.id;
@@ -190,15 +240,18 @@ const Profile = () => {
 
     const handleTopUpClick = () => {
         setIsTopUpDialogOpen(true);
+        setIsStarDialogOpen(false);
     };
 
     const handleCryptoTopUpClick = () => {
+        setIsStarDialogOpen(false);
         setIsTopUpDialogOpen(false);
         navigate('/topup');
     };
 
     const handleRublePaymentClick = () => {
         setIsTopUpDialogOpen(false);
+        setIsStarDialogOpen(false);
         navigate('/topup/rubles');
     };
 
@@ -239,6 +292,14 @@ const Profile = () => {
     const handleGiftTopUpClick = () => {
         setIsTopUpDialogOpen(false);
         setIsGiftDialogOpen(true);
+        setIsStarDialogOpen(false);
+
+    };
+
+    const handleStarTopUpClick = () => {
+        setIsStarDialogOpen(true);
+        setIsTopUpDialogOpen(false);
+        setIsGiftDialogOpen(false);
     };
 
     const handleShareLink = () => {
@@ -311,13 +372,6 @@ const Profile = () => {
         setSelectedGift(null);
     };
 
-    const copyGiftUsername = () => {
-        navigator.clipboard.writeText('@giftchance');
-        toast({
-            title: "Скопировано",
-            description: "Имя пользователя скопировано в буфер обмена",
-        });
-    };
 
     const getGiftLink = (title) => {
         const gift = default_gifts.find(gift => gift.title === title);
@@ -677,7 +731,8 @@ const Profile = () => {
 
             {/* TopUp Dialog */}
             <Dialog open={isTopUpDialogOpen} onOpenChange={setIsTopUpDialogOpen}>
-                <DialogContent className="bg-gradient-to-b bg-customDark border-white/40 border-2 rounded-2xl p-5 max-w-sm w-full">
+                <DialogContent
+                    className="bg-gradient-to-b bg-customDark border-white/40 border-2 rounded-2xl p-5 max-w-sm w-full">
                     <DialogHeader>
                         <DialogTitle className="text-xl text-center">Пополнить баланс</DialogTitle>
                         <DialogDescription className="text-center text-white/70">
@@ -693,6 +748,10 @@ const Profile = () => {
                             <CreditCard size={16} className="mr-2"/>
                             Рубли
                         </Button>
+                        <Button onClick={handleStarTopUpClick} className="bg-pink-400 hover:bg-pink-700">
+                            <Star size={16} className="mr-2"/>
+                            Звезды
+                        </Button>
                         <Button onClick={handleGiftTopUpClick} className="bg-pink-600 hover:bg-pink-700">
                             <Gift size={16} className="mr-2"/>
                             Подарки
@@ -703,7 +762,7 @@ const Profile = () => {
 
             {/* Gift TopUp Dialog */}
             <Dialog open={isGiftDialogOpen} onOpenChange={setIsGiftDialogOpen}>
-                <DialogContent className="bg-gradient-to-b from-customMidBlue to-customPurple/90 border-none">
+                <DialogContent className="bg-customDark border-white/40 border-2 p-6 sm:p-8 text-center rounded-3xl">
                     <DialogHeader>
                         <DialogTitle className="text-xl text-center">Пополнить подарками</DialogTitle>
                         <DialogDescription className="text-center text-white/70">
@@ -721,6 +780,33 @@ const Profile = () => {
                             Перешлите желаемый подарок на указанный выше аккаунт, и мы автоматически пополним ваш
                             баланс.
                         </p>
+                    </div>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={isStarDialogOpen} onOpenChange={setIsStarDialogOpen}>
+                <DialogContent className="bg-customDark border-white/40 border-2 p-6 sm:p-8 text-center rounded-3xl">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl text-center">Пополнить баланс звездами</DialogTitle>
+                        <DialogDescription className="text-center text-white/70">
+                            Введите сумму для пополнения баланса
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex flex-col items-center gap-4 mt-4">
+                        {/* Поле ввода */}
+                        <Input
+                            type="number"
+                            placeholder="Введите сумму"
+                            value={amount}
+                            onChange={(e) => setAmount(e.target.value)}
+                            className="w-full bg-white/10 text-white placeholder:text-white/50 rounded-lg p-4"
+                        />
+                        {/* Отображение ошибки */}
+                        {error && <p className="text-red-500 text-sm">{error}</p>}
+                        {/* Кнопка подтверждения */}
+                        <Button onClick={handleConfirm} className="w-full bg-white/20 hover:bg-white/30 text-white">
+                            Подтвердить
+                        </Button>
                     </div>
                 </DialogContent>
             </Dialog>

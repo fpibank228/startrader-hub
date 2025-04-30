@@ -6,11 +6,11 @@ import { ChevronRight, Star, Lock } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 
 // Import images
-import basicImage from '../../assets/images/roulette/case1.jpg';
-import middleImage from '../../assets/images/roulette/case1.jpg';
-import bigImage from '../../assets/images/roulette/case1.jpg';
-import nftImage from '../../assets/images/roulette/case1.jpg';
-import upgradeImage from '../../assets/images/roulette/case1.jpg';
+import basicImage from '../../assets/images/roulette/case1.png';
+import middleImage from '../../assets/images/roulette/case2.png';
+import bigImage from '../../assets/images/roulette/case3.png';
+import nftImage from '../../assets/images/roulette/caseNft.png';
+import upgradeImage from '../../assets/images/roulette/upgrade.png';
 
 // Image mapping
 const imageMap: { [key: string]: string } = {

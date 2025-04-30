@@ -90,35 +90,35 @@ export const staticGiftItems: RouletteItem[] = [
 export const rouletteOptions = [
     {
         id: 'basic',
-        title: 'Обычная рулетка',
+        title: 'Lite box',
         description: 'Классическая рулетка с базовыми призами',
         imageBg: '/src/assets/images/roulette/basic.jpg',
         path: '/roulette/basic'
     },
     {
         id: 'middle',
-        title: 'Средняя рулетка',
+        title: 'Medium box',
         description: 'Рулетка с более ценными призами',
         imageBg: '/src/assets/images/roulette/middle.jpg',
         path: '/roulette/middle'
     },
     {
         id: 'big',
-        title: 'Крупная рулетка',
+        title: 'Premium box',
         description: 'Рулетка с премиальными призами',
         imageBg: '/src/assets/images/roulette/big.jpg',
         path: '/roulette/big'
     },
     {
         id: 'nft',
-        title: 'NFT рулетка',
+        title: 'Major box',
         description: 'Выиграйте уникальные NFT предметы',
         imageBg: '/src/assets/images/roulette/nft.jpg',
         path: '/roulette/nft'
     },
     {
         id: 'upgrade',
-        title: 'Апгрейд',
+        title: 'Upgrade',
         description: 'Улучшите свои существующие предметы',
         imageBg: '/src/assets/images/roulette/upgrade.jpg',
         path: '/roulette/upgrade',
