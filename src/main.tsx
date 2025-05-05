@@ -3,12 +3,38 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import WebApp from "@twa-dev/sdk";
-import {init} from "@telegram-apps/sdk-react";
+import {
+    backButton,
+    viewport,
+    themeParams,
+    miniApp,
+    initData,
+    $debug,
+    init as initSDK,
+} from '@telegram-apps/sdk-react';
+
 // Ensure Buffer is available globally
 globalThis.Buffer = Buffer;
 window.Buffer = Buffer;
 try {
-    init()
+    initSDK()
+
+    backButton.mount();
+    miniApp.mount();
+    themeParams.mount();
+    initData.restore();
+    void viewport
+        .mount()
+        .catch(e => {
+            console.error('Something went wrong mounting the viewport', e);
+        })
+        .then(() => {
+            viewport.bindCssVars();
+        });
+
+    // Define components-related CSS variables.
+    miniApp.bindCssVars();
+    themeParams.bindCssVars();
     const tele = WebApp;
     tele.ready();
     tele.setHeaderColor("#000");

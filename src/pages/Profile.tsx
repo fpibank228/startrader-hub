@@ -22,6 +22,7 @@ import {Button} from "@/components/ui/button";
 import {useNavigate} from 'react-router-dom';
 import {Input} from "@/components/ui/input.tsx";
 import {openPopup, invoice} from "@telegram-apps/sdk-react";
+import {hapticFeedback} from "@telegram-apps/sdk";
 
 interface Transaction {
     id: number;
@@ -95,18 +96,19 @@ const Profile = () => {
     // Обработчик отправки
     const handleConfirm = async () => {
         if (validateInput()) {
-            const parsedAmount = Number(amount); // Преобразуем строку в число
-            console.log(`Пополнение на сумму: ${parsedAmount} звезд`);
+            const parsedAmount = Number(amount);
+            if (hapticFeedback.isSupported()) {
+                hapticFeedback.impactOccurred("soft")
+            }
             const res = await openPopup({
-                title: "njg ",
-                message: "Пожалуйста, введите правильную сумму",
+                title: "Подтверждение",
+                message: "Хотите пополнить баланс?",
                 buttons: [{id: "ok", type: "default", text: "OK"}, {id: "no", type: "destructive", text: "НЕТ"}],
             });
             if (res === "ok") {
                 const res = await apiService.topUpStars(Number(amount));
-                console.log(res.data.invoice_link);
+                console.log(res.data.invoice_link.replace("https://t.me/$", ""));
                 invoice.open(res.data.invoice_link.replace("https://t.me/$", ""))
-                console.log(res);
             }
         } else {
             // Если ввод некорректен, показываем модальное окно с ошибкой

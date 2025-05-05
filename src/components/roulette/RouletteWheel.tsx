@@ -98,7 +98,7 @@ const RouletteWheel = ({items: initialItems, onSpin, onPlayAgain, userData}: Rou
         const totalItems = items.length;
         const targetSetIndex = 2; // Use the middle (third) set for stability
         const targetItemPosition = targetSetIndex * totalItems + winningIndex;
-        const randomOffset = Math.floor(Math.random() * 86) - 80;
+        const randomOffset = Math.floor(Math.random() * 66) - 60;
         console.log(randomOffset);
         // Calculate the exact pixel position
         // We add 0.5 to center the item precisely in the indicator
