@@ -4,11 +4,11 @@ import App from './App.tsx';
 import './index.css';
 import WebApp from "@twa-dev/sdk";
 import {init} from "@telegram-apps/sdk-react";
-init()
 // Ensure Buffer is available globally
 globalThis.Buffer = Buffer;
 window.Buffer = Buffer;
 try {
+    init()
     const tele = WebApp;
     tele.ready();
     tele.setHeaderColor("#000");
