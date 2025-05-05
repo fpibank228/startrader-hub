@@ -270,4 +270,13 @@ export const apiService = {
             throw error;
         }
     },
+
+    async topUpStars(amount: number) {
+        try {
+            return await mainApi.post('/top_up/stars', {"amount": amount});
+        } catch (error) {
+            console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
 };

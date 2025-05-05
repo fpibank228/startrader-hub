@@ -95,20 +95,25 @@ const Profile = () => {
     // Обработчик отправки
     const handleConfirm = async () => {
         if (validateInput()) {
-            // Если ввод корректен, выполняем логику пополнения
             const parsedAmount = Number(amount); // Преобразуем строку в число
             console.log(`Пополнение на сумму: ${parsedAmount} звезд`);
-            await openPopup({
-                title: "Неверная сумма",
+            const res = await openPopup({
+                title: "njg ",
                 message: "Пожалуйста, введите правильную сумму",
-                buttons: [{ id: "ok", type: "default", text: "OK" }],
+                buttons: [{id: "ok", type: "default", text: "OK"}, {id: "no", type: "destructive", text: "НЕТ"}],
             });
+            if (res === "ok") {
+                const res = await apiService.topUpStars(Number(amount));
+                console.log(res.data.invoice_link);
+                invoice.open(res.data.invoice_link.replace("https://t.me/$", ""))
+                console.log(res);
+            }
         } else {
             // Если ввод некорректен, показываем модальное окно с ошибкой
             await openPopup({
                 title: "Неверная сумма",
                 message: "Пожалуйста, введите правильную сумму",
-                buttons: [{ id: "ok", type: "default", text: "OK" }],
+                buttons: [{id: "ok", type: "default", text: "OK"}],
             });
         }
     };
@@ -748,10 +753,10 @@ const Profile = () => {
                             <CreditCard size={16} className="mr-2"/>
                             Рубли
                         </Button>
-                        {/*<Button onClick={handleStarTopUpClick} className="bg-pink-400 hover:bg-pink-700">*/}
-                        {/*    <Star size={16} className="mr-2"/>*/}
-                        {/*    Звезды*/}
-                        {/*</Button>*/}
+                        <Button onClick={handleStarTopUpClick} className="bg-pink-400 hover:bg-pink-700">
+                            <Star size={16} className="mr-2"/>
+                            Звезды
+                        </Button>
                         <Button onClick={handleGiftTopUpClick} className="bg-pink-600 hover:bg-pink-700">
                             <Gift size={16} className="mr-2"/>
                             Подарки
@@ -793,7 +798,6 @@ const Profile = () => {
                         </DialogDescription>
                     </DialogHeader>
                     <div className="flex flex-col items-center gap-4 mt-4">
-                        {/* Поле ввода */}
                         <Input
                             type="number"
                             placeholder="Введите сумму"
@@ -801,9 +805,7 @@ const Profile = () => {
                             onChange={(e) => setAmount(e.target.value)}
                             className="w-full bg-white/10 text-white placeholder:text-white/50 rounded-lg p-4"
                         />
-                        {/* Отображение ошибки */}
                         {error && <p className="text-red-500 text-sm">{error}</p>}
-                        {/* Кнопка подтверждения */}
                         <Button onClick={handleConfirm} className="w-full bg-white/20 hover:bg-white/30 text-white">
                             Подтвердить
                         </Button>
