@@ -458,6 +458,7 @@ const Profile = () => {
                                     <h2 className="text-xl font-bold mb-1">{WebApp.initDataUnsafe.user ? WebApp.initDataUnsafe.user.first_name : "error"}</h2>
                                     <p className="text-white/70 text-sm mb-4">@{WebApp.initDataUnsafe.user ? WebApp.initDataUnsafe.user.username : "error"}</p>
                                     <TonConnectButton className={`mb-4`}/>
+                                    <TonConnectButton className={`mb-4`}/>
 
                                     {/* Use the new TONBalanceDisplay component */}
                                     <div
