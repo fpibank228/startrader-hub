@@ -13,6 +13,7 @@ import BasicRoulette from './pages/BasicRoulette';
 import FixedRoulette from './pages/FixedRoulette';
 import GiftUpgrade from './pages/GiftUpgrade';
 import NotFound from './pages/NotFound';
+import MinesGamePage from './pages/MinesGame';
 import './App.css';
 import WebApp from '@twa-dev/sdk';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -52,6 +53,7 @@ const App = () => {
                             <Route path="/roulette/middle" element={<MiddleBasicRoulette/>}/>
                             <Route path="/roulette/big" element={<BigBasicRoulette/>}/>
                             <Route path="/roulette/nft" element={<FixedRoulette/>}/>
+                            <Route path="/roulette/mines" element={<MinesGamePage/>}/>
                             <Route path="/profile" element={<Profile/>}/>
                             <Route path="/roulette/upgrade" element={<GiftUpgrade/>}/>
                             <Route path="*" element={<NotFound/>}/>

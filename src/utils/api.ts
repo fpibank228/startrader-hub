@@ -1,6 +1,8 @@
 import axios from 'axios';
 import WebApp from '@twa-dev/sdk';
 
+const GRID_SIZE = 5; // Grid size for Mines game
+
 const tonApi = axios.create({
     baseURL: 'https://tonapi.io/v2',
     headers: {
@@ -276,6 +278,45 @@ export const apiService = {
             return await mainApi.post('/top_up/stars', {"amount": amount});
         } catch (error) {
             console.error('Generate link check API Error:', error);
+            throw error;
+        }
+    },
+
+    // Mines game methods
+    placeMinesBet: async (bet: number, mines: number) => {
+        try {
+            const response = await mainApi.post('/mines/start', {
+                bet,
+                mines
+            });
+            return response;
+        } catch (error) {
+            console.error('Mines API Error:', error);
+            throw error;
+        }
+    },
+
+    checkMinesCell: async (gameId: string, cellIndex: number) => {
+        try {
+            const response = await mainApi.post('/mines/click', {
+                gameId,
+                cellIndex
+            });
+            return response;
+        } catch (error) {
+            console.error('Mines API Error:', error);
+            throw error;
+        }
+    },
+
+    cashOutMines: async (gameId: string) => {
+        try {
+            const response = await mainApi.post('/mines/cashout', {
+                gameId
+            });
+            return response;
+        } catch (error) {
+            console.error('Mines API Error:', error);
             throw error;
         }
     },

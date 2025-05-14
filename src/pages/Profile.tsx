@@ -63,6 +63,7 @@ const Profile = () => {
     const [selectedDefaultGift, setSelectedDefaultGift] = useState<DefaultGiftItem | null>(null);
     const [isTopUpDialogOpen, setIsTopUpDialogOpen] = useState(false);
     const [isStarDialogOpen, setIsStarDialogOpen] = useState(false);
+    const [isStarPayedDialogOpen, setIsStarPayedDialogOpen] = useState(false);
     const [isGiftDialogOpen, setIsGiftDialogOpen] = useState(false);
     const [earnedAmount, setEarnedAmount] = useState(0);
     const {toast} = useToast();
@@ -110,6 +111,7 @@ const Profile = () => {
                 console.log(res.data.invoice_link.replace("https://t.me/$", ""));
                 invoice.open(res.data.invoice_link.replace("https://t.me/$", ""))
             }
+            setIsStarPayedDialogOpen(true);
         } else {
             // Если ввод некорректен, показываем модальное окно с ошибкой
             await openPopup({
@@ -137,6 +139,7 @@ const Profile = () => {
         setIsLoading(true);
         try {
             const response = await apiService.getUserInfo();
+            console.log(response.data);
             const data = await response.data;
             setTransactions(data["transactions"]);
             setUserInfo(data["user_info"]);
@@ -811,6 +814,42 @@ const Profile = () => {
                         {error && <p className="text-red-500 text-sm">{error}</p>}
                         <Button onClick={handleConfirm} className="w-full bg-white/20 hover:bg-white/30 text-white">
                             Подтвердить
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={isStarPayedDialogOpen} onOpenChange={setIsStarPayedDialogOpen}>
+                <DialogContent className="bg-customDark border-white/40 border-2 p-6 sm:p-8 text-center rounded-3xl">
+                    {/* Заголовок */}
+
+                    {/* Иконка успеха */}
+                    <div className="mt-4 flex justify-center">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-16 h-16 text-green-400"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+
+                    {/* Основной текст */}
+                    <div className="mt-4 text-white/90 text-sm">
+                        <p>Если оплата прошла успешно,</p>
+                        <p>звезды будут зачислены на ваш баланс в течение нескольких минут.</p>
+                    </div>
+
+                    {/* Кнопка закрытия окна */}
+                    <div className="mt-6">
+                        <Button
+                            onClick={() => setIsStarPayedDialogOpen(false)}
+                            className="w-full bg-white/20 hover:bg-white/30 text-white"
+                        >
+                            Закрыть
                         </Button>
                     </div>
                 </DialogContent>
