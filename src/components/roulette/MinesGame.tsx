@@ -235,7 +235,7 @@ const MinesGame: React.FC = () => {
                     </div>
                     <div>
                         <p className="text-white/70 text-sm">Выигрыш</p>
-                        <p className="text-xl font-bold text-yellow-400 flex items-center gap-1">{winAmount.toFixed(0)}
+                        <p className="text-xl font-bold flex items-center gap-1">{winAmount.toFixed(0)}
                             <svg width="17" height="17" viewBox="0 0 14 15" fill="#ffffff"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path fillRule="evenodd" clipRule="evenodd"

@@ -117,10 +117,10 @@ export const rouletteOptions = [
         path: '/roulette/nft'
     },
     {
-        id: 'mines',
+        id: 'mine',
         title: 'Мины',
         description: 'Классическая игра в мины с множителем',
-        imageBg: '/src/assets/images/roulette/mines.jpg',
+        imageBg: '/src/assets/images/roulette/mines.png',
         path: '/roulette/mines'
     },
     {

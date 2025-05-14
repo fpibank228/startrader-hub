@@ -11,6 +11,7 @@ import middleImage from '../../assets/images/roulette/case2.png';
 import bigImage from '../../assets/images/roulette/case3.png';
 import nftImage from '../../assets/images/roulette/caseNft.png';
 import upgradeImage from '../../assets/images/roulette/upgrade.png';
+import mineImage from '../../assets/images/roulette/mine.png';
 
 // Image mapping
 const imageMap: { [key: string]: string } = {
@@ -18,7 +19,8 @@ const imageMap: { [key: string]: string } = {
     middle: middleImage,
     big: bigImage,
     nft: nftImage,
-    upgrade: upgradeImage
+    upgrade: upgradeImage,
+    mine: mineImage
 };
 
 interface RouletteOption {
@@ -69,7 +71,7 @@ const RouletteSelector = ({ options, onSelect }: RouletteSelectorProps) => {
   };
 
   return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {options.map((option) => (
             <motion.div
                 key={option.id}
@@ -92,20 +94,18 @@ const RouletteSelector = ({ options, onSelect }: RouletteSelectorProps) => {
                             alt={option.title}
                             className="w-full h-full object-contain"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-b to-transparent"></div>
                     </div>
                 )}
 
                 <div className="p-4">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-center">
                     <div>
                       <h3 className="text-lg font-semibold flex items-center gap-2">
                         {option.title}
                         {option.disabled && <Lock size={14} className="text-white/60" />}
                       </h3>
-                      <p className="text-sm text-white/70 mt-1">{option.description}</p>
                     </div>
-                    {!option.disabled && <ChevronRight className="w-5 h-5 text-white/60" />}
                   </div>
                 </div>
               </StarCard>
