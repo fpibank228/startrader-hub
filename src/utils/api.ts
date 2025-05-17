@@ -320,4 +320,16 @@ export const apiService = {
             throw error;
         }
     },
+
+    getMinesFinalPositions: async (gameId: string) => {
+        try {
+            const response = await mainApi.post('/mines/final-positions', {
+                gameId
+            });
+            return response;
+        } catch (error) {
+            console.error('Mines API Error:', error);
+            throw error;
+        }
+    },
 };

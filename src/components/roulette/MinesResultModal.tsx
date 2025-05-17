@@ -2,7 +2,8 @@ import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
-import { Diamond, Bomb } from 'lucide-react';
+import bombImage from '../../assets/images/roulette/bomb.png';
+import cristalImage from '../../assets/images/roulette/cristal.png';
 
 interface MinesResultModalProps {
     isOpen: boolean;
@@ -35,9 +36,9 @@ const MinesResultModal: React.FC<MinesResultModalProps> = ({
                     className="mt-4 flex justify-center"
                 >
                     {isWin ? (
-                        <Diamond className="w-16 h-16 text-green-400" />
+                        <img src={cristalImage} alt="Crystal" className="w-24 h-24" />
                     ) : (
-                        <Bomb className="w-16 h-16 text-red-500" />
+                        <img src={bombImage} alt="Bomb" className="w-24 h-24" />
                     )}
                 </motion.div>
 

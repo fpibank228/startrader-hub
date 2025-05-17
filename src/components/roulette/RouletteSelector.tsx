@@ -12,6 +12,8 @@ import bigImage from '../../assets/images/roulette/case3.png';
 import nftImage from '../../assets/images/roulette/caseNft.png';
 import upgradeImage from '../../assets/images/roulette/upgrade.png';
 import mineImage from '../../assets/images/roulette/mine.png';
+import bombImage from '../../assets/images/roulette/bomb.png';
+import cristalImage from '../../assets/images/roulette/cristal.png';
 
 // Image mapping
 const imageMap: { [key: string]: string } = {
@@ -20,7 +22,9 @@ const imageMap: { [key: string]: string } = {
     big: bigImage,
     nft: nftImage,
     upgrade: upgradeImage,
-    mine: mineImage
+    mine: mineImage,
+    bomb: bombImage,
+    cristal: cristalImage
 };
 
 interface RouletteOption {
