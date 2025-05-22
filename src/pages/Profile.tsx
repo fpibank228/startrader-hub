@@ -523,7 +523,7 @@ const Profile = () => {
                                                         className="flex flex-col items-center justify-center gap-1">
                                                         <div className="flex items-center gap-1">
                                                             <span
-                                                                className="font-bold text-white">{userInfo.user_details.ref_balance}</span>
+                                                                className="font-bold text-white">{userInfo.user_details.ref_balance.toFixed(2)}</span>
                                                             <svg width="14" height="14" viewBox="0 0 14 15"
                                                                  fill="#ffffff"
                                                                  xmlns="http://www.w3.org/2000/svg">

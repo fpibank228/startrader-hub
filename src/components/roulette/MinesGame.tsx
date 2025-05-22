@@ -249,7 +249,7 @@ const MinesGame: React.FC = () => {
     <div className="w-full max-w-md mx-auto p-4">
       <div className="flex justify-end mb-4">
         <TONBalanceDisplay
-          balance={userData ? userData.user_info.user_details.balance : 0}
+          balance={userData ? Number(userData.user_info.user_details.balance.toFixed(2)) : 0}
         />
       </div>
 

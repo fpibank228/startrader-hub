@@ -137,7 +137,7 @@ const BasicRoulette = () => {
           transition={{ duration: 0.5 }}
           className="max-w-md mx-auto"
         >
-          <TONBalanceDisplay balance={userData ? userData.balance : 0} />
+          <TONBalanceDisplay balance={userData ? Number(userData.balance.toFixed(2)) : 0} />
 
           <RouletteWheel
             items={items}
