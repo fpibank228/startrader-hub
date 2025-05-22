@@ -469,7 +469,7 @@ const Profile = () => {
                                         <div className="flex flex-col">
                                             <h1 className="text-white/70 mb-1 font-bold text-xl">Баланс</h1>
                                             <div className="flex items-center justify-between">
-                                                <h3 className="gap-1 text-2xl font-bold text-white flex items-center">{userInfo.user_details.balance}
+                                                <h3 className="gap-1 text-2xl font-bold text-white flex items-center">{userInfo.user_details.balance.toFixed(2)}
                                                     <svg width="21" height="21" viewBox="0 0 15 16.5" fill="#546CF3"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path fillRule="evenodd" clipRule="evenodd"
